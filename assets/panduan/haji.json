@@ -1,0 +1,233 @@
+{
+  "id": "haji",
+  "title": "Tata Cara Haji & Umrah",
+  "description": "Panduan lengkap ibadah haji dan umrah",
+  "icon": "flight",
+  "color": "0xFF4CAF50",
+  "items": [
+    {
+      "id": "rukun_haji",
+      "title": "Rukun dan Wajib Haji",
+      "shortDesc": "Rukun, wajib, dan syarat ibadah haji",
+      "sections": [
+        {
+          "title": "Pengertian Haji",
+          "type": "text",
+          "content": "Haji adalah ibadah yang dilakukan di Makkah dengan mengerjakan beberapa amalan tertentu pada waktu yang telah ditentukan, minimal sekali seumur hidup bagi yang mampu. Haji merupakan rukun Islam yang kelima."
+        },
+        {
+          "title": "Syarat Wajib Haji",
+          "type": "list",
+          "content": [
+            "Islam (beragama Islam)",
+            "Baligh (sudah dewasa)",
+            "Berakal sehat (tidak gila)",
+            "Merdeka (bukan budak - tidak relevan saat ini)",
+            "Mampu secara fisik (sehat)",
+            "Mampu secara finansial (biaya haji dan keluarga yang ditinggalkan)",
+            "Aman dalam perjalanan",
+            "Mahram bagi wanita (atau bersama rombongan wanita yang aman)"
+          ]
+        },
+        {
+          "title": "Rukun Haji (6 Rukun)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Ihram",
+              "description": "Niat haji yang dimulai dari miqat (tempat ihram). Ihram adalah rukun yang paling awal dan menjadi syarat sah ibadah haji.",
+              "arabic": "لَبَّيْكَ اللَّهُمَّ حَجًّا (Haji Ifrad) ۝ لَبَّيْكَ اللَّهُمَّ عُمْرَةً وَحَجًّا (Haji Qiran) ۝ لَبَّيْكَ اللَّهُمَّ عُمْرَةً (Haji Tamattu - umrah dulu)",
+              "transliteration": "Labbaikallahumma hajjan (Ifrad). Labbaikallahumma 'umratan wa hajjan (Qiran). Labbaikallahumma 'umratan (Tamattu)",
+              "translation": "Aku penuhi panggilan-Mu ya Allah untuk haji (Ifrad). Aku penuhi panggilan-Mu untuk umrah dan haji (Qiran). Aku penuhi panggilan-Mu untuk umrah (Tamattu - dilanjutkan haji)"
+            },
+            {
+              "number": 2,
+              "title": "Wukuf di Arafah",
+              "description": "Berada di Arafah pada tanggal 9 Dzulhijjah, mulai dari tergelincir matahari (dzuhur) hingga terbit fajar tanggal 10. Rasulullah bersabda: 'Haji itu adalah Arafah.' (HR. Tirmidzi)",
+              "arabic": "اَللَّهُمَّ إِنِّيْ أَسْأَلُكَ بِرَحْمَتِكَ الَّتِي وَسِعَتْ كُلَّ شَيْءٍ أَنْ تَغْفِرَ لِي",
+              "transliteration": "Allahumma innii as-aluka birahmatikallatii wasi'at kulla syai-in an taghfira lii",
+              "translation": "Ya Allah, sesungguhnya aku memohon kepada-Mu dengan rahmat-Mu yang meliputi segala sesuatu, agar Engkau mengampuni aku"
+            },
+            {
+              "number": 3,
+              "title": "Thawaf Ifadhah",
+              "description": "Thawaf (mengelilingi Ka'bah 7 kali) yang dilakukan setelah wukuf di Arafah, boleh dari tanggal 10 Dzulhijjah hingga akhir bulan Dzulhijjah. Dinamakan thawaf ifadhah karena dilakukan setelah ifadhah (berangkat) dari Muzdalifah.",
+              "arabic": "بِسْمِ اللهِ، اللهُ أَكْبَرُ، اَللَّهُمَّ إِيْمَانًا بِكَ، وَتَصْدِيْقًا بِكِتَابِكَ، وَوَفَاءً بِعَهْدِكَ، وَاتِّبَاعًا لِسُنَّةِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ",
+              "transliteration": "Bismillah, Allahu akbar, Allahumma imaanan bika, wa tashdiqan bikitaabik, wa wafaa-an bi'ahdik, wattibaa'an lisunnati nabiyyika Muhammadin shallallahu 'alaihi wasallam",
+              "translation": "Dengan nama Allah, Allah Maha Besar. Ya Allah, dengan penuh keimanan kepada-Mu, pembenaran terhadap kitab-Mu, penepatan janji kepada-Mu, dan mengikuti sunnah Nabi-Mu Muhammad SAW"
+            },
+            {
+              "number": 4,
+              "title": "Sa'i antara Shafa dan Marwah",
+              "description": "Berlari kecil (bagi laki-laki) antara bukit Shafa dan Marwah sebanyak 7 kali (Shafa-Marwah = 1x, Marwah-Shafa = 1x, dst). Dimulai dari Shafa dan diakhiri di Marwah.",
+              "arabic": "إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللهِ (di Shafa) ۝ رَبِّ اغْفِرْ وَارْحَمْ، إِنَّكَ أَنْتَ الْأَعَزُّ الْأَكْرَمُ (saat sa'i)",
+              "transliteration": "Innash shafaa wal marwata min sya'aa-irillah (di Shafa). Rabbighfir warham, innaka antal a'azzul akram (saat sa'i)",
+              "translation": "Sesungguhnya Shafa dan Marwah termasuk syiar-syiar Allah (di Shafa). Ya Tuhanku ampunilah dan rahmatilah, sesungguhnya Engkau Yang Maha Mulia lagi Maha Pemurah (saat sa'i)"
+            },
+            {
+              "number": 5,
+              "title": "Tahallul (Gundul/Potong Rambut)",
+              "description": "Mencukur habis atau memotong rambut kepala sebagai tanda tahallul (keluar dari ihram). Laki-laki lebih utama dicukur habis, wanita cukup memotong sepanjang ujung jari.",
+              "arabic": "اَلْحَمْدُ لِلَّهِ الَّذِي قَضَى عَنَّا نُسُكَنَا",
+              "transliteration": "Alhamdulillahilladzi qadhaa 'annaa nusukana",
+              "translation": "Segala puji bagi Allah yang telah menyempurnakan ibadah haji kami"
+            },
+            {
+              "number": 6,
+              "title": "Tertib",
+              "description": "Melaksanakan rukun haji sesuai urutan: Ihram → Wukuf → Thawaf Ifadhah → Sa'i → Tahallul. Tidak boleh mendahulukan rukun yang belakangan sebelum rukun sebelumnya."
+            }
+          ]
+        },
+        {
+          "title": "Wajib Haji (7 Wajib)",
+          "type": "list",
+          "content": [
+            "Ihram dari miqat yang telah ditentukan",
+            "Bermalam di Muzdalifah (malam 10 Dzulhijjah)",
+            "Bermalam di Mina (malam 11, 12, dan 13 Dzulhijjah - boleh pulang tanggal 12 setelah dhuhur)",
+            "Melempar jumrah aqabah (10 Dzulhijjah)",
+            "Melempar jumrah ula, wustha, dan aqabah (11, 12, 13 Dzulhijjah)",
+            "Thawaf wada' (thawaf perpisahan sebelum pulang dari Makkah)",
+            "Tertib dalam melaksanakan rukun dan wajib"
+          ]
+        },
+        {
+          "title": "Perbedaan Rukun dan Wajib",
+          "type": "text",
+          "content": "RUKUN: Tidak bisa diganti dengan dam (denda). Jika tidak dikerjakan, haji tidak sah. WAJIB: Bisa diganti dengan dam (menyembelih kambing). Jika tidak dikerjakan, haji tetap sah tapi berdosa dan wajib membayar dam."
+        }
+      ],
+      "references": [
+        "Al-Quran Surah Ali Imran: 97",
+        "Al-Quran Surah Al-Baqarah: 196-203",
+        "Hadits tentang Haji (HR. Bukhari & Muslim)",
+        "Fiqih Sunnah - Sayyid Sabiq (Bab Haji)",
+        "Manasik Haji - Syaikh Abdul Aziz bin Baz"
+      ]
+    },
+    {
+      "id": "larangan_ihram",
+      "title": "Larangan Ihram & Dam",
+      "shortDesc": "Hal-hal yang dilarang saat ihram dan dendanya",
+      "sections": [
+        {
+          "title": "Larangan Ihram untuk Laki-laki dan Wanita",
+          "type": "list",
+          "content": [
+            "Memotong rambut atau kuku",
+            "Memakai wangi-wangian (minyak wangi, parfum, sabun wangi)",
+            "Membunuh binatang buruan (boleh membunuh binatang berbahaya)",
+            "Menikah atau menikahkan orang lain",
+            "Bersetubuh atau melakukan pendahuluan jima' (ciuman, pelukan syahwat)",
+            "Berbuat maksiat dan berbantah-bantahan",
+            "Memotong pohon atau rumput di tanah haram (Makkah), kecuali yang tidak berakar kuat"
+          ]
+        },
+        {
+          "title": "Larangan Khusus Laki-laki",
+          "type": "list",
+          "content": [
+            "Memakai pakaian yang berjahit (kemeja, celana, dll)",
+            "Menutup kepala dengan sesuatu yang melekat (peci, topi, dll)",
+            "Catatan: Boleh pakai ikat pinggang, jam tangan, kacamata, sandal"
+          ]
+        },
+        {
+          "title": "Larangan Khusus Wanita",
+          "type": "list",
+          "content": [
+            "Menutup wajah dengan niqab atau cadar (boleh dengan ujung kerudung)",
+            "Memakai sarung tangan",
+            "Catatan: Wanita boleh pakai pakaian berjahit (gamis, kerudung), asal tidak wangi dan tidak menutup wajah"
+          ]
+        },
+        {
+          "title": "Dam (Denda) dalam Haji",
+          "type": "text",
+          "content": "Dam adalah denda yang wajib dibayar karena melanggar larangan ihram atau meninggalkan wajib haji. JENIS DAM: 1) Dam Tamattu/Qiran: kambing/1/7 unta atau sapi. 2) Dam Jinayat (pelanggaran): sesuai jenisnya. 3) Dam Jabr (meninggalkan wajib): kambing. Jika tidak mampu menyembelih dam, wajib puasa sebagai gantinya."
+        },
+        {
+          "title": "Puasa Pengganti Dam",
+          "type": "list",
+          "content": [
+            "Dam tamattu/qiran: Puasa 10 hari (3 hari saat haji, 7 hari setelah pulang)",
+            "Dam jinayat/pelanggaran: Puasa 10 hari",
+            "Dam meninggalkan wajib haji: Puasa 3 hari"
+          ]
+        }
+      ],
+      "references": [
+        "Al-Quran Surah Al-Baqarah: 196",
+        "Fiqih Sunnah - Sayyid Sabiq",
+        "Al-Mughni - Ibnu Qudamah (Bab Haji)",
+        "Fatwa-fatwa Haji - Syaikh Ibnu Baz"
+      ]
+    },
+    {
+      "id": "umrah",
+      "title": "Tata Cara Umrah",
+      "shortDesc": "Rukun dan tata cara ibadah umrah",
+      "sections": [
+        {
+          "title": "Pengertian Umrah",
+          "type": "text",
+          "content": "Umrah adalah ibadah seperti haji namun lebih ringan dan bisa dilakukan kapan saja sepanjang tahun (kecuali 9-13 Dzulhijjah bagi yang sedang haji). Umrah sering disebut 'haji kecil'."
+        },
+        {
+          "title": "Rukun Umrah (4 Rukun)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Ihram dari Miqat",
+              "description": "Niat umrah dari miqat yang ditentukan. Miqat untuk umrah sama dengan miqat haji. Bagi yang sudah berada di Makkah, ihram dari Masjid Aisyah (Taneem).",
+              "arabic": "لَبَّيْكَ اللَّهُمَّ عُمْرَةً",
+              "transliteration": "Labbaikallahumma 'umratan",
+              "translation": "Aku penuhi panggilan-Mu ya Allah untuk umrah"
+            },
+            {
+              "number": 2,
+              "title": "Thawaf",
+              "description": "Mengelilingi Ka'bah sebanyak 7 kali (putaran). Dimulai dari Hajar Aswad dan berakhir di Hajar Aswad. 3 putaran pertama lebih cepat (raml) bagi laki-laki."
+            },
+            {
+              "number": 3,
+              "title": "Sa'i antara Shafa dan Marwah",
+              "description": "Berlari kecil antara Shafa dan Marwah sebanyak 7 kali. Dimulai dari Shafa dan diakhiri di Marwah."
+            },
+            {
+              "number": 4,
+              "title": "Tahallul (Gundul/Potong Rambut)",
+              "description": "Mencukur habis atau memotong rambut. Dengan ini selesailah ibadah umrah dan boleh kembali ke keadaan biasa (tidak ihram)."
+            }
+          ]
+        },
+        {
+          "title": "Wajib Umrah",
+          "type": "list",
+          "content": [
+            "Ihram dari miqat yang telah ditentukan",
+            "Tidak melakukan larangan-larangan ihram"
+          ]
+        },
+        {
+          "title": "Perbedaan Umrah dan Haji",
+          "type": "text",
+          "content": "UMRAH: 4 rukun, bisa kapan saja, tidak wajib wukuf Arafah, tidak melempar jumrah, tidak bermalam di Mina/Muzdalifah. HAJI: 6 rukun, hanya di bulan Dzulhijjah, wajib wukuf Arafah, wajib melempar jumrah, wajib bermalam di Mina/Muzdalifah."
+        },
+        {
+          "title": "Keutamaan Umrah",
+          "type": "text",
+          "content": "Rasulullah SAW bersabda: 'Umrah ke umrah berikutnya adalah penghapus dosa di antara keduanya. Dan haji mabrur tidak ada balasan baginya kecuali surga.' (HR. Bukhari dan Muslim)"
+        }
+      ],
+      "references": [
+        "Hadits Umrah (HR. Bukhari & Muslim)",
+        "Fiqih Sunnah - Sayyid Sabiq (Bab Umrah)",
+        "Manasik Umrah - Syaikh Abdul Aziz bin Baz"
+      ]
+    }
+  ]
+}

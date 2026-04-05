@@ -1,0 +1,68 @@
+[
+  {
+    "id": 20,
+    "kategori": "shalat",
+    "nama": "Istighfar",
+    "arab": "أَسْتَغْفِرُ اللهَ (ثلاثا)، اللَّهُمَّ أَنْتَ السَّلاَمُ، وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالإِكْرَامِ",
+    "latin": "Astaghfirullah (3x). Allahumma antassalaam wa minkassalaam, tabaarakta yaa dzal jalaali wal ikraam.",
+    "arti": "Aku mohon ampun kepada Allah (3x). Ya Allah, Engkau Maha Pemberi kesejahteraan, dan dari-Mu kesejahteraan, Maha Suci Engkau, wahai Tuhan Yang Memiliki Keagungan dan Kemuliaan.",
+    "keutamaan": "Dzikir setelah salam dari shalat fardhu.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 21,
+    "kategori": "shalat",
+    "nama": "Tasbih",
+    "arab": "سُبْحَانَ اللهِ",
+    "latin": "Subhanallah.",
+    "arti": "Maha Suci Allah.",
+    "keutamaan": "Barangsiapa yang bertasbih 33 kali setelah shalat fardhu, maka dosanya akan diampuni meskipun sebanyak buih di lautan.",
+    "jumlahBaca": 33,
+    "isDone": false
+  },
+  {
+    "id": 22,
+    "kategori": "shalat",
+    "nama": "Tahmid",
+    "arab": "اَلْحَمْدُ لِلَّهِ",
+    "latin": "Alhamdulillah.",
+    "arti": "Segala puji bagi Allah.",
+    "keutamaan": "Hamdalah adalah ungkapan syukur kepada Allah atas segala nikmat.",
+    "jumlahBaca": 33,
+    "isDone": false
+  },
+  {
+    "id": 23,
+    "kategori": "shalat",
+    "nama": "Takbir",
+    "arab": "اَللهُ أَكْبَرُ",
+    "latin": "Allahu Akbar.",
+    "arti": "Allah Maha Besar.",
+    "keutamaan": "Takbir mengagungkan kebesaran Allah.",
+    "jumlahBaca": 34,
+    "isDone": false
+  },
+  {
+    "id": 24,
+    "kategori": "shalat",
+    "nama": "Tahlil",
+    "arab": "لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "latin": "Laa ilaaha illallahu wahdahu laa syariikalah, lahul mulku walahul hamdu wa huwa 'alaa kulli syai-in qodiir.",
+    "arti": "Tidak ada Tuhan melainkan Allah Yang Maha Esa, tidak ada sekutu bagi-Nya. Milik Allah kerajaan dan bagi-Nya segala pujian. Dan Dia Mahakuasa atas segala sesuatu.",
+    "keutamaan": "Bacaan ini setelah 33 tasbih, 33 tahmid, dan 34 takbir menyempurnakan 100 bacaan.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 25,
+    "kategori": "shalat",
+    "nama": "Ayat Kursi",
+    "arab": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ",
+    "latin": "Allahu laa ilaaha illaa huwal hayyul qayyuum, laa ta'khudzuhuu sinatuw walaa naum. Lahuu maa fissamaawaati wa maa fil ardh...",
+    "arti": "Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya); tidak mengantuk dan tidak tidur...",
+    "keutamaan": "Barangsiapa membaca ayat kursi setiap selesai shalat fardhu, tidak ada yang menghalanginya masuk surga kecuali kematian.",
+    "jumlahBaca": 1,
+    "isDone": false
+  }
+]

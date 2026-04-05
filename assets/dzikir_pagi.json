@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "kategori": "pagi",
+    "nama": "Ayat Kursi",
+    "arab": "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+    "latin": "Allahu laa ilaaha illaa huwal hayyul qayyuum, laa ta'khudzuhuu sinatuw walaa naum. Lahuu maa fissamaawaati wa maa fil ardh. Man dzalladzii yasyfa'u 'indahuu illaa bi-idznih. Ya'lamu maa baina aidiihim wa maa khalfahum. Wa laa yuhiithuuna bisyai'im min 'ilmihii illaa bimaa syaa'. Wasi'a kursiyyuhus samaawaati wal ardh. Wa laa ya'uuduhuu hifdhuhumaa. Wa huwal 'aliyyul 'adhiim.",
+    "arti": "Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya); tidak mengantuk dan tidak tidur. Kepunyaan-Nya apa yang di langit dan di bumi. Tiada yang dapat memberi syafa'at di sisi Allah tanpa izin-Nya. Allah mengetahui apa-apa yang di hadapan mereka dan di belakang mereka, dan mereka tidak mengetahui apa-apa dari ilmu Allah melainkan apa yang dikehendaki-Nya. Kursi Allah meliputi langit dan bumi. Dan Allah tidak merasa berat memelihara keduanya, dan Allah Maha Tinggi lagi Maha Besar.",
+    "keutamaan": "Barang siapa membaca ayat kursi ketika hendak tidur, maka Allah akan menjaganya dan setan tidak akan mendekatinya hingga waktu subuh.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 2,
+    "kategori": "pagi",
+    "nama": "Surat Al-Ikhlas",
+    "arab": "قُلْ هُوَ اللَّهُ أَحَدٌ. اللَّهُ الصَّمَدُ. لَمْ يَلِدْ وَلَمْ يُولَدْ. وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
+    "latin": "Qul huwallahu ahad. Allahush shamad. Lam yalid wa lam yuulad. Wa lam yakul lahu kufuwan ahad.",
+    "arti": "Katakanlah: Dialah Allah, Yang Maha Esa. Allah adalah Tuhan yang bergantung kepada-Nya segala sesuatu. Dia tiada beranak dan tidak pula diperanakkan, dan tidak ada seorangpun yang setara dengan Dia.",
+    "keutamaan": "Siapa yang membaca surat Al-Ikhlas 3 kali, sama seperti membaca Al-Qur'an 1 kali.",
+    "jumlahBaca": 3,
+    "isDone": false
+  },
+  {
+    "id": 3,
+    "kategori": "pagi",
+    "nama": "Surat Al-Falaq",
+    "arab": "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ. مِنْ شَرِّ مَا خَلَقَ. وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ. وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ. وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+    "latin": "Qul a'udzu birabbil falaq. Min syarri maa khalaq. Wa min syarri ghaasiqin idza waqab. Wa min syarrin naffatsaati fil 'uqad. Wa min syarri haasidin idza hasad.",
+    "arti": "Katakanlah: Aku berlindung kepada Tuhan Yang Menguasai subuh, dari kejahatan makhluk-Nya, dan dari kejahatan malam apabila telah gelap gulita, dan dari kejahatan wanita-wanita tukang sihir yang menghembus pada buhul-buhul, dan dari kejahatan orang yang dengki apabila ia dengki.",
+    "keutamaan": "Membaca surat Al-Falaq dan An-Nas pagi dan petang 3 kali akan mencukupi dari segala sesuatu.",
+    "jumlahBaca": 3,
+    "isDone": false
+  },
+  {
+    "id": 4,
+    "kategori": "pagi",
+    "nama": "Surat An-Nas",
+    "arab": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ. مَلِكِ النَّاسِ. إِلَٰهِ النَّاسِ. مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ. الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ. مِنَ الْجِنَّةِ وَالنَّاسِ",
+    "latin": "Qul a'udzu birabbin naas. Malikin naas. Ilaahin naas. Min syarril waswaasil khannaas. Alladzii yuwaswisu fii shuduurin naas. Minal jinnati wannaas.",
+    "arti": "Katakanlah: Aku berlindung kepada Tuhan (yang memelihara dan menguasai) manusia, Raja manusia, Sembahan manusia, dari kejahatan (bisikan) syaitan yang biasa bersembunyi, yang membisikkan (kejahatan) ke dalam dada manusia, dari (golongan) jin dan manusia.",
+    "keutamaan": "Membaca surat An-Nas akan melindungi dari gangguan jin dan sihir.",
+    "jumlahBaca": 3,
+    "isDone": false
+  },
+  {
+    "id": 5,
+    "kategori": "pagi",
+    "nama": "Dzikir Pagi 1",
+    "arab": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيْكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِيْ هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوْذُ بِكَ مِنْ شَرِّ مَا فِيْ هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ",
+    "latin": "Ashbahnaa wa ashbahal mulku lillah walhamdulillah, laa ilaaha illallahu wahdahu laa syariikalah, lahul mulku walahul hamdu wa huwa 'alaa kulli syai-in qodiir, robbi as-aluka khoiro maa fii haadzal yaumi wa khoiro maa ba'dahu, wa a'udzu bika min syarri maa fii haadzal yaumi wa syarri maa ba'dahu.",
+    "arti": "Kami telah memasuki waktu pagi dan kerajaan hanya milik Allah, segala puji bagi Allah. Tidak ada Tuhan melainkan Allah Yang Maha Esa, tidak ada sekutu bagi-Nya. Milik Allah kerajaan dan bagi-Nya segala pujian. Dia-lah Yang Mahakuasa atas segala sesuatu. Wahai Rabbku, aku mohon kepada-Mu kebaikan di hari ini dan kebaikan sesudahnya. Aku berlindung kepada-Mu dari kejahatan hari ini dan kejahatan sesudahnya.",
+    "keutamaan": "Dzikir ini melindungi dari kejahatan sepanjang hari.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 6,
+    "kategori": "pagi",
+    "nama": "Dzikir Pagi 2",
+    "arab": "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ",
+    "latin": "Allahumma bika ashbahnaa, wa bika amsainaa, wa bika nahyaa, wa bika namuutu wa ilaikal nusyuur.",
+    "arti": "Ya Allah, dengan rahmat dan pertolongan-Mu kami memasuki waktu pagi, dan dengan rahmat dan pertolongan-Mu kami memasuki waktu petang. Dengan rahmat dan pertolongan-Mu kami hidup dan dengan kehendak-Mu kami mati. Dan kepada-Mu kebangkitan.",
+    "keutamaan": "Mengingat Allah di pagi hari mendatangkan keberkahan.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 7,
+    "kategori": "pagi",
+    "nama": "Dzikir Pagi 3",
+    "arab": "اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِر لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ",
+    "latin": "Allahumma anta rabbii laa ilaaha illaa anta, kholaqtanii wa anaa 'abduka, wa anaa 'alaa 'ahdika wa wa'dika mas-tatho'tu, a'uudzu bika min syarri maa shona'tu, abuu-u laka bini'matika 'alayya wa abuu-u bidzambii, faghfirlii fa-innahuu laa yaghfirudz dzunuuba illaa anta.",
+    "arti": "Ya Allah, Engkau adalah Tuhanku, tidak ada Tuhan melainkan Engkau, Engkau telah menciptakanku. Aku adalah hamba-Mu. Aku akan setia pada perjanjianku pada-Mu (yaitu aku akan mentauhidkan-Mu) semampuku dan aku yakin akan janji-Mu (berupa surga untukku). Aku berlindung kepada-Mu dari kejelekan yang kuperbuat. Aku mengakui nikmat-Mu yang Engkau berikan kepadaku dan aku mengakui dosaku. Oleh karena itu, ampunilah aku. Sesungguhnya tiada yang mengampuni dosa kecuali Engkau.",
+    "keutamaan": "Siapa yang membaca dzikir ini dengan yakin di siang hari lalu meninggal pada hari itu, maka ia termasuk penghuni surga.",
+    "jumlahBaca": 1,
+    "isDone": false
+  },
+  {
+    "id": 8,
+    "kategori": "pagi",
+    "nama": "Tasbih",
+    "arab": "سُبْحَانَ اللهِ وَبِحَمْدِهِ",
+    "latin": "Subhanallahi wa bihamdihi.",
+    "arti": "Maha Suci Allah, aku memuji-Nya.",
+    "keutamaan": "Barangsiapa yang mengucapkan tasbih ini 100 kali di pagi dan petang, tidak ada yang datang pada hari kiamat yang lebih baik dari yang dia lakukan kecuali orang yang mengucapkan semisal atau lebih dari itu.",
+    "jumlahBaca": 100,
+    "isDone": false
+  },
+  {
+    "id": 9,
+    "kategori": "pagi",
+    "nama": "Istighfar",
+    "arab": "أَسْتَغْفِرُ اللهَ وَأَتُوبُ إِلَيْهِ",
+    "latin": "Astaghfirullaha wa atuubu ilaih.",
+    "arti": "Aku memohon ampun kepada Allah dan bertobat kepada-Nya.",
+    "keutamaan": "Nabi SAW beristighfar lebih dari 70 kali setiap hari.",
+    "jumlahBaca": 100,
+    "isDone": false
+  },
+  {
+    "id": 10,
+    "kategori": "pagi",
+    "nama": "Shalawat Nabi",
+    "arab": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    "latin": "Allahumma shalli 'alaa Muhammadin wa 'alaa aali Muhammadin kamaa shallaita 'alaa Ibraahiima wa 'alaa aali Ibraahiima innaka hamiidun majiid. Allahumma baarik 'alaa Muhammadin wa 'alaa aali Muhammadin kamaa baarakta 'alaa Ibraahiima wa 'alaa aali Ibraahiima innaka hamiidun majiid.",
+    "arti": "Ya Allah, limpahkanlah shalawat atas Muhammad dan keluarga Muhammad sebagaimana Engkau telah melimpahkan shalawat atas Ibrahim dan keluarga Ibrahim. Sesungguhnya Engkau Maha Terpuji lagi Maha Mulia. Ya Allah, limpahkanlah berkah atas Muhammad dan keluarga Muhammad sebagaimana Engkau telah melimpahkan berkah atas Ibrahim dan keluarga Ibrahim. Sesungguhnya Engkau Maha Terpuji lagi Maha Mulia.",
+    "keutamaan": "Barangsiapa yang bershalawat kepadaku satu kali, maka Allah akan bershalawat kepadanya sepuluh kali.",
+    "jumlahBaca": 10,
+    "isDone": false
+  }
+]

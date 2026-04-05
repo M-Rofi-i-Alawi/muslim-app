@@ -1,0 +1,169 @@
+{
+  "id": "puasa",
+  "title": "Tata Cara Puasa",
+  "description": "Panduan lengkap puasa Ramadan dan sunnah",
+  "icon": "no_food",
+  "color": "0xFF9C27B0",
+  "items": [
+    {
+      "id": "puasa_ramadan",
+      "title": "Puasa Ramadan",
+      "shortDesc": "Rukun, syarat, dan tata cara puasa wajib",
+      "sections": [
+        {
+          "title": "Pengertian Puasa",
+          "type": "text",
+          "content": "Puasa adalah menahan diri dari makan, minum, dan hal-hal yang membatalkan puasa mulai dari terbit fajar (imsak) hingga terbenam matahari (maghrib), dengan niat beribadah kepada Allah SWT."
+        },
+        {
+          "title": "Syarat Wajib Puasa Ramadan",
+          "type": "list",
+          "content": [
+            "Islam (beragama Islam)",
+            "Baligh (sudah dewasa/akil baligh)",
+            "Berakal sehat (tidak gila)",
+            "Mampu melaksanakan puasa (sehat)",
+            "Mukim (tidak sedang bepergian jauh/musafir)",
+            "Suci dari haid dan nifas (khusus wanita)"
+          ]
+        },
+        {
+          "title": "Rukun Puasa (2 Rukun)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Niat",
+              "description": "Niat puasa dilakukan sebelum fajar (subuh) di bulan Ramadan. Niat cukup dalam hati, boleh diucapkan.",
+              "arabic": "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هَذِهِ السَّنَةِ لِلَّهِ تَعَالَى",
+              "transliteration": "Nawaitu shauma ghadin 'an adaa-i fardhi syahri Ramadhana haadzihis sanati lillahi ta'ala",
+              "translation": "Saya niat puasa esok hari untuk menunaikan fardhu bulan Ramadan tahun ini karena Allah Ta'ala"
+            },
+            {
+              "number": 2,
+              "title": "Menahan Diri dari Hal yang Membatalkan",
+              "description": "Menahan diri dari makan, minum, dan segala hal yang membatalkan puasa mulai dari terbit fajar shidiq (imsak) hingga terbenam matahari (maghrib)."
+            }
+          ]
+        },
+        {
+          "title": "Sunnah-sunnah Puasa",
+          "type": "list",
+          "content": [
+            "Makan sahur dan mengakhirkannya mendekati imsak",
+            "Menyegerakan berbuka saat masuk waktu maghrib",
+            "Berbuka dengan yang manis (kurma atau air manis)",
+            "Membaca doa berbuka puasa",
+            "Memperbanyak sedekah dan membaca Al-Quran",
+            "Menahan diri dari perkataan dan perbuatan sia-sia",
+            "I'tikaf di 10 hari terakhir Ramadan (sunnah muakkad)",
+            "Memperbanyak shalat sunnah, terutama tarawih dan tahajud",
+            "Menahan amarah dan tidak membalas kejelekan",
+            "Berbuka bersama orang lain (mengundang berbuka)"
+          ]
+        },
+        {
+          "title": "Doa Berbuka Puasa",
+          "type": "arabic",
+          "content": {
+            "arabic": "اَللَّهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ، ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوْقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللهُ",
+            "transliteration": "Allahumma laka shumtu wa bika aamantu wa 'alaa rizqika afthartu, dzahabazh zhama-u wabtallatil 'uruuqu wa tsabatal ajru insyaa Allah",
+            "translation": "Ya Allah, untuk-Mu aku berpuasa, kepada-Mu aku beriman, dengan rezeki-Mu aku berbuka. Telah hilang dahaga, telah basah kerongkongan, dan telah ditetapkan pahala, insya Allah"
+          }
+        },
+        {
+          "title": "Hal-hal yang Membatalkan Puasa",
+          "type": "list",
+          "content": [
+            "Makan atau minum dengan sengaja",
+            "Muntah dengan sengaja",
+            "Haid atau nifas (khusus wanita)",
+            "Melahirkan (khusus wanita)",
+            "Gila atau hilang akal",
+            "Murtad (keluar dari Islam)",
+            "Berhubungan suami istri (jima')",
+            "Keluar mani karena syahwat dengan sengaja",
+            "Memasukkan sesuatu ke dalam lubang (mulut, hidung, telinga, dll) yang sampai ke rongga badan dengan sengaja"
+          ]
+        },
+        {
+          "title": "Hal-hal yang Tidak Membatalkan Puasa",
+          "type": "list",
+          "content": [
+            "Makan atau minum karena lupa",
+            "Muntah tanpa sengaja",
+            "Mimpi basah",
+            "Berkumur atau istinsyaq (memasukkan air ke hidung) untuk wudhu, asal tidak sampai tertelan",
+            "Suntik yang tidak mengandung nutrisi",
+            "Mencicipi makanan tanpa ditelan",
+            "Mencium bau wangi-wangian",
+            "Mandi atau berendam",
+            "Donor darah atau cek darah",
+            "Sikat gigi (asal tidak tertelan pasta gigi)"
+          ]
+        },
+        {
+          "title": "Fidyah dan Kafarat",
+          "type": "text",
+          "content": "FIDYAH: Membayar fidyah (denda) dengan memberi makan 1 orang miskin untuk 1 hari tidak puasa. Wajib bagi orang yang tidak mampu puasa selamanya (tua renta, sakit kronis). KAFARAT: Wajib bagi yang membatalkan puasa dengan sengaja di siang hari Ramadan tanpa uzur (alasan syar'i). Kafaratnya: membebaskan budak, atau puasa 2 bulan berturut-turut, atau memberi makan 60 orang miskin."
+        }
+      ],
+      "references": [
+        "Al-Quran Surah Al-Baqarah: 183-185",
+        "Fiqih Sunnah - Sayyid Sabiq (Jilid 1 hal 480-550)",
+        "Shahih Bukhari - Kitab Ash-Shaum",
+        "Shahih Muslim - Kitab Ash-Shiyam",
+        "Bidayatul Mujtahid - Ibnu Rusyd (Bab Puasa)",
+        "Fathul Bari - Ibnu Hajar (Syarah Bukhari Bab Puasa)"
+      ]
+    },
+    {
+      "id": "puasa_sunnah",
+      "title": "Puasa Sunnah",
+      "shortDesc": "Jenis-jenis puasa sunnah dan keutamaannya",
+      "sections": [
+        {
+          "title": "Puasa Senin & Kamis",
+          "type": "text",
+          "content": "Puasa sunnah yang dilakukan setiap hari Senin dan Kamis. Rasulullah SAW bersabda bahwa amal perbuatan diangkat kepada Allah pada hari Senin dan Kamis, beliau menyukai amalnya diangkat dalam keadaan berpuasa. (HR. Tirmidzi)"
+        },
+        {
+          "title": "Puasa Ayyamul Bidh (Hari Putih)",
+          "type": "text",
+          "content": "Puasa pada tanggal 13, 14, dan 15 setiap bulan Hijriah. Dinamakan ayyamul bidh (hari putih) karena bulan bersinar terang di malam-malam tersebut. Rasulullah SAW bersabda: 'Puasa tiga hari setiap bulan adalah seperti puasa sepanjang masa.' (HR. Bukhari dan Muslim)"
+        },
+        {
+          "title": "Puasa 6 Hari Syawal",
+          "type": "text",
+          "content": "Puasa 6 hari di bulan Syawal setelah Idul Fitri. Rasulullah SAW bersabda: 'Barangsiapa yang berpuasa Ramadan kemudian diikuti dengan puasa 6 hari di bulan Syawal, maka pahalanya seperti puasa setahun penuh.' (HR. Muslim)"
+        },
+        {
+          "title": "Puasa Hari Arafah",
+          "type": "text",
+          "content": "Puasa pada tanggal 9 Dzulhijjah (bagi yang tidak sedang haji). Rasulullah SAW bersabda tentang puasa hari Arafah: 'Aku berharap kepada Allah, puasa tersebut dapat menghapus dosa setahun sebelumnya dan setahun sesudahnya.' (HR. Muslim)"
+        },
+        {
+          "title": "Puasa Asyura & Tasu'a",
+          "type": "text",
+          "content": "Puasa pada tanggal 9 dan 10 Muharram (Tasu'a dan Asyura). Rasulullah SAW bersabda: 'Puasa hari Asyura, aku berharap kepada Allah dapat menghapus dosa setahun sebelumnya.' (HR. Muslim). Dianjurkan puasa 9 Muharram juga untuk membedakan dengan Yahudi."
+        },
+        {
+          "title": "Puasa Nabi Daud AS",
+          "type": "text",
+          "content": "Puasa sehari berbuka sehari. Ini adalah puasa yang paling utama menurut Rasulullah SAW. Beliau bersabda: 'Puasa yang paling utama adalah puasa Daud. Beliau berpuasa sehari dan berbuka sehari.' (HR. Bukhari dan Muslim)"
+        },
+        {
+          "title": "Puasa Bulan Sya'ban",
+          "type": "text",
+          "content": "Aisyah RA berkata: 'Rasulullah SAW berpuasa hingga kami mengira beliau tidak akan berbuka. Beliau juga berbuka hingga kami mengira beliau tidak akan berpuasa. Aku tidak pernah melihat Rasulullah SAW berpuasa sebulan penuh selain di bulan Ramadan. Dan aku tidak pernah melihat beliau lebih banyak berpuasa selain di bulan Sya'ban.' (HR. Bukhari dan Muslim)"
+        }
+      ],
+      "references": [
+        "Shahih Bukhari - Kitab Ash-Shaum (Bab Puasa Sunnah)",
+        "Shahih Muslim - Kitab Ash-Shiyam",
+        "Sunan Tirmidzi - Bab Puasa Senin Kamis",
+        "Riyadhus Shalihin - Imam Nawawi (Bab Puasa Sunnah)"
+      ]
+    }
+  ]
+}

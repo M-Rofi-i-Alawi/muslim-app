@@ -1,0 +1,167 @@
+{
+  "id": "zakat",
+  "title": "Tata Cara Zakat",
+  "description": "Panduan lengkap zakat mal dan fitrah",
+  "icon": "volunteer_activism",
+  "color": "0xFFFF9800",
+  "items": [
+    {
+      "id": "zakat_fitrah",
+      "title": "Zakat Fitrah",
+      "shortDesc": "Tata cara dan ketentuan zakat fitrah",
+      "sections": [
+        {
+          "title": "Pengertian Zakat Fitrah",
+          "type": "text",
+          "content": "Zakat fitrah adalah zakat yang wajib dikeluarkan oleh setiap muslim menjelang Idul Fitri sebagai pembersih bagi orang yang berpuasa dari perkataan kotor dan perbuatan sia-sia, serta untuk memberi makan kepada orang miskin."
+        },
+        {
+          "title": "Hukum dan Waktu Wajib",
+          "type": "text",
+          "content": "Zakat fitrah wajib bagi setiap muslim yang memiliki kelebihan makanan untuk dirinya dan keluarganya pada malam dan hari raya Idul Fitri. Waktu wajib dimulai sejak terbenam matahari di akhir bulan Ramadan (1 Syawal)."
+        },
+        {
+          "title": "Syarat Wajib Zakat Fitrah",
+          "type": "list",
+          "content": [
+            "Islam (beragama Islam)",
+            "Hidup saat terbenam matahari akhir Ramadan",
+            "Memiliki kelebihan makanan untuk diri dan keluarga pada malam dan hari raya",
+            "Merdeka (bukan budak - sudah tidak relevan saat ini)"
+          ]
+        },
+        {
+          "title": "Jumlah dan Jenis Zakat Fitrah",
+          "type": "text",
+          "content": "Zakat fitrah dikeluarkan sebesar 1 sha' (2,5 kg atau 3,5 liter) beras atau makanan pokok sehari-hari. Boleh diganti dengan uang senilai harga beras tersebut. Dikeluarkan untuk setiap jiwa (diri sendiri, istri, anak, dan tanggungan lain)."
+        },
+        {
+          "title": "Waktu Mengeluarkan Zakat Fitrah",
+          "type": "list",
+          "content": [
+            "BOLEH: Sejak awal Ramadan hingga sebelum shalat Idul Fitri",
+            "UTAMA: Pagi hari raya sebelum shalat Id",
+            "MAKRUH: Setelah shalat Id hingga sebelum terbenam matahari",
+            "HARAM: Setelah terbenam matahari hari raya (menjadi sedekah biasa, bukan zakat fitrah)"
+          ]
+        },
+        {
+          "title": "Mustahiq Zakat (8 Golongan)",
+          "type": "list",
+          "content": [
+            "Fakir: Orang yang tidak memiliki harta dan tidak mampu berusaha",
+            "Miskin: Orang yang memiliki harta/penghasilan namun tidak cukup untuk kebutuhan",
+            "Amil: Pengurus/pengelola zakat",
+            "Muallaf: Orang yang baru masuk Islam dan perlu dikuatkan imannya",
+            "Riqab: Budak yang ingin memerdekakan diri (tidak relevan saat ini)",
+            "Gharim: Orang yang berhutang untuk kepentingan yang baik",
+            "Fisabilillah: Orang yang berjuang di jalan Allah",
+            "Ibnus Sabil: Musafir yang kehabisan bekal dalam perjalanan"
+          ]
+        },
+        {
+          "title": "Doa Membayar Zakat",
+          "type": "arabic",
+          "content": {
+            "arabic": "اَللَّهُمَّ اجْعَلْهَا مَغْنَمًا وَلاَ تَجْعَلْهَا مَغْرَمًا",
+            "transliteration": "Allahummaj'alhaa maghnaman wa laa taj'alhaa maghraman",
+            "translation": "Ya Allah, jadikanlah zakat ini sebagai keuntungan dan jangan jadikan sebagai kerugian"
+          }
+        }
+      ],
+      "references": [
+        "Al-Quran Surah At-Taubah: 60",
+        "Hadits Ibnu Umar (HR. Bukhari & Muslim)",
+        "Fiqih Sunnah - Sayyid Sabiq (Bab Zakat Fitrah)",
+        "Majmu' Syarh Muhadzdzab - Imam Nawawi"
+      ]
+    },
+    {
+      "id": "zakat_mal",
+      "title": "Zakat Mal (Harta)",
+      "shortDesc": "Jenis-jenis dan cara menghitung zakat harta",
+      "sections": [
+        {
+          "title": "Pengertian Zakat Mal",
+          "type": "text",
+          "content": "Zakat mal adalah zakat yang dikenakan atas harta yang dimiliki oleh individu muslim yang telah mencapai nisab (batas minimum) dan haul (masa kepemilikan 1 tahun), dengan kadar tertentu untuk diberikan kepada yang berhak menerimanya."
+        },
+        {
+          "title": "Syarat Wajib Zakat Mal",
+          "type": "list",
+          "content": [
+            "Islam",
+            "Merdeka (bukan budak)",
+            "Milik penuh (harta benar-benar miliknya)",
+            "Mencapai nisab (batas minimum harta)",
+            "Mencapai haul (telah dimiliki selama 1 tahun hijriah)",
+            "Harta yang berkembang atau berpotensi berkembang"
+          ]
+        },
+        {
+          "title": "1. Zakat Emas dan Perak",
+          "type": "text",
+          "content": "NISAB EMAS: 85 gram emas murni. NISAB PERAK: 595 gram perak murni. KADAR ZAKAT: 2,5% dari total emas/perak yang dimiliki. HAUL: 1 tahun hijriah (354 hari). Berlaku juga untuk uang simpanan yang setara dengan nisab emas."
+        },
+        {
+          "title": "2. Zakat Perdagangan",
+          "type": "text",
+          "content": "NISAB: Senilai 85 gram emas. KADAR: 2,5% dari total (modal + keuntungan + piutang - hutang jatuh tempo). HAUL: 1 tahun hijriah. Contoh: Modal 50 juta + Untung 20 juta + Piutang 10 juta - Hutang 5 juta = 75 juta. Zakat = 75 juta x 2,5% = 1.875.000."
+        },
+        {
+          "title": "3. Zakat Pertanian",
+          "type": "text",
+          "content": "NISAB: 520 kg (653 liter) beras atau makanan pokok. KADAR: 10% jika diairi hujan/alami, 5% jika diairi irigasi/biaya. TIDAK ADA HAUL: Dikeluarkan setiap panen. Contoh: Panen 1 ton (1000 kg) dengan hujan = 1000 x 10% = 100 kg zakat."
+        },
+        {
+          "title": "4. Zakat Profesi/Penghasilan",
+          "type": "text",
+          "content": "Menurut pendapat sebagian ulama kontemporer, penghasilan dari profesi (gaji, honor, dll) yang telah mencapai nisab (setara 85 gram emas) dikeluarkan zakatnya 2,5%. Boleh dipotong kebutuhan pokok. Contoh: Gaji 10 juta/bulan, nisab emas 1 juta/gram = 85 juta. Jika gaji setahun 120 juta, zakat = 120 juta x 2,5% = 3 juta."
+        },
+        {
+          "title": "5. Zakat Peternakan",
+          "type": "text",
+          "content": "ZAKAT UNTA: Nisab 5 ekor, kadar bervariasi sesuai jumlah. ZAKAT SAPI: Nisab 30 ekor, kadar 1 tabi' (sapi 1 tahun). ZAKAT KAMBING: Nisab 40 ekor, kadar 1 kambing. Harus diumbar (digembalakan), bukan dipekerjakan, dan telah mencapai haul."
+        },
+        {
+          "title": "Cara Menghitung Zakat Harta",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Hitung Total Harta",
+              "description": "Jumlahkan semua harta yang dimiliki: tabungan, emas, perak, investasi, piutang yang akan kembali, dll."
+            },
+            {
+              "number": 2,
+              "title": "Kurangi Hutang (Opsional)",
+              "description": "Menurut sebagian ulama, hutang yang jatuh tempo boleh dikurangkan dari total harta."
+            },
+            {
+              "number": 3,
+              "title": "Bandingkan dengan Nisab",
+              "description": "Cek apakah total harta mencapai nisab (setara 85 gram emas). Jika belum, tidak wajib zakat."
+            },
+            {
+              "number": 4,
+              "title": "Cek Haul",
+              "description": "Pastikan harta telah dimiliki selama 1 tahun hijriah (354 hari)."
+            },
+            {
+              "number": 5,
+              "title": "Hitung Zakat 2,5%",
+              "description": "Jika mencapai nisab dan haul, kalikan total harta dengan 2,5%. Itulah zakat yang harus dikeluarkan."
+            }
+          ]
+        }
+      ],
+      "references": [
+        "Al-Quran Surah At-Taubah: 103",
+        "Hadits tentang Zakat (HR. Bukhari & Muslim)",
+        "Fiqih Sunnah - Sayyid Sabiq (Jilid 1 Bab Zakat)",
+        "Al-Mughni - Ibnu Qudamah (Bab Zakat)",
+        "Fiqhuz Zakat - Dr. Yusuf Qardhawi"
+      ]
+    }
+  ]
+}

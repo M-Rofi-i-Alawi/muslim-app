@@ -1,0 +1,192 @@
+{
+  "id": "shalat",
+  "title": "Tata Cara Shalat",
+  "description": "Panduan lengkap shalat 5 waktu",
+  "icon": "prayer",
+  "color": "0xFF00897B",
+  "items": [
+    {
+      "id": "shalat_5_waktu",
+      "title": "Shalat 5 Waktu",
+      "shortDesc": "Rukun, syarat, dan tata cara shalat wajib",
+      "sections": [
+        {
+          "title": "Syarat Wajib Shalat",
+          "type": "list",
+          "content": [
+            "Islam (beragama Islam)",
+            "Baligh (sudah dewasa/akil baligh)",
+            "Berakal (tidak gila, dalam keadaan sadar)",
+            "Suci dari haid dan nifas (khusus wanita)",
+            "Telah sampai dakwah (mengetahui kewajiban shalat)"
+          ]
+        },
+        {
+          "title": "Syarat Sah Shalat",
+          "type": "list",
+          "content": [
+            "Suci dari hadats kecil dan besar (berwudhu atau mandi wajib)",
+            "Suci badan, pakaian, dan tempat dari najis",
+            "Menutup aurat (laki-laki: pusar-lutut, wanita: seluruh tubuh kecuali wajah dan telapak tangan)",
+            "Menghadap kiblat (arah Ka'bah di Makkah)",
+            "Masuk waktu shalat yang telah ditentukan",
+            "Mengetahui mana rukun dan mana sunnah dalam shalat"
+          ]
+        },
+        {
+          "title": "Rukun Shalat (13 Rukun)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Niat",
+              "description": "Niat dalam hati untuk shalat tertentu. Niat dilakukan bersamaan dengan takbiratul ihram.",
+              "arabic": "أُصَلِّى فَرْضَ الظُّهْرِ أَرْبَعَ رَكَعَاتٍ مُسْتَقْبِلَ الْقِبْلَةِ أَدَاءً لِلَّهِ تَعَالَى",
+              "transliteration": "Ushalli fardha zhuhri arba'a raka'atin mustaqbilal qiblati adaa-an lillahi ta'ala",
+              "translation": "Saya niat shalat fardhu Dzuhur 4 rakaat menghadap kiblat karena Allah Ta'ala"
+            },
+            {
+              "number": 2,
+              "title": "Berdiri bagi yang mampu",
+              "description": "Berdiri tegak saat shalat fardhu. Boleh duduk jika sakit atau tidak mampu berdiri. Untuk shalat sunnah boleh duduk meskipun mampu berdiri."
+            },
+            {
+              "number": 3,
+              "title": "Takbiratul Ihram",
+              "description": "Mengucapkan Allahu Akbar sambil mengangkat kedua tangan sejajar telinga atau bahu, dengan telapak tangan menghadap kiblat.",
+              "arabic": "اللهُ أَكْبَرُ",
+              "transliteration": "Allahu Akbar",
+              "translation": "Allah Maha Besar"
+            },
+            {
+              "number": 4,
+              "title": "Membaca Al-Fatihah",
+              "description": "Membaca surat Al-Fatihah dengan lengkap dan tertib di setiap rakaat. Membaca Al-Fatihah adalah rukun bagi imam, makmum, dan orang yang shalat sendirian.",
+              "arabic": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ ۝ اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ ۝ الرَّحْمٰنِ الرَّحِيْمِ ۝ مٰلِكِ يَوْمِ الدِّيْنِ ۝ اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُ ۝ اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَ ۝ صِرَاطَ الَّذِيْنَ اَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّاۤلِّيْنَ",
+              "transliteration": "Bismillahir rahmaanir rahiim. Alhamdulillahi rabbil 'aalamiin. Ar-rahmaanir rahiim. Maaliki yaumiddiin. Iyyaaka na'budu wa iyyaaka nasta'iin. Ihdinash shiraathal mustaqiim. Shiraathal ladziina an'amta 'alaihim ghairil maghdhuubi 'alaihim waladh dhaallin",
+              "translation": "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Segala puji bagi Allah, Tuhan semesta alam. Yang Maha Pengasih lagi Maha Penyayang. Pemilik hari pembalasan. Hanya kepada-Mu kami menyembah dan hanya kepada-Mu kami memohon pertolongan. Tunjukilah kami jalan yang lurus, yaitu jalan orang-orang yang telah Engkau beri nikmat, bukan jalan mereka yang dimurkai dan bukan pula jalan mereka yang sesat"
+            },
+            {
+              "number": 5,
+              "title": "Ruku dengan Tuma'ninah",
+              "description": "Membungkuk hingga posisi punggung rata dan kepala sejajar dengan punggung. Kedua tangan diletakkan di atas lutut. Harus diam sejenak (tuma'ninah) dalam keadaan ruku.",
+              "arabic": "سُبْحَانَ رَبِّيَ الْعَظِيْمِ وَبِحَمْدِهِ (3x)",
+              "transliteration": "Subhana rabbiyal azhimi wabihamdih (3x)",
+              "translation": "Maha Suci Tuhanku Yang Maha Agung dan dengan memuji-Nya (3x)"
+            },
+            {
+              "number": 6,
+              "title": "I'tidal dengan Tuma'ninah",
+              "description": "Bangkit dari ruku dengan berdiri tegak kembali. Kedua tangan di samping badan. Harus diam sejenak (tuma'ninah) dalam keadaan i'tidal.",
+              "arabic": "سَمِعَ اللهُ لِمَنْ حَمِدَهُ ۝ رَبَّنَا وَلَكَ الْحَمْدُ حَمْدًا كَثِيْرًا طَيِّبًا مُبَارَكًا فِيْهِ",
+              "transliteration": "Sami'allahu liman hamidah. Rabbana walakal hamdu hamdan katsiran thayyiban mubarakan fih",
+              "translation": "Allah mendengar pujian orang yang memuji-Nya. Ya Tuhan kami, bagi-Mu segala puji, pujian yang banyak, baik, dan penuh berkah"
+            },
+            {
+              "number": 7,
+              "title": "Sujud Dua Kali dengan Tuma'ninah",
+              "description": "Sujud dengan menempelkan 7 anggota tubuh ke lantai: dahi, hidung, kedua telapak tangan, kedua lutut, dan kedua ujung kaki. Harus diam sejenak (tuma'ninah). Sujud dilakukan 2 kali.",
+              "arabic": "سُبْحَانَ رَبِّيَ الْأَعْلَى وَبِحَمْدِهِ (3x)",
+              "transliteration": "Subhana rabbiyal a'la wabihamdih (3x)",
+              "translation": "Maha Suci Tuhanku Yang Maha Tinggi dan dengan memuji-Nya (3x)"
+            },
+            {
+              "number": 8,
+              "title": "Duduk di Antara Dua Sujud",
+              "description": "Duduk dengan tuma'ninah (diam sejenak) di antara dua sujud. Posisi iftirasy: kaki kiri dilipat di bawah, kaki kanan ditegakkan dengan jari-jari menghadap kiblat.",
+              "arabic": "رَبِّ اغْفِرْ لِي وَارْحَمْنِي وَاجْبُرْنِي وَارْفَعْنِي وَارْزُقْنِي وَاهْدِنِي وَعَافِنِي وَاعْفُ عَنِّي",
+              "transliteration": "Rabbighfirli warhamni wajburni warfa'ni warzuqni wahdini wa'afini wa'fu 'anni",
+              "translation": "Ya Allah ampunilah aku, rahmatilah aku, cukupkanlah aku, tinggikanlah derajatku, berilah aku rezeki, berilah aku petunjuk, berilah aku kesehatan, dan maafkanlah aku"
+            },
+            {
+              "number": 9,
+              "title": "Duduk Tasyahud Akhir",
+              "description": "Duduk untuk membaca tasyahud akhir di rakaat terakhir. Posisi tawarruk: pantat di lantai, kaki kiri di bawah kaki kanan, ujung jari kaki kanan menghadap kiblat."
+            },
+            {
+              "number": 10,
+              "title": "Membaca Tasyahud Akhir",
+              "description": "Membaca bacaan tahiyat (attahiyat) lengkap di rakaat terakhir. Jari telunjuk tangan kanan diangkat saat menyebut nama Allah.",
+              "arabic": "اَلتَّحِيَّاتُ الْمُبَارَكَاتُ الصَّلَوَاتُ الطَّيِّبَاتُ لِلَّهِ ۝ السَّلاَمُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ ۝ السَّلاَمُ عَلَيْنَا وَعَلَى عِبَادِ اللهِ الصَّالِحِينَ ۝ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللهِ",
+              "transliteration": "Attahiyyaatul mubaarakaatush shalawaatuth thayyibaatu lillah. Assalaamu'alaika ayyuhan nabiyyu wa rahmatullaahi wa barakaatuh. Assalaamu'alainaa wa'alaa'ibaadillaahish shaalihiin. Asyhadu allaa ilaaha illallah wa asyhadu anna Muhammadan rasuulullah",
+              "translation": "Segala penghormatan, keberkahan, shalawat dan kebaikan hanya bagi Allah. Semoga kesejahteraan tercurah kepadamu wahai Nabi, demikian pula rahmat Allah dan keberkahan-Nya. Semoga kesejahteraan tercurah kepada kami dan hamba-hamba Allah yang saleh. Aku bersaksi bahwa tidak ada tuhan selain Allah dan aku bersaksi bahwa Muhammad adalah utusan Allah"
+            },
+            {
+              "number": 11,
+              "title": "Membaca Shalawat Nabi",
+              "description": "Membaca shalawat kepada Nabi Muhammad SAW setelah membaca tasyahud akhir.",
+              "arabic": "اَللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيْمَ وَعَلَى آلِ إِبْرَاهِيْمَ، إِنَّكَ حَمِيْدٌ مَجِيْدٌ ۝ اَللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيْمَ وَعَلَى آلِ إِبْرَاهِيْمَ، إِنَّكَ حَمِيْدٌ مَجِيْدٌ",
+              "transliteration": "Allahumma shalli 'alaa Muhammad wa 'alaa aali Muhammad, kamaa shallaita 'alaa Ibraahiim wa 'alaa aali Ibraahiim, innaka hamiidun majiid. Allahumma baarik 'alaa Muhammad wa 'alaa aali Muhammad, kamaa baarakta 'alaa Ibraahiim wa 'alaa aali Ibraahiim, innaka hamiidun majiid",
+              "translation": "Ya Allah, limpahkanlah rahmat kepada Nabi Muhammad dan keluarganya, sebagaimana Engkau telah melimpahkan rahmat kepada Ibrahim dan keluarganya. Sesungguhnya Engkau Maha Terpuji lagi Maha Agung. Ya Allah, limpahkanlah berkah kepada Nabi Muhammad dan keluarganya, sebagaimana Engkau telah melimpahkan berkah kepada Ibrahim dan keluarganya. Sesungguhnya Engkau Maha Terpuji lagi Maha Agung"
+            },
+            {
+              "number": 12,
+              "title": "Salam Pertama",
+              "description": "Mengucapkan salam sambil menoleh ke kanan hingga pipi kanan terlihat oleh orang di belakang.",
+              "arabic": "اَلسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ",
+              "transliteration": "Assalamu'alaikum wa rahmatullah",
+              "translation": "Semoga keselamatan dan rahmat Allah tercurah kepada kalian"
+            },
+            {
+              "number": 13,
+              "title": "Salam Kedua",
+              "description": "Mengucapkan salam sambil menoleh ke kiri hingga pipi kiri terlihat oleh orang di belakang.",
+              "arabic": "اَلسَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ",
+              "transliteration": "Assalamu'alaikum wa rahmatullah",
+              "translation": "Semoga keselamatan dan rahmat Allah tercurah kepada kalian"
+            }
+          ]
+        },
+        {
+          "title": "Sunnah-sunnah Shalat",
+          "type": "list",
+          "content": [
+            "Mengangkat kedua tangan saat takbiratul ihram, ruku, dan bangkit dari ruku",
+            "Membaca doa iftitah setelah takbiratul ihram",
+            "Membaca ta'awudz sebelum Al-Fatihah",
+            "Mengucapkan amin setelah Al-Fatihah",
+            "Membaca surat atau ayat Al-Quran setelah Al-Fatihah di rakaat 1 dan 2",
+            "Mengeraskan bacaan (jahr) di rakaat 1 dan 2 untuk shalat Maghrib, Isya, dan Subuh",
+            "Melirihkan bacaan (sirr) untuk shalat Dzuhur dan Ashar",
+            "Meletakkan tangan kanan di atas tangan kiri di dada saat berdiri",
+            "Meletakkan telapak tangan di atas lutut saat ruku",
+            "Merapatkan jari-jari saat ruku",
+            "Mengangkat kedua tangan saat bangkit dari ruku (i'tidal)",
+            "Duduk tawarruk di tasyahud akhir, duduk iftirasy di tasyahud awal dan di antara dua sujud"
+          ]
+        },
+        {
+          "title": "Hal-hal yang Membatalkan Shalat",
+          "type": "list",
+          "content": [
+            "Berhadats (batal wudhu), baik hadats kecil maupun besar",
+            "Terkena najis yang tidak dimaafkan",
+            "Membuka aurat",
+            "Berubah niat di tengah shalat atau ragu dengan niat",
+            "Berbicara dengan kata-kata manusia yang disengaja",
+            "Banyak bergerak yang tidak ada kaitannya dengan shalat secara berturut-turut",
+            "Makan atau minum dengan sengaja, meskipun sedikit",
+            "Tertawa terbahak-bahak hingga terdengar oleh orang lain"
+          ]
+        },
+        {
+          "title": "Doa Setelah Shalat",
+          "type": "arabic",
+          "content": {
+            "arabic": "أَسْتَغْفِرُ اللهَ (3x) ۝ اَللَّهُمَّ أَنْتَ السَّلاَمُ وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ",
+            "transliteration": "Astaghfirullah (3x). Allahumma antas salaam wa minkas salaam, tabaarakta yaa dzal jalaali wal ikraam",
+            "translation": "Aku mohon ampun kepada Allah (3x). Ya Allah, Engkau adalah keselamatan, dan dari-Mu keselamatan. Maha Suci Engkau wahai Dzat yang memiliki keagungan dan kemuliaan"
+          }
+        }
+      ],
+      "references": [
+        "Fiqih Sunnah - Sayyid Sabiq (Jilid 1 hal 123-200)",
+        "Al-Umm - Imam Syafi'i (Bab Shalat)",
+        "Shahih Bukhari - Kitab Al-Adzan & Al-Shalat",
+        "Shahih Muslim - Kitab Al-Shalat",
+        "Fathul Mu'in - Zainuddin Al-Malibari",
+        "NU.or.id - Rukun Shalat Menurut Madzhab Syafi'i"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "id": "wudhu",
+  "title": "Tata Cara Wudhu",
+  "description": "Panduan bersuci sebelum shalat",
+  "icon": "water_drop",
+  "color": "0xFF2196F3",
+  "items": [
+    {
+      "id": "wudhu_lengkap",
+      "title": "Wudhu Lengkap",
+      "shortDesc": "Rukun, sunnah, dan tata cara wudhu yang benar",
+      "sections": [
+        {
+          "title": "Pengertian Wudhu",
+          "type": "text",
+          "content": "Wudhu adalah bersuci dari hadats kecil dengan cara membasuh anggota tubuh tertentu menggunakan air suci dan mensucikan. Wudhu merupakan syarat sah shalat dan ibadah-ibadah lainnya."
+        },
+        {
+          "title": "Rukun Wudhu (6 Rukun)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Niat Wudhu",
+              "description": "Niat dalam hati untuk menghilangkan hadats kecil. Niat dilakukan bersamaan dengan membasuh muka yang pertama kali.",
+              "arabic": "نَوَيْتُ الْوُضُوْءَ لِرَفْعِ الْحَدَثِ الْأَصْغَرِ فَرْضًا لِلَّهِ تَعَالَى",
+              "transliteration": "Nawaitul wudhuu-a liraf'il hadatsil ashghari fardhan lillahi ta'ala",
+              "translation": "Saya niat wudhu untuk menghilangkan hadats kecil fardhu karena Allah Ta'ala"
+            },
+            {
+              "number": 2,
+              "title": "Membasuh Muka",
+              "description": "Membasuh seluruh wajah dari batas ujung rambut kepala (biasa tumbuh) hingga dagu, dan dari telinga kanan hingga telinga kiri. Termasuk kumis dan jenggot bagian luar.",
+              "arabic": "اَللَّهُمَّ بَيِّضْ وَجْهِيْ يَوْمَ تَبْيَضُّ وُجُوْهٌ وَتَسْوَدُّ وُجُوْهٌ",
+              "transliteration": "Allahumma bayyidh wajhii yauma tabyaddhu wujuuhun wa taswaddu wujuuh",
+              "translation": "Ya Allah, putihkanlah wajahku pada hari ketika wajah-wajah ada yang putih dan ada yang hitam"
+            },
+            {
+              "number": 3,
+              "title": "Membasuh Kedua Tangan Hingga Siku",
+              "description": "Membasuh kedua tangan mulai dari ujung jari hingga siku. Siku harus ikut terbasuh. Dimulai dari tangan kanan kemudian kiri (sunnah).",
+              "arabic": "اَللَّهُمَّ أَعْطِنِيْ كِتَابِيْ بِيَمِيْنِيْ وَحَاسِبْنِيْ حِسَابًا يَسِيْرًا (tangan kanan) ۝ اَللَّهُمَّ لاَ تُعْطِنِيْ كِتَابِيْ بِشِمَالِيْ وَلاَ مِنْ وَرَاءِ ظَهْرِيْ (tangan kiri)",
+              "transliteration": "Allahumma a'thini kitaabii biyamiinii wa haasibnii hisaaban yasiiraa (tangan kanan). Allahumma laa tu'thini kitaabii bisyimaalii wa laa min waraa-i zhahriy (tangan kiri)",
+              "translation": "Ya Allah, berikanlah kitabku dengan tangan kananku dan hitunglah aku dengan hisab yang mudah (tangan kanan). Ya Allah, janganlah Engkau berikan kitabku dengan tangan kiriku dan jangan pula dari belakang punggungku (tangan kiri)"
+            },
+            {
+              "number": 4,
+              "title": "Mengusap Sebagian Kepala",
+              "description": "Mengusap kepala, cukup sebagian saja (walau hanya satu helai rambut). Sunnah mengusap seluruh kepala dengan tangan basah.",
+              "arabic": "اَللَّهُمَّ حَرِّمْ شَعْرِيْ وَبَشَرِيْ عَلَى النَّارِ وَأَظِلَّنِيْ تَحْتَ ظِلِّ عَرْشِكَ يَوْمَ لاَ ظِلَّ إِلاَّ ظِلُّكَ",
+              "transliteration": "Allahumma harrim sya'rii wa basyarii 'alan naari wa azhillanii tahta zhilli 'arsyika yauma laa zhilla illaa zhilluk",
+              "translation": "Ya Allah, haramkanlah rambut dan kulitku dari api neraka, dan lindungilah aku di bawah naungan Arasy-Mu pada hari yang tiada naungan kecuali naungan-Mu"
+            },
+            {
+              "number": 5,
+              "title": "Membasuh Kedua Kaki Hingga Mata Kaki",
+              "description": "Membasuh kedua kaki mulai dari ujung jari hingga mata kaki (tulang yang menonjol). Mata kaki harus ikut terbasuh. Dimulai dari kaki kanan kemudian kiri (sunnah).",
+              "arabic": "اَللَّهُمَّثَبِّتْ قَدَمَيَّ عَلَى الصِّرَاطِ يَوْمَ تَزِلُّ فِيْهِ الْأَقْدَامُ",
+              "transliteration": "Allahumma tsabbit qadamaiya 'alash shiraathi yauma tazillu fiihil aqdaam",
+              "translation": "Ya Allah, kokohkanlah kedua kakiku di atas shirat (titian) pada hari tergelincirnya kaki-kaki"
+            },
+            {
+              "number": 6,
+              "title": "Tertib (Berurutan)",
+              "description": "Melakukan wudhu sesuai urutan rukun yang telah ditentukan. Tidak boleh membasuh kaki sebelum tangan, atau tangan sebelum muka."
+            }
+          ]
+        },
+        {
+          "title": "Sunnah-sunnah Wudhu (Urut & Lengkap)",
+          "type": "steps",
+          "content": [
+            {
+              "number": 1,
+              "title": "Membaca Basmalah",
+              "description": "Membaca bismillah sebelum memulai wudhu",
+              "arabic": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+              "transliteration": "Bismillahir rahmaanir rahiim",
+              "translation": "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang"
+            },
+            {
+              "number": 2,
+              "title": "Membasuh Kedua Telapak Tangan",
+              "description": "Membasuh kedua telapak tangan 3 kali sebelum memasukkan tangan ke wadah air",
+              "arabic": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+              "transliteration": "Bismillahir rahmaanir rahiim",
+              "translation": "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang"
+            },
+            {
+              "number": 3,
+              "title": "Berkumur-kumur (Madmadah)",
+              "description": "Berkumur-kumur 3 kali dengan memasukkan air ke mulut",
+              "arabic": "اَللَّهُمَّ أَعِنِّيْ عَلَى تِلاَوَةِ كِتَابِكَ وَذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+              "transliteration": "Allahumma a'innii 'alaa tilaawati kitaabika wa dzikrika wa syukrika wa husni 'ibaadatik",
+              "translation": "Ya Allah, tolonglah aku untuk membaca kitab-Mu, berdzikir kepada-Mu, bersyukur kepada-Mu, dan beribadah dengan baik kepada-Mu"
+            },
+            {
+              "number": 4,
+              "title": "Istinsyaq & Istintsar",
+              "description": "Memasukkan air ke hidung (istinsyaq) dan mengeluarkannya (istintsar) 3 kali",
+              "arabic": "اَللَّهُمَّ أَرِحْنِيْ رَائِحَةَ الْجَنَّةِ وَلاَ تُرِحْنِيْ رَائِحَةَ النَّارِ",
+              "transliteration": "Allahumma arih-nii raa-ihataljannati wa laa turih-nii raa-ihatan naar",
+              "translation": "Ya Allah, ciumkanlah kepadaku harumnya surga dan janganlah Engkau ciumkan kepadaku harumnya neraka"
+            },
+            {
+              "number": 5,
+              "title": "Mengusap Seluruh Kepala",
+              "description": "Mengusap seluruh kepala (bukan hanya sebagian) dengan tangan basah, dari depan ke belakang lalu kembali ke depan"
+            },
+            {
+              "number": 6,
+              "title": "Mengusap Kedua Telinga",
+              "description": "Mengusap bagian dalam telinga dengan jari telunjuk dan bagian luar dengan ibu jari",
+              "arabic": "اَللَّهُمَّ اجْعَلْنِيْ مِنَ الَّذِيْنَ يَسْتَمِعُوْنَ الْقَوْلَ فَيَتَّبِعُوْنَ أَحْسَنَهُ",
+              "transliteration": "Allahummaj'alnii minal ladziina yastami'uunal qaula fayattabi'uuna ahsanah",
+              "translation": "Ya Allah, jadikanlah aku termasuk orang-orang yang mendengarkan perkataan lalu mengikuti yang terbaik"
+            },
+            {
+              "number": 7,
+              "title": "Mendahulukan yang Kanan",
+              "description": "Mendahulukan anggota tubuh yang kanan dari yang kiri (tangan kanan dulu, lalu kiri; kaki kanan dulu, lalu kiri)"
+            },
+            {
+              "number": 8,
+              "title": "Membasuh 3 Kali",
+              "description": "Membasuh setiap anggota wudhu sebanyak 3 kali (boleh 1x atau 2x, tapi 3x lebih utama)"
+            },
+            {
+              "number": 9,
+              "title": "Menyela-nyela Jari",
+              "description": "Menyela-nyela jari tangan dan kaki agar air merata ke seluruh bagian"
+            },
+            {
+              "number": 10,
+              "title": "Berturut-turut (Al-Muwaalah)",
+              "description": "Membasuh anggota wudhu secara berturut-turut tanpa jeda yang lama (sebelum bagian sebelumnya kering)"
+            },
+            {
+              "number": 11,
+              "title": "Menghemat Air",
+              "description": "Tidak berlebihan dalam menggunakan air, meskipun air berlimpah"
+            },
+            {
+              "number": 12,
+              "title": "Berdoa Setelah Wudhu",
+              "description": "Membaca doa setelah selesai berwudhu (lihat section terpisah)"
+            }
+          ]
+        },
+        {
+          "title": "Doa Sebelum Wudhu",
+          "type": "arabic",
+          "content": {
+            "arabic": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+            "transliteration": "Bismillahir rahmaanir rahiim",
+            "translation": "Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang"
+          }
+        },
+        {
+          "title": "Doa Setelah Wudhu",
+          "type": "arabic",
+          "content": {
+            "arabic": "أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُوْلُهُ ۝ اَللَّهُمَّ اجْعَلْنِيْ مِنَ التَّوَّابِيْنَ وَاجْعَلْنِيْ مِنَ الْمُتَطَهِّرِيْنَ ۝ سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوْبُ إِلَيْكَ",
+            "transliteration": "Asyhadu allaa ilaaha illallaahu wahdahu laa syariika lah, wa asyhadu anna Muhammadan 'abduhu wa rasuuluh. Allahummaj'alnii minat tawwaabiina waj'alnii minal mutathahhiriin. Subhanakallahumma wabihamdik, asyhadu allaa ilaaha illa ant, astaghfiruka wa atuubu ilaik",
+            "translation": "Aku bersaksi bahwa tiada tuhan selain Allah Yang Maha Esa, tiada sekutu bagi-Nya. Dan aku bersaksi bahwa Muhammad adalah hamba dan utusan-Nya. Ya Allah, jadikanlah aku termasuk orang-orang yang bertaubat dan jadikanlah aku termasuk orang-orang yang bersuci. Maha Suci Engkau ya Allah dan dengan memuji-Mu, aku bersaksi bahwa tiada tuhan selain Engkau, aku mohon ampun kepada-Mu dan bertaubat kepada-Mu"
+          }
+        },
+        {
+          "title": "Hal-hal yang Membatalkan Wudhu",
+          "type": "list",
+          "content": [
+            "Keluar sesuatu dari qubul (kemaluan) atau dubur (anus), seperti: kencing, buang air besar, buang angin, madzi, wadi",
+            "Hilang akal karena: pingsan, gila, mabuk, atau tidur bukan dalam keadaan duduk bersandar dengan kuat",
+            "Bersentuhan kulit antara laki-laki dan perempuan yang bukan mahram dengan syahwat (menurut mazhab Syafi'i)",
+            "Menyentuh kemaluan (qubul atau dubur) dengan telapak tangan tanpa penghalang",
+            "Menyentuh dubur dengan bagian dalam telapak tangan"
+          ]
+        },
+        {
+          "title": "Hal-hal yang Dilarang Tanpa Wudhu",
+          "type": "list",
+          "content": [
+            "Shalat (wajib maupun sunnah)",
+            "Thawaf (mengelilingi Ka'bah)",
+            "Menyentuh mushaf Al-Quran",
+            "Membawa mushaf Al-Quran (kecuali dalam wadah/sarung)"
+          ]
+        },
+        {
+          "title": "Hal-hal yang Makruh dalam Wudhu",
+          "type": "list",
+          "content": [
+            "Membasuh anggota wudhu lebih dari 3 kali",
+            "Berbicara selain dzikir saat berwudhu",
+            "Boros menggunakan air",
+            "Memercikkan air dengan keras",
+            "Meminta bantuan orang lain tanpa alasan (seperti sakit)"
+          ]
+        }
+      ],
+      "references": [
+        "Fiqih Sunnah - Sayyid Sabiq (Jilid 1 hal 45-80)",
+        "Al-Adzkar - Imam Nawawi (Bab Adzkar Al-Wudhu)",
+        "Sunan Abu Daud - Hadits No. 101 (Doa-doa Wudhu)",
+        "Hadits Shahih Bukhari - Kitab Al-Wudhu",
+        "Shahih Muslim - Kitab Thaharah",
+        "Fathul Bari - Ibnu Hajar (Syarah Bukhari)",
+        "Bidayatul Mujtahid - Ibnu Rusyd",
+        "NU Online - Doa-doa Wudhu yang Shahih"
+      ]
+    }
+  ]
+}

@@ -19,6 +19,7 @@ import 'view/splash_page.dart';
 import 'services/gemini_service.dart';
 import 'services/kalender_service.dart';
 import 'services/zakat_calculator.dart';
+import 'services/settings_service.dart';
 
 import 'viewmodel/doa_viewmodel.dart';
 import 'viewmodel/shalat_viewmodel.dart';
@@ -91,6 +92,9 @@ void main() {
           create: (_) => ChatViewModel(
             GeminiService('AIzaSyC8qeIgB1SDbji-dmA1u6kM7SRA0bwfHnQ'),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SettingsService()..load(),
         ),
       ],
       child: const MyApp(),

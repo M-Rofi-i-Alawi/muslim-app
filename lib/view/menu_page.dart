@@ -18,6 +18,7 @@ import 'zakat_page.dart';
 import 'kalender_page.dart';
 import 'panduan_ibadah_page.dart';
 import 'ramadhan_page.dart';
+import 'settings_page.dart';
 
 // ─────────────────────────────────────────────
 // KONSTANTA WARNA
@@ -451,6 +452,14 @@ class _MenuPageState extends State<MenuPage> {
         label: 'Tentang',
         color: const Color(0xFF546E7A),
         onTap: () => _push(context, const AboutPage()),
+      ),
+
+      // Pengaturan → ikon gear/settings
+      _MenuItem(
+        icon: Icons.settings_rounded,
+        label: 'Pengaturan',
+        color: const Color(0xFF37474F),
+        onTap: () => _push(context, const SettingsPage()),
       ),
     ];
   }

@@ -153,8 +153,8 @@ class _TasbihPageState extends State<TasbihPage> with SingleTickerProviderStateM
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF00A86B),
-              Color(0xFF00C87D),
+              const Color(0xFF00A086),
+              const Color(0xFF00A086),
               Colors.white,
             ],
             stops: [0.0, 0.3, 0.3],
@@ -627,7 +627,7 @@ class _TasbihPageState extends State<TasbihPage> with SingleTickerProviderStateM
             ),
             child: const Icon(
               Icons.check_circle,
-              color: Color(0xFF00A86B),
+              color: const Color(0xFF00A086),
               size: 24,
             ),
           ),
@@ -677,75 +677,473 @@ class _TasbihPageState extends State<TasbihPage> with SingleTickerProviderStateM
       ),
     );
   }
+// ... (SEMUA KODE ATAS TETAP SAMA, TIDAK DIUBAH)
 
   void _showAddCustomTasbih(TasbihViewModel vm) {
     final namaController = TextEditingController();
     final arabController = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Text(
-            'Tambah Dzikir Custom',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: namaController,
-                decoration: InputDecoration(
-                  labelText: 'Nama (Latin)',
-                  hintText: 'Misal: Subhanallah',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: SingleChildScrollView(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.75,
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: arabController,
-                decoration: InputDecoration(
-                  labelText: 'Arab',
-                  hintText: 'سُبْحَانَ اللهِ',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                style: const TextStyle(fontFamily: 'Amiri', fontSize: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Batal', style: GoogleFonts.poppins()),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // HEADER
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF007A68), Color(0xFF00A086)],
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.add_circle_outline_rounded,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Tambah Dzikir Custom',
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close_rounded, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // FORM
+                  Flexible(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nama (Latin)',
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(controller: namaController),
+
+                          const SizedBox(height: 16),
+
+                          Text(
+                            'Arab',
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: arabController,
+                            textAlign: TextAlign.right,
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // BUTTON
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Batal'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final nama = namaController.text.trim();
+                              final arab = arabController.text.trim();
+
+                              if (nama.isEmpty || arab.isEmpty) return;
+
+                              vm.addCustomTasbih(nama, arab);
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Tambah'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (namaController.text.isNotEmpty && arabController.text.isNotEmpty) {
-                  vm.addCustomTasbih(namaController.text, arabController.text);
-                  Navigator.pop(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00A86B),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text('Tambah', style: GoogleFonts.poppins(color: Colors.white)),
-            ),
-          ],
+          ),
         );
       },
     );
-  }
+  } // ✅ FIX: function ditutup dengan benar
 
+  // ✅ PINDAH KE LUAR (sejajar method lain)
   String _formatDate(DateTime date) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    final months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   String _formatTime(DateTime date) {
+    return '${date.hour.toString().padLeft(2, '0')}:'
+           '${date.minute.toString().padLeft(2, '0')}';
+  }
+
+} // ✅ PENUTUP CLASS (cukup satu)
+
+// ignore: unused_element
+void _showAddCustomTasbih(TasbihViewModel vm) {
+  final namaController = TextEditingController();
+  final arabController = TextEditingController();
+  
+  var context;
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: SingleChildScrollView(
+          // ← FIX: Outer scroll untuk handle keyboard
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.75,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // ← FIX: Use min size
+              children: [
+                // Header dengan gradient teal
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF007A68), Color(0xFF00A086)],
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Tambah Dzikir Custom',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close_rounded, color: Colors.white),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Form Content
+                Flexible(
+                  // ← FIX: Use Flexible instead of Expanded
+                  child: SingleChildScrollView(
+                    // ← FIX: Inner scroll for form
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Nama (Latin)
+                        Text(
+                          'Nama (Latin)',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1A1A2E),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: namaController,
+                          decoration: InputDecoration(
+                            hintText: 'Misal: Subhanallah',
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: 14,
+                              color: Colors.grey[400],
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF2F4F7),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF00A086),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                          ),
+                          style: GoogleFonts.poppins(fontSize: 14),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Arab
+                        Text(
+                          'Arab',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1A1A2E),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: arabController,
+                          decoration: InputDecoration(
+                            hintText: 'سُبْحَانَ اللّٰهِ',
+                            hintStyle: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'serif',
+                              color: Colors.grey,
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF2F4F7),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF00A086),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'serif',
+                          ),
+                          textAlign: TextAlign.right,
+                          textDirection: TextDirection.rtl,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Info Card
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00A086).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFF00A086).withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.info_outline_rounded,
+                                color: Color(0xFF00A086),
+                                size: 20,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'Dzikir custom akan memiliki target 33x secara default',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: const Color(0xFF007A68),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Buttons
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF00A086),
+                            side: const BorderSide(
+                              color: Color(0xFF00A086),
+                              width: 1.5,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Batal',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final nama = namaController.text.trim();
+                            final arab = arabController.text.trim();
+
+                            if (nama.isEmpty || arab.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Mohon isi semua field!',
+                                    style: GoogleFonts.poppins(),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+
+                            vm.addCustomTasbih(nama, arab);
+                            Navigator.pop(context);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Dzikir "$nama" ditambahkan!',
+                                  style: GoogleFonts.poppins(),
+                                ),
+                                backgroundColor: const Color(0xFF00A086),
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00A086),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Tambah',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+    // ignore: unused_element
+    String _formatDate(DateTime date) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  // ignore: unused_element
+  String _formatTime(DateTime date) {
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }
+

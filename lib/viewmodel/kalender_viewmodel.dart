@@ -9,7 +9,8 @@ class HijriCalendarViewModel extends ChangeNotifier {
   int _selectedYear = 1446;
 
   HijriCalendarViewModel() {
-    _currentHijriDate = HijriCalendarService.gregorianToHijri(_selectedGregorianDate);
+    _currentHijriDate =
+        HijriCalendarService.gregorianToHijri(_selectedGregorianDate);
     _selectedMonth = _currentHijriDate.month;
     _selectedYear = _currentHijriDate.year;
   }
@@ -21,24 +22,67 @@ class HijriCalendarViewModel extends ChangeNotifier {
   int get selectedYear => _selectedYear;
 
   String get currentMonthName => HijriMonths.getName(_selectedMonth);
-  String get currentMonthArabic => HijriMonths.getArabicName(_selectedMonth);
+  String get currentMonthArabic =>
+      HijriMonths.getArabicName(_selectedMonth);
 
   // Get events for current month
   List<IslamicEvent> get currentMonthEvents {
     return HijriCalendarService.getEventsForMonth(_selectedMonth);
   }
 
+  // ✅ FIX: Get first day offset (tanpa hijriToGregorian)
+  int getFirstDayOffset() {
+  try {
+    DateTime date = _selectedGregorianDate;
+
+    for (int i = 0; i < 35; i++) {
+      final hijri = HijriCalendarService.gregorianToHijri(date);
+
+      if (hijri.day == 1 &&
+          hijri.month == _selectedMonth &&
+          hijri.year == _selectedYear) {
+        int weekday = date.weekday % 7;
+
+        return weekday;
+      }
+
+      date = date.subtract(const Duration(days: 1));
+    }
+
+    return 0;
+  } catch (e) {
+    return 0;
+  }
+}
+  // Helper: Get day name
+  // ignore: unused_element
+  String _getDayName(int offset) {
+    const days = [
+      'Ahad',
+      'Senin',
+      'Selasa',
+      'Rabu',
+      'Kamis',
+      'Jumat',
+      'Sabtu'
+    ];
+    if (offset < 0 || offset > 6) return 'Unknown';
+    return days[offset];
+  }
+
   // Select a date
   void selectDate(DateTime date) {
     _selectedGregorianDate = date;
-    _currentHijriDate = HijriCalendarService.gregorianToHijri(date);
+    _currentHijriDate =
+        HijriCalendarService.gregorianToHijri(date);
     notifyListeners();
   }
 
-  // Navigate to today
+  // Go to today
   void goToToday() {
     _selectedGregorianDate = DateTime.now();
-    _currentHijriDate = HijriCalendarService.gregorianToHijri(_selectedGregorianDate);
+    _currentHijriDate =
+        HijriCalendarService.gregorianToHijri(_selectedGregorianDate);
     _selectedMonth = _currentHijriDate.month;
     _selectedYear = _currentHijriDate.year;
     notifyListeners();
@@ -74,29 +118,43 @@ class HijriCalendarViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Get Hijri date for a specific Gregorian date
+  // Convert Gregorian → Hijri
   HijriDate convertToHijri(DateTime gregorian) {
     return HijriCalendarService.gregorianToHijri(gregorian);
   }
 
-  // Check if date has event
+  // Get event
   IslamicEvent? getEventForDate(int day, int month) {
     return HijriCalendarService.getEventForDate(day, month);
   }
 
-  // Get days in current month
+  // Days in month
   int get daysInCurrentMonth {
-    return HijriCalendarService.getDaysInMonth(_selectedMonth, _selectedYear);
+    return HijriCalendarService.getDaysInMonth(
+        _selectedMonth, _selectedYear);
   }
 
-  // Format Hijri date
+  // Format Hijri
   String formatHijriDate(HijriDate date) {
     return '${date.day} ${date.monthName} ${date.year} H';
   }
 
-  // Format Gregorian date
+  // Format Gregorian
   String formatGregorianDate(DateTime date) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Oct', 'Nov', 'Des'];
+    const months = [
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember'
+    ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 }

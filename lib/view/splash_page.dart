@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     _controller.forward();
 
     // Navigate after delay
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(milliseconds: 1800), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -261,7 +261,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Built with Flutter',
+                          'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
                           style: GoogleFonts.poppins(
                             fontSize: 11,
                             color: Colors.white.withOpacity(0.8),

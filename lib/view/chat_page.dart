@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/chat_viewmodel.dart';
 import '../model/chat_message_model.dart';
+import '../utils/theme_helper.dart'; // ← import ThemeHelper
 
 const _kTeal      = Color(0xFF00A086);
 const _kTealDark  = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
-const _kBg        = Color(0xFFF2F4F7);
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -17,10 +17,9 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _ctrl        = TextEditingController();
-  final _scrollCtrl  = ScrollController();
+  final _ctrl       = TextEditingController();
+  final _scrollCtrl = ScrollController();
 
-  // Pertanyaan cepat yang bisa di-tap
   static const _quickQuestions = [
     'Apa syarat sah shalat?',
     'Bacaan doa qunut subuh',
@@ -58,20 +57,18 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final vm             = context.watch<ChatViewModel>();
-    final bottomPadding  = MediaQuery.of(context).padding.bottom;
+    final vm            = context.watch<ChatViewModel>();
+    final c             = context.colors; // ← adaptive colors
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: c.background, // ← adaptive
       body: Column(
         children: [
-          // ── APP BAR ────────────────────────────────────────
           _buildAppBar(context, vm),
-
-          // ── AREA CHAT ──────────────────────────────────────
           Expanded(
             child: vm.messages.isEmpty
-                ? _buildEmptyState(vm)
+                ? _buildEmptyState(context, vm)
                 : ListView.builder(
                     controller: _scrollCtrl,
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -80,8 +77,6 @@ class _ChatPageState extends State<ChatPage> {
                         _ChatBubble(message: vm.messages[i]),
                   ),
           ),
-
-          // ── LOADING ────────────────────────────────────────
           if (vm.isLoading)
             Container(
               padding: const EdgeInsets.symmetric(
@@ -89,20 +84,22 @@ class _ChatPageState extends State<ChatPage> {
               child: Row(
                 children: [
                   SizedBox(
-                    width: 18, height: 18,
+                    width: 18,
+                    height: 18,
                     child: CircularProgressIndicator(
-                      strokeWidth: 2, color: _kTeal),
+                        strokeWidth: 2, color: _kTeal),
                   ),
                   const SizedBox(width: 10),
-                  Text('AI sedang menyiapkan jawaban...',
-                      style: GoogleFonts.poppins(
-                          fontSize: 12, color: Colors.grey[600])),
+                  Text(
+                    'AI sedang menyiapkan jawaban...',
+                    style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: c.textSecondary), // ← adaptive
+                  ),
                 ],
               ),
             ),
-
-          // ── INPUT AREA ─────────────────────────────────────
-          _buildInputArea(vm, bottomPadding),
+          _buildInputArea(context, vm, bottomPadding),
         ],
       ),
     );
@@ -129,9 +126,9 @@ class _ChatPageState extends State<ChatPage> {
                     color: Colors.white),
                 onPressed: () => Navigator.pop(context),
               ),
-              // Avatar AI
               Container(
-                width: 36, height: 36,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   shape: BoxShape.circle,
@@ -152,24 +149,22 @@ class _ChatPageState extends State<ChatPage> {
                     Row(
                       children: [
                         Container(
-                          width: 7, height: 7,
+                          width: 7,
+                          height: 7,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF69F0AE),
-                            shape: BoxShape.circle,
-                          ),
+                              color: Color(0xFF69F0AE),
+                              shape: BoxShape.circle),
                         ),
                         const SizedBox(width: 4),
                         Text('Online · siap menjawab',
                             style: GoogleFonts.poppins(
                                 fontSize: 11,
-                                color:
-                                    Colors.white.withOpacity(0.85))),
+                                color: Colors.white.withOpacity(0.85))),
                       ],
                     ),
                   ],
                 ),
               ),
-              // Tombol hapus riwayat
               if (vm.messages.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.delete_outline_rounded,
@@ -185,15 +180,16 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   // ─── EMPTY STATE ──────────────────────────────────────────────────────────
-  Widget _buildEmptyState(ChatViewModel vm) {
+  Widget _buildEmptyState(BuildContext context, ChatViewModel vm) {
+    final c = context.colors;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           const SizedBox(height: 24),
-          // Ilustrasi
           Container(
-            width: 90, height: 90,
+            width: 90,
+            height: 90,
             decoration: BoxDecoration(
               color: _kTeal.withOpacity(0.1),
               shape: BoxShape.circle,
@@ -206,30 +202,28 @@ class _ChatPageState extends State<ChatPage> {
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1A1A2E))),
+                  color: c.onSurface)), // ← adaptive
           const SizedBox(height: 8),
           Text(
-            'Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\nhadist, doa, dan seputar Islam lainnya.',
+            'Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\n'
+            'hadist, doa, dan seputar Islam lainnya.',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-                fontSize: 13,
-                color: Colors.grey[600],
-                height: 1.6),
+                fontSize: 13, color: c.textSecondary, height: 1.6), // ← adaptive
           ),
           const SizedBox(height: 28),
-
-          // Pertanyaan cepat
           Align(
             alignment: Alignment.centerLeft,
             child: Text('Coba tanya:',
                 style: GoogleFonts.poppins(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey[700])),
+                    color: c.textSecondary)), // ← adaptive
           ),
           const SizedBox(height: 10),
           Wrap(
-            spacing: 8, runSpacing: 8,
+            spacing: 8,
+            runSpacing: 8,
             children: _quickQuestions.map((q) {
               return GestureDetector(
                 onTap: () => _send(vm, text: q),
@@ -237,13 +231,13 @@ class _ChatPageState extends State<ChatPage> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: c.surface, // ← adaptive (putih / gelap)
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                         color: _kTeal.withOpacity(0.3), width: 1),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
+                          color: c.shadow, // ← adaptive
                           blurRadius: 6,
                           offset: const Offset(0, 2)),
                     ],
@@ -263,14 +257,16 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   // ─── INPUT AREA ───────────────────────────────────────────────────────────
-  Widget _buildInputArea(ChatViewModel vm, double bottomPadding) {
+  Widget _buildInputArea(
+      BuildContext context, ChatViewModel vm, double bottomPadding) {
+    final c = context.colors;
     return Container(
       padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + bottomPadding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface, // ← adaptive
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: c.shadow, // ← adaptive
               blurRadius: 12,
               offset: const Offset(0, -2)),
         ],
@@ -280,36 +276,38 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: _kBg,
+                color: c.surfaceVariant, // ← adaptive (abu muda / abu gelap)
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                    color: _kTeal.withOpacity(0.2), width: 1),
+                border:
+                    Border.all(color: _kTeal.withOpacity(0.2), width: 1),
               ),
               child: TextField(
                 controller: _ctrl,
                 maxLines: 4,
                 minLines: 1,
                 textInputAction: TextInputAction.newline,
+                style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: c.onSurface), // ← adaptive
                 decoration: InputDecoration(
                   hintText: 'Tanya sesuatu tentang Islam...',
                   hintStyle: GoogleFonts.poppins(
-                      fontSize: 13, color: Colors.grey[500]),
+                      fontSize: 13, color: c.textHint), // ← adaptive
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 10),
                 ),
-                style: GoogleFonts.poppins(fontSize: 14),
               ),
             ),
           ),
           const SizedBox(width: 8),
-          // Tombol kirim
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 46, height: 46,
+            width: 46,
+            height: 46,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [_kTealDark, _kTeal]),
+              gradient:
+                  LinearGradient(colors: [_kTealDark, _kTeal]),
               shape: BoxShape.circle,
             ),
             child: Material(
@@ -330,20 +328,27 @@ class _ChatPageState extends State<ChatPage> {
 
   // ─── KONFIRMASI HAPUS ─────────────────────────────────────────────────────
   void _confirmClear(BuildContext context, ChatViewModel vm) {
+    final c = context.colors;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor: c.surface, // ← adaptive
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
         title: Text('Hapus Percakapan?',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                color: c.onSurface)), // ← adaptive
         content: Text('Semua pesan akan dihapus.',
-            style: GoogleFonts.poppins(fontSize: 13)),
+            style: GoogleFonts.poppins(
+                fontSize: 13,
+                color: c.textSecondary)), // ← adaptive
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text('Batal',
-                style: GoogleFonts.poppins(color: Colors.grey)),
+                style: GoogleFonts.poppins(
+                    color: c.textSecondary)), // ← adaptive
           ),
           ElevatedButton(
             onPressed: () {
@@ -374,6 +379,7 @@ class _ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.isUser;
+    final c      = context.colors; // ← adaptive
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -382,39 +388,37 @@ class _ChatBubble extends StatelessWidget {
         mainAxisAlignment:
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          // Avatar AI
           if (!isUser) ...[
             Container(
-              width: 30, height: 30,
+              width: 30,
+              height: 30,
               decoration: BoxDecoration(
-                color: _kTeal.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
+                  color: _kTeal.withOpacity(0.1),
+                  shape: BoxShape.circle),
               child: const Icon(Icons.auto_awesome_rounded,
                   color: _kTeal, size: 16),
             ),
             const SizedBox(width: 8),
           ],
-
-          // Bubble
           Flexible(
             child: Container(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75,
-              ),
+                  maxWidth:
+                      MediaQuery.of(context).size.width * 0.75),
               padding: const EdgeInsets.symmetric(
                   horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: isUser ? _kTeal : Colors.white,
+                // User bubble tetap teal, AI bubble adaptive
+                color: isUser ? _kTeal : c.surface,
                 borderRadius: BorderRadius.only(
-                  topLeft:     const Radius.circular(18),
-                  topRight:    const Radius.circular(18),
-                  bottomLeft:  Radius.circular(isUser ? 18 : 4),
+                  topLeft: const Radius.circular(18),
+                  topRight: const Radius.circular(18),
+                  bottomLeft: Radius.circular(isUser ? 18 : 4),
                   bottomRight: Radius.circular(isUser ? 4 : 18),
                 ),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: c.shadow, // ← adaptive
                       blurRadius: 6,
                       offset: const Offset(0, 2)),
                 ],
@@ -422,21 +426,16 @@ class _ChatBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Teks pesan
                   if (message.text.isNotEmpty)
                     Text(
                       message.text,
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: isUser
-                            ? Colors.white
-                            : const Color(0xFF1A1A2E),
+                        // User text putih, AI text adaptive
+                        color: isUser ? Colors.white : c.onSurface,
                         height: 1.5,
                       ),
                     ),
-
-                  // ✅ Link sumber (ganti gambar)
-                  // Tampilkan imageUrls sebagai link teks, bukan gambar
                   if (message.imageUrls != null &&
                       message.imageUrls!.isNotEmpty) ...[
                     const SizedBox(height: 10),
@@ -466,7 +465,8 @@ class _ChatBubble extends StatelessWidget {
                           const SizedBox(height: 6),
                           ...message.imageUrls!.asMap().entries.map(
                             (e) => Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
+                              padding:
+                                  const EdgeInsets.only(bottom: 4),
                               child: GestureDetector(
                                 onTap: () {
                                   Clipboard.setData(
@@ -474,15 +474,12 @@ class _ChatBubble extends StatelessWidget {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     content: Text('Link disalin',
-                                        style:
-                                            GoogleFonts.poppins()),
+                                        style: GoogleFonts.poppins()),
                                     backgroundColor: _kTeal,
-                                    behavior:
-                                        SnackBarBehavior.floating,
+                                    behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(
-                                                10)),
+                                            BorderRadius.circular(10)),
                                     duration:
                                         const Duration(seconds: 1),
                                   ));
@@ -524,16 +521,14 @@ class _ChatBubble extends StatelessWidget {
               ),
             ),
           ),
-
-          // Avatar user
           if (isUser) ...[
             const SizedBox(width: 8),
             Container(
-              width: 30, height: 30,
+              width: 30,
+              height: 30,
               decoration: BoxDecoration(
-                color: _kTeal.withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
+                  color: _kTeal.withOpacity(0.15),
+                  shape: BoxShape.circle),
               child: const Icon(Icons.person_rounded,
                   color: _kTeal, size: 16),
             ),

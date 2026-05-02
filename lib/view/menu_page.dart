@@ -20,18 +20,12 @@ import 'panduan_ibadah_page.dart';
 import 'ramadhan_page.dart';
 import 'settings_page.dart';
 
-// ─────────────────────────────────────────────
-// KONSTANTA WARNA
-// ─────────────────────────────────────────────
 const _kTeal      = Color(0xFF00A086);
 const _kTealLight = Color(0xFF00C4A7);
 const _kTealDark  = Color(0xFF007A68);
 const _kGold      = Color(0xFFE8B84B);
 const _kBg        = Color(0xFFF4F6F9);
 
-// ─────────────────────────────────────────────
-// MENU PAGE
-// ─────────────────────────────────────────────
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -40,20 +34,35 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  Timer? _timer;
-  Duration _countdown = Duration.zero;
-  String _nextPrayerName = '';
-  String _nextPrayerTime = '';
+  Timer?    _timer;
+  Duration  _countdown       = Duration.zero;
+  String    _nextPrayerName  = '';
+  String    _nextPrayerTime  = '';
+
+  int _getOffset(String kota) {
+    if (['Jayapura', 'Sorong'].contains(kota)) return 9;
+    if (['Makassar', 'Kendari', 'Palu', 'Gorontalo',
+         'Denpasar', 'Mataram'].contains(kota)) return 8;
+    return 7;
+  }
+
+  String _getZona(String kota) {
+    if (['Jayapura', 'Sorong'].contains(kota)) return 'WIT';
+    if (['Makassar', 'Kendari', 'Palu', 'Gorontalo',
+         'Denpasar', 'Mataram'].contains(kota)) return 'WITA';
+    return 'WIB';
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ShalatViewModel>().getJadwalShalatGPS();
+      context.read<ShalatViewModel>().initWithSavedCity();
     });
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      _updateCountdown();
-    });
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _updateCountdown(),
+    );
   }
 
   @override
@@ -67,8 +76,9 @@ class _MenuPageState extends State<MenuPage> {
     if (vm.jadwal == null) return;
 
     final jadwal = vm.jadwal!;
-    final now    = TimeOfDay.now();
-    final nowMin = now.hour * 60 + now.minute;
+    final now    = DateTime.now();
+    // FIX: hitung dalam total detik, bukan menit + detik terpisah
+    final nowSec = now.hour * 3600 + now.minute * 60 + now.second;
 
     final prayers = [
       {'name': 'Subuh',   'time': jadwal.subuh},
@@ -81,24 +91,21 @@ class _MenuPageState extends State<MenuPage> {
     Map<String, String>? next;
     for (final p in prayers) {
       final parts = p['time']!.split(':');
-      final pMin  = int.parse(parts[0]) * 60 + int.parse(parts[1]);
-      if (pMin > nowMin) { next = p; break; }
+      final pSec  = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
+      if (pSec > nowSec) { next = p; break; }
     }
     next ??= prayers.first;
 
-    final parts  = next['time']!.split(':');
-    final pMin   = int.parse(parts[0]) * 60 + int.parse(parts[1]);
-    var   diffMin = pMin - nowMin;
-    if (diffMin < 0) diffMin += 1440;
+    final parts   = next['time']!.split(':');
+    final pSec    = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
+    var   diffSec = pSec - nowSec;
+    if (diffSec < 0) diffSec += 86400; // wrap ke hari berikutnya
 
     if (mounted) {
       setState(() {
         _nextPrayerName = next!['name']!;
         _nextPrayerTime = next['time']!;
-        _countdown = Duration(
-          minutes: diffMin,
-          seconds: 60 - DateTime.now().second,
-        );
+        _countdown      = Duration(seconds: diffSec);
       });
     }
   }
@@ -114,8 +121,11 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark   = Theme.of(context).brightness == Brightness.dark;
+    final bgColor  = isDark ? const Color(0xFF121212) : _kBg;
+
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: bgColor,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _buildHeroHeader()),
@@ -123,10 +133,10 @@ class _MenuPageState extends State<MenuPage> {
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount:  4,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 12,
-                childAspectRatio: 0.75,
+                childAspectRatio: 0.72,
               ),
               delegate: SliverChildListDelegate(_buildMenuItems(context)),
             ),
@@ -142,6 +152,9 @@ class _MenuPageState extends State<MenuPage> {
       builder: (context, vm, _) {
         final cityName = vm.jadwal?.namaKota ?? 'Mendeteksi lokasi...';
         final tanggal  = vm.jadwal?.tanggal  ?? '';
+        final zona     = _getZona(cityName);
+        final isDark   = Theme.of(context).brightness == Brightness.dark;
+        final bgColor  = isDark ? const Color(0xFF121212) : _kBg;
 
         return Container(
           decoration: const BoxDecoration(
@@ -155,12 +168,13 @@ class _MenuPageState extends State<MenuPage> {
             bottom: false,
             child: Column(
               children: [
-                // Lokasi
+                // Lokasi + tombol Ganti
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Row(
                     children: [
-                      const Icon(Icons.location_on, color: Colors.white70, size: 16),
+                      const Icon(Icons.location_on_rounded,
+                          color: Colors.white70, size: 16),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -173,17 +187,24 @@ class _MenuPageState extends State<MenuPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      GestureDetector(
+                      // FIX: ganti GestureDetector → InkWell + padding besar
+                      InkWell(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const ShalatPage()),
+                          MaterialPageRoute(
+                              builder: (_) => const ShalatPage()),
                         ),
-                        child: Text(
-                          'Ganti',
-                          style: GoogleFonts.poppins(
-                            color: _kGold,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 6),
+                          child: Text(
+                            'Ganti',
+                            style: GoogleFonts.poppins(
+                              color: _kGold,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
@@ -191,7 +212,7 @@ class _MenuPageState extends State<MenuPage> {
                   ),
                 ),
 
-                // Nama + waktu shalat berikutnya
+                // Countdown
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
                   child: Column(
@@ -199,11 +220,12 @@ class _MenuPageState extends State<MenuPage> {
                       if (vm.isLoading)
                         const Padding(
                           padding: EdgeInsets.all(12),
-                          child: CircularProgressIndicator(color: Colors.white),
+                          child: CircularProgressIndicator(
+                              color: Colors.white),
                         )
                       else if (_nextPrayerName.isNotEmpty) ...[
                         Text(
-                          '$_nextPrayerName · $_nextPrayerTime WIB',
+                          '$_nextPrayerName · $_nextPrayerTime $zona',
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 22,
@@ -233,7 +255,7 @@ class _MenuPageState extends State<MenuPage> {
                         Text(
                           'Memuat jadwal shalat...',
                           style: GoogleFonts.poppins(
-                            color: Colors.white70, fontSize: 15),
+                              color: Colors.white70, fontSize: 15),
                         ),
                     ],
                   ),
@@ -254,7 +276,7 @@ class _MenuPageState extends State<MenuPage> {
                 if (vm.jadwal != null) _buildPrayerRow(vm.jadwal!),
 
                 // Lengkung bawah
-                _buildCurvedBottom(),
+                _buildCurvedBottom(bgColor),
               ],
             ),
           ),
@@ -272,7 +294,8 @@ class _MenuPageState extends State<MenuPage> {
       ('Maghrib', jadwal.maghrib),
       ('Isya',    jadwal.isya),
     ];
-    final now    = TimeOfDay.now();
+    final offset = _getOffset(jadwal.namaKota);
+    final now    = DateTime.now().toUtc().add(Duration(hours: offset));
     final nowMin = now.hour * 60 + now.minute;
 
     return Container(
@@ -293,33 +316,34 @@ class _MenuPageState extends State<MenuPage> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                p.$1,
-                style: GoogleFonts.poppins(
-                  color: isNext ? _kGold
-                      : isPast ? Colors.white38
-                      : Colors.white70,
-                  fontSize: 10,
-                  fontWeight: isNext ? FontWeight.bold : FontWeight.normal,
-                ),
-              ),
+              Text(p.$1,
+                  style: GoogleFonts.poppins(
+                    color: isNext ? _kGold
+                        : isPast ? Colors.white38
+                        : Colors.white70,
+                    // FIX: naikkan 10 → 12
+                    fontSize: 12,
+                    fontWeight: isNext
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  )),
               const SizedBox(height: 2),
-              Text(
-                p.$2,
-                style: GoogleFonts.poppins(
-                  color: isNext ? Colors.white
-                      : isPast ? Colors.white38
-                      : Colors.white,
-                  fontSize: 13,
-                  fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
-                ),
-              ),
+              Text(p.$2,
+                  style: GoogleFonts.poppins(
+                    color: isNext ? Colors.white
+                        : isPast ? Colors.white38
+                        : Colors.white,
+                    fontSize: 13,
+                    fontWeight: isNext
+                        ? FontWeight.bold
+                        : FontWeight.w500,
+                  )),
               if (isNext)
                 Container(
                   margin: const EdgeInsets.only(top: 3),
                   width: 5, height: 5,
                   decoration: const BoxDecoration(
-                    color: _kGold, shape: BoxShape.circle),
+                      color: _kGold, shape: BoxShape.circle),
                 ),
             ],
           );
@@ -328,136 +352,94 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildCurvedBottom() {
+  Widget _buildCurvedBottom(Color bgColor) {
     return Container(
       margin: const EdgeInsets.only(top: 16),
       height: 28,
-      decoration: const BoxDecoration(
-        color: _kBg,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      decoration: BoxDecoration(
+        // FIX: pakai bgColor dinamis untuk dark/light mode
+        color: bgColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
     );
   }
 
-  // ─── MENU ITEMS ──────────────────────────────────────────────────────────
+  // ─── MENU ITEMS ───────────────────────────────────────────────────────────
   List<Widget> _buildMenuItems(BuildContext context) {
     return [
-      // Jadwal Shalat → jam/waktu
       _MenuItem(
-        icon: Icons.access_time_rounded,
-        label: 'Jadwal\nShalat',
+        icon: Icons.access_time_rounded, label: 'Jadwal\nShalat',
         color: const Color(0xFF00897B),
         onTap: () => _push(context, const ShalatPage()),
       ),
-
-      // Wirid & Doa → tangan berdoa / buku doa
       _MenuItem(
-        icon: Icons.menu_book_rounded,
-        label: 'Wirid\n& Doa',
+        icon: Icons.menu_book_rounded, label: 'Wirid\n& Doa',
         color: const Color(0xFFE67E22),
         onTap: () => _push(context, const DoaListPage()),
       ),
-
-      // Al-Qur'an → buku terbuka
       _MenuItem(
-        icon: Icons.auto_stories_rounded,
-        label: 'Al-\nQur\'an',
+        icon: Icons.auto_stories_rounded, label: 'Al-\nQur\'an',
         color: const Color(0xFF1976D2),
         onTap: () => _push(context, const SuratListPage()),
       ),
-
-      // Arah Kiblat → kompas
       _MenuItem(
-        icon: Icons.explore_rounded,
-        label: 'Arah\nKiblat',
+        icon: Icons.explore_rounded, label: 'Arah\nKiblat',
         color: const Color(0xFF7B1FA2),
         onTap: () => _push(context, const KiblatPage()),
       ),
-
-      // Tasbih Digital → loop/counter (tasbih = hitung dzikir berulang)
       _MenuItem(
-        icon: Icons.track_changes_rounded,
-        label: 'Tasbih\nDigital',
+        icon: Icons.track_changes_rounded, label: 'Tasbih\nDigital',
         color: const Color(0xFF388E3C),
         onTap: () => _push(context, const TasbihPage()),
       ),
-
-      // Dzikir Harian → orang bermeditasi/berdoa
       _MenuItem(
-        icon: Icons.volunteer_activism_rounded,
-        label: 'Dzikir\nHarian',
+        icon: Icons.volunteer_activism_rounded, label: 'Dzikir\nHarian',
         color: const Color(0xFF00796B),
         onTap: () => _push(context, const DzikirPage()),
       ),
-
-      // Panduan Ibadah → buku panduan/checklist
       _MenuItem(
-        icon: Icons.checklist_rounded,
-        label: 'Panduan\nIbadah',
+        icon: Icons.checklist_rounded, label: 'Panduan\nIbadah',
         color: const Color(0xFF6A1B9A),
         onTap: () => _push(context, const PanduanIbadahPage()),
       ),
-
-      // Hadist → gulungan teks/naskah kuno
       _MenuItem(
-        icon: Icons.history_edu_rounded,
-        label: 'Hadist',
+        icon: Icons.history_edu_rounded, label: 'Hadist',
         color: const Color(0xFF5D4037),
         onTap: () => _push(context, const HadistPage()),
       ),
-
-      // Asmaul Husna → bintang/nama Allah yang indah
       _MenuItem(
-        icon: Icons.auto_awesome_rounded,
-        label: 'Asmaul\nHusna',
+        icon: Icons.auto_awesome_rounded, label: 'Asmaul\nHusna',
         color: const Color(0xFFF9A825),
         onTap: () => _push(context, const AsmaulHusnaPage()),
       ),
-
-      // Zakat → dompet / uang sedekah
+      // FIX: ganti ikon duplikat volunteer_activism → calculate untuk Zakat
       _MenuItem(
-        icon: Icons.volunteer_activism_rounded,
-        label: 'Zakat',
+        icon: Icons.calculate_rounded, label: 'Zakat',
         color: const Color(0xFF00838F),
         onTap: () => _push(context, const ZakatPage()),
       ),
-
-      // Kalender Hijri → kalender bulan
       _MenuItem(
-        icon: Icons.calendar_month_rounded,
-        label: 'Kalender\nHijri',
+        icon: Icons.calendar_month_rounded, label: 'Kalender\nHijri',
         color: const Color(0xFF1565C0),
         onTap: () => _push(context, const HijriCalendarPage()),
       ),
-
-      // Tanya ISLAM → chat tanya jawab
       _MenuItem(
-        icon: Icons.question_answer_rounded,
-        label: 'Tanya\nISLAM',
+        icon: Icons.question_answer_rounded, label: 'Tanya\nISLAM',
         color: const Color(0xFF00897B),
         onTap: () => _push(context, const ChatPage()),
       ),
-
-      // Ramadhan → bulan sabit (simbol Ramadhan/Islam)
       _MenuItem(
-        icon: Icons.nightlight_round,
-        label: 'Ramadhan',
+        icon: Icons.nightlight_round, label: 'Ramadhan',
         color: const Color(0xFFC62828),
         onTap: () => _push(context, const RamadhanPage()),
       ),
-
-      // Tentang → info aplikasi
       _MenuItem(
-        icon: Icons.info_outline_rounded,
-        label: 'Tentang',
+        icon: Icons.info_outline_rounded, label: 'Tentang',
         color: const Color(0xFF546E7A),
         onTap: () => _push(context, const AboutPage()),
       ),
-
-      // Pengaturan → ikon gear/settings
       _MenuItem(
-        icon: Icons.settings_rounded,
-        label: 'Pengaturan',
+        icon: Icons.settings_rounded, label: 'Pengaturan',
         color: const Color(0xFF37474F),
         onTap: () => _push(context, const SettingsPage()),
       ),
@@ -472,9 +454,9 @@ class _MenuPageState extends State<MenuPage> {
 // MENU ITEM WIDGET
 // ─────────────────────────────────────────────
 class _MenuItem extends StatelessWidget {
-  final IconData icon;
-  final String   label;
-  final Color    color;
+  final IconData     icon;
+  final String       label;
+  final Color        color;
   final VoidCallback onTap;
 
   const _MenuItem({
@@ -486,98 +468,39 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    // FIX: ambil warna label dari theme agar kompatibel dark/light mode
+    final labelColor = Theme.of(context).colorScheme.onSurface;
+
+    return InkWell(
+      // FIX: ganti GestureDetector → InkWell untuk ripple effect Material
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: color.withOpacity(0.25),
-                width: 1.5,
-              ),
-            ),
-            child: Icon(icon, color: color, size: 30),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF2C3E50),
-              height: 1.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// BACKWARD COMPAT: MenuItem publik
-// ─────────────────────────────────────────────
-class MenuItem extends StatelessWidget {
-  final IconData   icon;
-  final String     title;
-  final Color      color;
-  final Gradient   gradient;
-  final VoidCallback onTap;
-
-  const MenuItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.color,
-    required this.gradient,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: gradient,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              width: 64, height: 64,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: color.withOpacity(0.12),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: color.withOpacity(0.25), width: 1.5),
               ),
-              child: Icon(icon, size: 40, color: Colors.white),
+              child: Icon(icon, color: color, size: 30),
             ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                // FIX: naikkan 11 → 13
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                // FIX: ganti hardcoded #2C3E50 → theme-aware
+                color: labelColor,
+                height: 1.3,
               ),
             ),
           ],

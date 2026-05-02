@@ -4,12 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/hadist_viewmodel.dart';
 import '../model/hadist_model.dart';
-
-const _kTeal      = Color(0xFF00A086);
-const _kTealDark  = Color(0xFF007A68);
-const _kTealLight = Color(0xFF00C4A7);
-const _kGold      = Color(0xFFE8A020);
-const _kBg        = Color(0xFFF2F4F7);
+import '../utils/theme_helper.dart';
 
 class HadistPage extends StatefulWidget {
   const HadistPage({super.key});
@@ -20,12 +15,17 @@ class HadistPage extends StatefulWidget {
 class _HadistPageState extends State<HadistPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
+  int _selectedTab = 0;
 
   @override
   void initState() {
     super.initState();
     _tabCtrl = TabController(length: 2, vsync: this);
-    _tabCtrl.addListener(() => setState(() {}));
+    _tabCtrl.addListener(() {
+      if (!_tabCtrl.indexIsChanging) {
+        setState(() => _selectedTab = _tabCtrl.index);
+      }
+    });
     Future.microtask(
         () => context.read<HadistViewModel>().fetchHadist());
   }
@@ -38,51 +38,41 @@ class _HadistPageState extends State<HadistPage>
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: c.background,
       body: SafeArea(
         child: Column(
           children: [
-            // App Bar
             _buildAppBar(),
-
-            // Hadist of the Day
             Consumer<HadistViewModel>(
               builder: (_, vm, __) => vm.hadistOfDay == null
                   ? const SizedBox.shrink()
                   : _buildHadistOfDay(vm.hadistOfDay!),
             ),
-
-            // Tab Bar
-            _buildTabBar(),
-
-            // Search & Filter
+            _buildTabBar(c),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Consumer<HadistViewModel>(
-                builder: (_, vm, __) => _buildSearchAndFilter(vm),
+                builder: (_, vm, __) => _buildSearchAndFilter(vm, c),
               ),
             ),
-
             const SizedBox(height: 8),
-
-            // List
             Expanded(
               child: Consumer<HadistViewModel>(
                 builder: (_, vm, __) {
                   if (vm.isLoading) {
-                    return const Center(
-                        child: CircularProgressIndicator(color: _kTeal));
+                    return Center(
+                        child: CircularProgressIndicator(color: kTeal));
                   }
-                  final list = _tabCtrl.index == 0
+                  final list = _selectedTab == 0
                       ? vm.hadistList
                       : vm.getFavorites();
-                  if (list.isEmpty) return _buildEmptyState();
+                  if (list.isEmpty) return _buildEmptyState(c);
                   return ListView.builder(
-                    padding:
-                        const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                     itemCount: list.length,
-                    itemBuilder: (_, i) => _buildCard(list[i]),
+                    itemBuilder: (_, i) => _buildCard(list[i], c),
                   );
                 },
               ),
@@ -93,6 +83,7 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
+  // ─── APP BAR ──────────────────────────────────────────────────────────────
   Widget _buildAppBar() {
     return Container(
       padding: const EdgeInsets.fromLTRB(4, 8, 16, 16),
@@ -100,14 +91,13 @@ class _HadistPageState extends State<HadistPage>
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [_kTealDark, _kTeal, _kTealLight],
+          colors: [kTealDark, kTeal, kTealLight],
         ),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 4),
@@ -137,19 +127,20 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
+  // ─── HADIST OF THE DAY ────────────────────────────────────────────────────
   Widget _buildHadistOfDay(HadistModel hadist) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [_kGold, _kGold.withOpacity(0.8)],
+          colors: [kGold, kGold.withOpacity(0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: _kGold.withOpacity(0.3),
+              color: kGold.withOpacity(0.3),
               blurRadius: 12,
               offset: const Offset(0, 4)),
         ],
@@ -187,16 +178,14 @@ class _HadistPageState extends State<HadistPage>
                           style: GoogleFonts.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
-                              color: _kGold)),
+                              color: kGold)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Text(hadist.arti,
                     style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        color: Colors.white,
-                        height: 1.6),
+                        fontSize: 13, color: Colors.white, height: 1.6),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 6),
@@ -213,60 +202,74 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
-  Widget _buildTabBar() {
+  // ─── CUSTOM TAB BAR ───────────────────────────────────────────────────────
+  Widget _buildTabBar(AppColors c) {
+    final tabs = ['Semua Hadist', 'Favorit'];
+
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
       ),
-      child: TabBar(
-        controller: _tabCtrl,
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-              colors: [_kTealDark, _kTeal]),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600, fontSize: 13),
-        unselectedLabelStyle:
-            GoogleFonts.poppins(fontSize: 13),
-        dividerColor: Colors.transparent,
-        tabs: const [
-          Tab(text: 'Semua Hadist'),
-          Tab(text: 'Favorit ❤️'),
-        ],
+      child: Row(
+        children: List.generate(tabs.length, (i) {
+          final isSelected = _selectedTab == i;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedTab = i);
+                _tabCtrl.animateTo(i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: isSelected ? kTeal : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  tabs[i],
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                    color: isSelected ? Colors.white : c.textSecondary,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildSearchAndFilter(HadistViewModel vm) {
+  // ─── SEARCH & FILTER ──────────────────────────────────────────────────────
+  Widget _buildSearchAndFilter(HadistViewModel vm, AppColors c) {
     return Column(
       children: [
         TextField(
+          style: TextStyle(color: c.onSurface),
           decoration: InputDecoration(
             hintText: 'Cari hadist...',
-            hintStyle:
-                GoogleFonts.poppins(fontSize: 13, color: Colors.grey),
-            prefixIcon:
-                const Icon(Icons.search_rounded, color: _kTeal),
+            hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
+            prefixIcon: const Icon(Icons.search_rounded, color: kTeal),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: c.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
           ),
           onChanged: vm.setSearchQuery,
         ),
@@ -277,7 +280,7 @@ class _HadistPageState extends State<HadistPage>
             scrollDirection: Axis.horizontal,
             itemCount: vm.temaList.length,
             itemBuilder: (_, i) {
-              final tema       = vm.temaList[i];
+              final tema = vm.temaList[i];
               final isSelected = vm.selectedTema == tema;
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -285,24 +288,19 @@ class _HadistPageState extends State<HadistPage>
                   label: Text(tema,
                       style: GoogleFonts.poppins(
                           fontSize: 12,
-                          color: isSelected
-                              ? Colors.white
-                              : Colors.black87,
+                          color: isSelected ? Colors.white : c.onSurface,
                           fontWeight: isSelected
                               ? FontWeight.w600
                               : FontWeight.normal)),
                   selected: isSelected,
                   onSelected: (_) => vm.setSelectedTema(tema),
-                  backgroundColor: Colors.white,
-                  selectedColor: _kTeal,
+                  backgroundColor: c.surface,
+                  selectedColor: kTeal,
                   checkmarkColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: isSelected
-                          ? _kTeal
-                          : Colors.grey[300]!,
-                    ),
+                        color: isSelected ? kTeal : c.border),
                   ),
                   padding: EdgeInsets.zero,
                 ),
@@ -314,15 +312,18 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
-  Widget _buildCard(HadistModel hadist) {
+  // ─── CARD ─────────────────────────────────────────────────────────────────
+  Widget _buildCard(HadistModel hadist, AppColors c) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+            color: c.isDark ? Colors.transparent : Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -341,9 +342,10 @@ class _HadistPageState extends State<HadistPage>
                 Row(
                   children: [
                     Container(
-                      width: 40, height: 40,
+                      width: 40,
+                      height: 40,
                       decoration: BoxDecoration(
-                        color: _kTeal,
+                        color: kTeal,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
@@ -362,10 +364,11 @@ class _HadistPageState extends State<HadistPage>
                           Text('Hadist ${hadist.number}',
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
+                                  fontSize: 14,
+                                  color: c.onSurface)),
                           Text(hadist.tema,
                               style: GoogleFonts.poppins(
-                                  fontSize: 11, color: _kTeal)),
+                                  fontSize: 11, color: kTeal)),
                         ],
                       ),
                     ),
@@ -377,11 +380,10 @@ class _HadistPageState extends State<HadistPage>
                               : Icons.favorite_border_rounded,
                           color: hadist.isFavorite
                               ? Colors.red
-                              : Colors.grey[400],
+                              : c.textHint,
                           size: 22,
                         ),
-                        onPressed: () =>
-                            vm.toggleFavorite(hadist.id),
+                        onPressed: () => vm.toggleFavorite(hadist.id),
                       ),
                     ),
                   ],
@@ -389,15 +391,16 @@ class _HadistPageState extends State<HadistPage>
                 const SizedBox(height: 10),
                 Text(hadist.arti,
                     style: GoogleFonts.poppins(
-                        fontSize: 13, height: 1.6,
-                        color: Colors.grey[800]),
+                        fontSize: 13,
+                        height: 1.6,
+                        color: c.textSecondary),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 6),
                 Text('Rawi: ${hadist.rawi}',
                     style: GoogleFonts.poppins(
                         fontSize: 11,
-                        color: Colors.grey[500],
+                        color: c.textHint,
                         fontStyle: FontStyle.italic)),
               ],
             ),
@@ -407,27 +410,29 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
-  Widget _buildEmptyState() {
+  // ─── EMPTY STATE ──────────────────────────────────────────────────────────
+  Widget _buildEmptyState(AppColors c) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off_rounded,
-              size: 72, color: Colors.grey[300]),
+          Icon(Icons.search_off_rounded, size: 72, color: c.textHint),
           const SizedBox(height: 12),
           Text(
-            _tabCtrl.index == 0
+            _selectedTab == 0
                 ? 'Tidak ada hadist ditemukan'
                 : 'Belum ada hadist favorit',
             style: GoogleFonts.poppins(
-                fontSize: 15, color: Colors.grey[500]),
+                fontSize: 15, color: c.textSecondary),
           ),
         ],
       ),
     );
   }
 
+  // ─── DETAIL BOTTOM SHEET ──────────────────────────────────────────────────
   void _showDetail(HadistModel hadist) {
+    final c = context.colors;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -437,18 +442,19 @@ class _HadistPageState extends State<HadistPage>
         minChildSize: 0.5,
         maxChildSize: 0.95,
         builder: (_, ctrl) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: c.surface,
             borderRadius:
-                BorderRadius.vertical(top: Radius.circular(24)),
+                const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12),
-                width: 40, height: 4,
+                width: 40,
+                height: 4,
                 decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: c.divider,
                     borderRadius: BorderRadius.circular(2)),
               ),
               Expanded(
@@ -456,12 +462,11 @@ class _HadistPageState extends State<HadistPage>
                   controller: ctrl,
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
                   children: [
-                    // Header
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                            colors: [_kTealDark, _kTeal]),
+                            colors: [kTealDark, kTeal]),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
@@ -474,8 +479,7 @@ class _HadistPageState extends State<HadistPage>
                           const SizedBox(width: 16),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Hadist Arbain',
                                     style: GoogleFonts.poppins(
@@ -494,43 +498,39 @@ class _HadistPageState extends State<HadistPage>
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    _hadistSection('Teks Arab', _kTeal.withOpacity(0.06),
+                    _hadistSection(c, 'Teks Arab',
+                        kTeal.withOpacity(0.06),
                         Text(hadist.arab,
                             textAlign: TextAlign.right,
                             textDirection: TextDirection.rtl,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'serif',
-                                height: 2.2))),
-
-                    _hadistSection('Transliterasi Latin',
+                                height: 2.2,
+                                color: c.onSurface))),
+                    _hadistSection(c, 'Transliterasi Latin',
                         const Color(0xFF7B1FA2).withOpacity(0.06),
                         Text(hadist.latin,
                             style: GoogleFonts.poppins(
                                 fontSize: 13,
                                 height: 1.8,
                                 fontStyle: FontStyle.italic,
-                                color: Colors.grey[700]))),
-
-                    _hadistSection('Terjemahan',
-                        _kGold.withOpacity(0.08),
+                                color: c.textSecondary))),
+                    _hadistSection(c, 'Terjemahan',
+                        kGold.withOpacity(0.08),
                         Text(hadist.arti,
                             style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 height: 1.8,
-                                color: Colors.grey[800]))),
-
-                    _hadistSection('Penjelasan',
-                        _kTeal.withOpacity(0.05),
+                                color: c.onSurface))),
+                    _hadistSection(c, 'Penjelasan',
+                        kTeal.withOpacity(0.05),
                         Text(hadist.penjelasan,
                             style: GoogleFonts.poppins(
                                 fontSize: 13,
                                 height: 1.8,
-                                color: Colors.grey[700]))),
-
+                                color: c.textSecondary))),
                     const SizedBox(height: 20),
-
                     Row(
                       children: [
                         Expanded(
@@ -544,7 +544,7 @@ class _HadistPageState extends State<HadistPage>
                                   .showSnackBar(SnackBar(
                                 content: Text('Hadist disalin!',
                                     style: GoogleFonts.poppins()),
-                                backgroundColor: _kTeal,
+                                backgroundColor: kTeal,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
@@ -552,18 +552,15 @@ class _HadistPageState extends State<HadistPage>
                                 duration: const Duration(seconds: 2),
                               ));
                             },
-                            icon: const Icon(Icons.copy_rounded,
-                                size: 16),
+                            icon: const Icon(Icons.copy_rounded, size: 16),
                             label: Text('Salin',
-                                style:
-                                    GoogleFonts.poppins(fontSize: 13)),
+                                style: GoogleFonts.poppins(fontSize: 13)),
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: _kTeal,
-                              side: const BorderSide(color: _kTeal),
+                              foregroundColor: kTeal,
+                              side: const BorderSide(color: kTeal),
                               padding: const EdgeInsets.all(14),
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12)),
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),
@@ -575,15 +572,13 @@ class _HadistPageState extends State<HadistPage>
                                 size: 16, color: Colors.white),
                             label: Text('Tutup',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: Colors.white)),
+                                    fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: _kTeal,
+                              backgroundColor: kTeal,
                               padding: const EdgeInsets.all(14),
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12)),
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),
@@ -599,31 +594,30 @@ class _HadistPageState extends State<HadistPage>
     );
   }
 
-  Widget _hadistSection(String title, Color bg, Widget child) {
+  Widget _hadistSection(AppColors c, String title, Color bg, Widget child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: _kTeal.withOpacity(0.1),
+            color: kTeal.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(title,
               style: GoogleFonts.poppins(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: _kTeal)),
+                  color: kTeal)),
         ),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: bg,
+            color: c.isDark ? c.surfaceVariant : bg,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: _kTeal.withOpacity(0.1)),
+            border: Border.all(color: kTeal.withOpacity(0.1)),
           ),
           child: child,
         ),

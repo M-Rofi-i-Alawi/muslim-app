@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/asmaul_husna_viewmodel.dart';
 import '../model/asmaul_husna_model.dart';
+import '../utils/theme_helper.dart';
 
-const _kTeal      = Color(0xFF00A086);
-const _kTealDark  = Color(0xFF007A68);
+const _kTeal = Color(0xFF00A086);
+const _kTealDark = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
-const _kGold      = Color(0xFFE8A020);
-const _kBg        = Color(0xFFF2F4F7);
+const _kGold = Color(0xFFE8A020);
 
 class AsmaulHusnaPage extends StatefulWidget {
   const AsmaulHusnaPage({super.key});
@@ -28,7 +28,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -52,8 +52,8 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                               size: 72, color: Colors.grey[300]),
                           const SizedBox(height: 12),
                           Text('Tidak ada hasil',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.grey[500])),
+                              style:
+                                  GoogleFonts.poppins(color: Colors.grey[500])),
                         ],
                       ),
                     );
@@ -87,8 +87,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 4),
@@ -103,8 +102,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                         color: Colors.white)),
                 Text('99 Nama Allah Yang Maha Agung',
                     style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.9))),
+                        fontSize: 12, color: Colors.white.withOpacity(0.9))),
               ],
             ),
           ),
@@ -124,9 +122,8 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
   Widget _buildProgressCard() {
     return Consumer<AsmaulHusnaViewModel>(
       builder: (_, vm, __) {
-        final progress = vm.totalCount > 0
-            ? vm.memorizedCount / vm.totalCount
-            : 0.0;
+        final progress =
+            vm.totalCount > 0 ? vm.memorizedCount / vm.totalCount : 0.0;
         return Container(
           margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
           padding: const EdgeInsets.all(16),
@@ -158,22 +155,20 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                               color: Colors.white,
                               fontWeight: FontWeight.w600)),
                       const SizedBox(height: 3),
-                      Text(
-                          '${vm.memorizedCount} dari ${vm.totalCount} nama',
+                      Text('${vm.memorizedCount} dari ${vm.totalCount} nama',
                           style: GoogleFonts.poppins(
                               fontSize: 12,
                               color: Colors.white.withOpacity(0.9))),
                     ],
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text(
-                        '${(progress * 100).toStringAsFixed(0)}%',
+                    child: Text('${(progress * 100).toStringAsFixed(0)}%',
                         style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -188,8 +183,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                   value: progress,
                   minHeight: 8,
                   backgroundColor: Colors.white.withOpacity(0.25),
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                      Colors.white),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               ),
             ],
@@ -207,18 +201,15 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
         builder: (_, vm, __) => TextField(
           decoration: InputDecoration(
             hintText: 'Cari nama Allah...',
-            hintStyle:
-                GoogleFonts.poppins(fontSize: 13, color: Colors.grey),
-            prefixIcon:
-                const Icon(Icons.search_rounded, color: _kTeal),
+            hintStyle: GoogleFonts.poppins(fontSize: 13, color: Colors.grey),
+            prefixIcon: const Icon(Icons.search_rounded, color: _kTeal),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: context.colors.surface,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide.none,
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
           ),
           onChanged: vm.setSearchQuery,
         ),
@@ -231,7 +222,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(16),
         border: item.isMemorized
             ? Border.all(color: _kGold.withOpacity(0.4), width: 1.5)
@@ -255,7 +246,8 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
               children: [
                 // Nomor badge
                 Container(
-                  width: 46, height: 46,
+                  width: 46,
+                  height: 46,
                   decoration: BoxDecoration(
                     color: _kTeal,
                     borderRadius: BorderRadius.circular(12),
@@ -276,21 +268,21 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(item.arab,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'serif',
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1A1A2E))),
+                              color:
+                                  context.colors.onSurface)), // ✅ tanpa const
                       const SizedBox(height: 3),
                       Text(item.latin,
                           style: GoogleFonts.poppins(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: _kTeal)),
+                              color: context.colors.onSurface)),
                       Text(item.arti,
                           style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              color: Colors.grey[500])),
+                              fontSize: 11, color: context.colors.textHint)),
                     ],
                   ),
                 ),
@@ -325,16 +317,16 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
         minChildSize: 0.5,
         maxChildSize: 0.9,
         builder: (_, ctrl) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: context.colors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12),
-                width: 40, height: 4,
+                width: 40,
+                height: 4,
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(2)),
@@ -347,7 +339,8 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                     // Nomor badge besar
                     Center(
                       child: Container(
-                        width: 72, height: 72,
+                        width: 72,
+                        height: 72,
                         decoration: BoxDecoration(
                           color: _kTeal,
                           borderRadius: BorderRadius.circular(16),
@@ -366,11 +359,11 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                     // Arab besar
                     Center(
                       child: Text(item.arab,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 48,
                               fontFamily: 'serif',
                               height: 1.5,
-                              color: Color(0xFF1A1A2E))),
+                              color: context.colors.onSurface)),
                     ),
                     const SizedBox(height: 12),
 
@@ -389,7 +382,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                       child: Text(item.arti,
                           style: GoogleFonts.poppins(
                               fontSize: 16,
-                              color: Colors.grey[600])),
+                              color: context.colors.textSecondary)),
                     ),
                     const SizedBox(height: 20),
 
@@ -399,8 +392,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                       decoration: BoxDecoration(
                         color: _kTeal.withOpacity(0.06),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                            color: _kTeal.withOpacity(0.15)),
+                        border: Border.all(color: _kTeal.withOpacity(0.15)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,7 +415,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                               style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   height: 1.8,
-                                  color: Colors.grey[800])),
+                                  color: context.colors.onSurface)),
                         ],
                       ),
                     ),
@@ -434,18 +426,14 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                       children: [
                         Expanded(
                           child: Consumer<AsmaulHusnaViewModel>(
-                            builder: (_, vm, __) =>
-                                ElevatedButton.icon(
-                              onPressed: () =>
-                                  vm.toggleMemorized(item.id),
+                            builder: (_, vm, __) => ElevatedButton.icon(
+                              onPressed: () => vm.toggleMemorized(item.id),
                               icon: Icon(
                                 item.isMemorized
                                     ? Icons.check_circle_rounded
                                     : Icons.check_circle_outline_rounded,
                                 size: 16,
-                                color: item.isMemorized
-                                    ? Colors.white
-                                    : _kGold,
+                                color: item.isMemorized ? Colors.white : _kGold,
                               ),
                               label: Text(
                                 item.isMemorized
@@ -461,12 +449,10 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                                 backgroundColor: item.isMemorized
                                     ? _kGold
                                     : _kGold.withOpacity(0.1),
-                                padding:
-                                    const EdgeInsets.all(14),
+                                padding: const EdgeInsets.all(14),
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(12)),
+                                    borderRadius: BorderRadius.circular(12)),
                               ),
                             ),
                           ),
@@ -486,25 +472,21 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10)),
-                                duration:
-                                    const Duration(seconds: 2),
+                                    borderRadius: BorderRadius.circular(10)),
+                                duration: const Duration(seconds: 2),
                               ));
                             },
                             icon: const Icon(Icons.copy_rounded,
                                 size: 16, color: Colors.white),
                             label: Text('Salin',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: Colors.white)),
+                                    fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _kTeal,
                               padding: const EdgeInsets.all(14),
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12)),
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),

@@ -33,6 +33,8 @@ class ZakatViewModel extends ChangeNotifier {
   ZakatResult? get perdaganganResult => _perdaganganResult;
   ZakatResult? get pertanianResult => _pertanianResult;
   ZakatResult? get fitrahResult => _fitrahResult;
+
+  get selectedTabIndex => null;
   
   // Update harga emas
   void updateHargaEmas(double harga) {
@@ -109,4 +111,6 @@ class ZakatViewModel extends ChangeNotifier {
     );
     return 'Rp $formatter';
   }
+
+  void setSelectedTab(int index) {}
 }

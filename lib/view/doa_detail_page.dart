@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../model/doa_model.dart';
+import '../utils/theme_helper.dart';
 
 const _kTeal      = Color(0xFF00A086);
 const _kTealDark  = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
-const _kBg        = Color(0xFFF2F4F7);
 
 class DoaDetailPage extends StatelessWidget {
   final DoaModel doa;
@@ -22,8 +22,7 @@ class DoaDetailPage extends StatelessWidget {
         content: Text('Doa berhasil disalin', style: GoogleFonts.poppins()),
         backgroundColor: _kTeal,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -31,35 +30,27 @@ class DoaDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // FIX: adaptive colors
+    final c             = context.colors;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
-    final topPadding    = MediaQuery.of(context).padding.top;
-
-    // ✅ FIX: hitung expandedHeight dinamis berdasarkan panjang judul
-    // judul panjang butuh lebih banyak ruang
-    final titleLines = (doa.judul.length / 20).ceil().clamp(1, 3);
-    final expandedHeight = topPadding + 56 + 16 + 56 + 8 + (titleLines * 22.0) + 24;
-
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: c.background,
       body: CustomScrollView(
         slivers: [
           // ── APP BAR ──────────────────────────────────────────
           SliverAppBar(
-            // ✅ FIX: expandedHeight dinamis, tidak hardcode 160
-            expandedHeight: expandedHeight.clamp(180.0, 260.0),
+            expandedHeight: 200,
             pinned: true,
             backgroundColor: _kTealDark,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_rounded,
-                  color: Colors.white),
+              icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
+            // title hanya muncul saat collapsed
             title: Text(
               doa.judul,
               style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
+                  color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -72,8 +63,9 @@ class DoaDetailPage extends StatelessWidget {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              // ✅ FIX: collapseMode.none agar tidak ada overlap
               collapseMode: CollapseMode.pin,
+              // titlePadding kosong agar title AppBar yang tampil, bukan ini
+              titlePadding: EdgeInsets.zero,
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -82,48 +74,50 @@ class DoaDetailPage extends StatelessWidget {
                     colors: [_kTealDark, _kTeal, _kTealLight],
                   ),
                 ),
-                // ✅ FIX: pakai SafeArea + Column yang tidak overflow
                 child: SafeArea(
                   bottom: false,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Ruang untuk appbar (back button + title row)
-                      const SizedBox(height: 56),
-
-                      // Icon
+                      const SizedBox(height: 40),
+                      // Icon dengan dekorasi lebih kaya
                       Container(
-                        width: 56, height: 56,
+                        width: 64, height: 64,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.white.withOpacity(0.18),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
                         ),
                         child: const Icon(Icons.menu_book_rounded,
-                            color: Colors.white, size: 30),
+                            color: Colors.white, size: 34),
                       ),
-
-                      const SizedBox(height: 10),
-
-                      // ✅ FIX: judul dengan Padding horizontal agar tidak
-                      // mentok ke tepi dan teks tidak terpotong ke bawah
+                      const SizedBox(height: 12),
+                      // Judul di bawah icon (expanded state)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 56),
                         child: Text(
                           doa.judul,
                           textAlign: TextAlign.center,
-                          // ✅ FIX: maxLines lebih besar + softWrap agar tidak overflow
-                          maxLines: 3,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 16,
                             height: 1.4,
                           ),
                         ),
                       ),
-
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 4),
+                      // Subtitle dekoratif
+                      Text(
+                        'الدعاء',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.35),
+                          fontSize: 16,
+                          fontFamily: 'serif',
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -139,17 +133,19 @@ class DoaDetailPage extends StatelessWidget {
                 children: [
                   // Card Arab
                   _buildSection(
+                    c: c,
                     label: 'Arab',
                     labelColor: _kTeal,
-                    labelBg: _kTeal.withOpacity(0.08),
+                    labelBg: _kTeal.withOpacity(0.12),
                     child: Text(
                       doa.arab,
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 26,
                         fontFamily: 'serif',
                         height: 2.2,
-                        color: Color(0xFF1A1A2E),
+                        // FIX: hardcoded 0xFF1A1A2E → c.onSurface
+                        color: c.onSurface,
                       ),
                     ),
                   ),
@@ -158,15 +154,17 @@ class DoaDetailPage extends StatelessWidget {
 
                   // Card Latin
                   _buildSection(
+                    c: c,
                     label: 'Latin',
                     labelColor: const Color(0xFF7B1FA2),
-                    labelBg: const Color(0xFF7B1FA2).withOpacity(0.08),
+                    labelBg: const Color(0xFF7B1FA2).withOpacity(0.12),
                     child: Text(
                       doa.latin,
                       style: GoogleFonts.poppins(
                         fontStyle: FontStyle.italic,
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        // FIX: Colors.grey[700] → c.textSecondary
+                        color: c.textSecondary,
                         height: 1.8,
                       ),
                     ),
@@ -176,14 +174,16 @@ class DoaDetailPage extends StatelessWidget {
 
                   // Card Artinya
                   _buildSection(
+                    c: c,
                     label: 'Artinya',
                     labelColor: const Color(0xFF388E3C),
-                    labelBg: const Color(0xFF388E3C).withOpacity(0.08),
+                    labelBg: const Color(0xFF388E3C).withOpacity(0.12),
                     child: Text(
                       '"${doa.arti}"',
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: const Color(0xFF1A1A2E),
+                        // FIX: hardcoded 0xFF1A1A2E → c.onSurface
+                        color: c.onSurface,
                         height: 1.8,
                       ),
                     ),
@@ -196,16 +196,13 @@ class DoaDetailPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () => _copyDoa(context),
-                      icon: const Icon(Icons.copy_rounded,
-                          color: Colors.white, size: 18),
+                      icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 18),
                       label: Text('Salin Doa',
                           style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600)),
+                              color: Colors.white, fontWeight: FontWeight.w600)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _kTeal,
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 14),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14)),
                         elevation: 0,
@@ -222,6 +219,7 @@ class DoaDetailPage extends StatelessWidget {
   }
 
   Widget _buildSection({
+    required AppColors c,
     required String label,
     required Color labelColor,
     required Color labelBg,
@@ -231,11 +229,12 @@ class DoaDetailPage extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // FIX: Colors.white → c.surface (adaptive)
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -246,8 +245,7 @@ class DoaDetailPage extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: labelBg,
                   borderRadius: BorderRadius.circular(8),

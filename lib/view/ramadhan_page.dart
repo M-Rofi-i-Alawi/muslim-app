@@ -3,12 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/ramadhan_viewmodel.dart';
 import '../model/ramadhan_model.dart';
-
-const _kTeal      = Color(0xFF00A086);
-const _kTealDark  = Color(0xFF007A68);
-const _kTealLight = Color(0xFF00C4A7);
-const _kGold      = Color(0xFFE8A020);
-const _kBg        = Color(0xFFF2F4F7);
+import '../utils/theme_helper.dart';
 
 class RamadhanPage extends StatefulWidget {
   const RamadhanPage({super.key});
@@ -24,6 +19,9 @@ class _RamadhanPageState extends State<RamadhanPage>
   void initState() {
     super.initState();
     _tabCtrl = TabController(length: 3, vsync: this);
+    _tabCtrl.addListener(() {
+      if (!_tabCtrl.indexIsChanging) setState(() {});
+    });
   }
 
   @override
@@ -34,13 +32,14 @@ class _RamadhanPageState extends State<RamadhanPage>
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: c.background,
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(context),
-            _buildTabBar(),
+            _buildAppBar(context, c),
+            _buildTabBar(c),
             Expanded(
               child: TabBarView(
                 controller: _tabCtrl,
@@ -62,34 +61,32 @@ class _RamadhanPageState extends State<RamadhanPage>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>
-                    _EditEntryPage(entry: vm.currentEntry!),
+                builder: (_) => _EditEntryPage(entry: vm.currentEntry!),
               ),
             );
           }
         },
-        backgroundColor: _kTeal,
+        backgroundColor: kTeal,
         child: const Icon(Icons.add_rounded),
       ),
     );
   }
 
   // ─── APP BAR ──────────────────────────────────────────────────────────────
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, AppColors c) {
     return Container(
       padding: const EdgeInsets.fromLTRB(4, 8, 8, 16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [_kTealDark, _kTeal, _kTealLight],
+          colors: [kTealDark, kTeal, kTealLight],
         ),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 4),
@@ -124,7 +121,7 @@ class _RamadhanPageState extends State<RamadhanPage>
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('✅ Data berhasil disimpan',
                     style: GoogleFonts.poppins()),
-                backgroundColor: _kTeal,
+                backgroundColor: kTeal,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -137,46 +134,58 @@ class _RamadhanPageState extends State<RamadhanPage>
   }
 
   // ─── TAB BAR ──────────────────────────────────────────────────────────────
-  Widget _buildTabBar() {
+  Widget _buildTabBar(AppColors c) {
+    final tabs = ['Amalan', 'Statistik', 'Karomah'];
+
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
       ),
-      child: TabBar(
-        controller: _tabCtrl,
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-              colors: [_kTealDark, _kTeal]),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600, fontSize: 13),
-        unselectedLabelStyle:
-            GoogleFonts.poppins(fontSize: 13),
-        dividerColor: Colors.transparent,
-        tabs: const [
-          Tab(text: 'Amalan'),
-          Tab(text: 'Statistik'),
-          Tab(text: 'Karomah'),
-        ],
+      child: Row(
+        children: List.generate(tabs.length, (i) {
+          final isSelected = _tabCtrl.index == i;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {});
+                _tabCtrl.animateTo(i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: isSelected ? kTeal : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  tabs[i],
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    color: isSelected ? Colors.white : c.textSecondary,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
 
   String _formatDate(DateTime date) {
-    const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
     return '${days[date.weekday % 7]}, ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 }
@@ -187,19 +196,19 @@ class _RamadhanPageState extends State<RamadhanPage>
 class _AmalanTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Consumer<RamadhanViewModel>(
       builder: (_, vm, __) {
         if (vm.isLoading) {
-          return const Center(
-              child: CircularProgressIndicator(color: _kTeal));
+          return Center(child: CircularProgressIndicator(color: kTeal));
         }
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              _buildUserHeader(context),
+              _buildUserHeader(context, c),
               const SizedBox(height: 20),
-              _buildTimelineList(vm),
+              _buildTimelineList(context, vm, c),
               const SizedBox(height: 80),
             ],
           ),
@@ -208,19 +217,19 @@ class _AmalanTab extends StatelessWidget {
     );
   }
 
-  Widget _buildUserHeader(BuildContext context) {
+  Widget _buildUserHeader(BuildContext context, AppColors c) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [_kTealDark, _kTeal],
+          colors: [kTealDark, kTeal],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-              color: _kTeal.withOpacity(0.3),
+              color: kTeal.withOpacity(0.3),
               blurRadius: 14,
               offset: const Offset(0, 5)),
         ],
@@ -228,7 +237,8 @@ class _AmalanTab extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 56, height: 56,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
               shape: BoxShape.circle,
@@ -261,17 +271,14 @@ class _AmalanTab extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.picture_as_pdf_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Export PDF coming soon',
-                      style: GoogleFonts.poppins()),
-                  backgroundColor: _kTeal,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Export PDF coming soon',
+                    style: GoogleFonts.poppins()),
+                backgroundColor: kTeal,
+                behavior: SnackBarBehavior.floating,
+              ));
             },
           ),
         ],
@@ -279,13 +286,12 @@ class _AmalanTab extends StatelessWidget {
     );
   }
 
-  Widget _buildTimelineList(RamadhanViewModel vm) {
+  Widget _buildTimelineList(BuildContext context, RamadhanViewModel vm, AppColors c) {
     return FutureBuilder<List<RamadhanEntry>>(
       future: vm.getAllEntries(),
       builder: (context, snap) {
         if (!snap.hasData) {
-          return const Center(
-              child: CircularProgressIndicator(color: _kTeal));
+          return Center(child: CircularProgressIndicator(color: kTeal));
         }
         final entries = snap.data!;
         if (entries.isEmpty) {
@@ -295,15 +301,15 @@ class _AmalanTab extends StatelessWidget {
               child: Column(
                 children: [
                   Icon(Icons.edit_calendar_rounded,
-                      size: 64, color: Colors.grey[300]),
+                      size: 64, color: c.textHint),
                   const SizedBox(height: 12),
                   Text('Belum ada catatan',
                       style: GoogleFonts.poppins(
-                          fontSize: 15, color: Colors.grey[500])),
+                          fontSize: 15, color: c.textSecondary)),
                   const SizedBox(height: 6),
                   Text('Tap tombol + untuk mulai',
                       style: GoogleFonts.poppins(
-                          fontSize: 12, color: Colors.grey[400])),
+                          fontSize: 12, color: c.textHint)),
                 ],
               ),
             ),
@@ -332,12 +338,12 @@ class _TimelineItemState extends State<_TimelineItem> {
 
   @override
   Widget build(BuildContext context) {
-    final entry      = widget.entry;
-    final isPuasa    = entry.puasa;
+    final c = context.colors;
+    final entry = widget.entry;
+    final isPuasa = entry.puasa;
     final shalatCount = entry.completedShalatCount;
-    final puasaColor = isPuasa
-        ? const Color(0xFF388E3C)
-        : const Color(0xFFD32F2F);
+    final puasaColor =
+        isPuasa ? const Color(0xFF388E3C) : const Color(0xFFD32F2F);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -347,22 +353,21 @@ class _TimelineItemState extends State<_TimelineItem> {
           Column(
             children: [
               Container(
-                width: 46, height: 46,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
                   color: puasaColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                   border: Border.all(color: puasaColor, width: 1.5),
                 ),
                 child: Icon(
-                  isPuasa
-                      ? Icons.wb_sunny_rounded
-                      : Icons.no_food_rounded,
-                  color: puasaColor, size: 22,
+                  isPuasa ? Icons.wb_sunny_rounded : Icons.no_food_rounded,
+                  color: puasaColor,
+                  size: 22,
                 ),
               ),
               if (!_expanded)
-                Container(width: 2, height: 36,
-                    color: Colors.grey[200]),
+                Container(width: 2, height: 36, color: c.divider),
             ],
           ),
           const SizedBox(width: 14),
@@ -371,11 +376,11 @@ class _TimelineItemState extends State<_TimelineItem> {
               onTap: () => setState(() => _expanded = !_expanded),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: c.surface,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: c.shadow,
                         blurRadius: 8,
                         offset: const Offset(0, 2)),
                   ],
@@ -394,13 +399,14 @@ class _TimelineItemState extends State<_TimelineItem> {
                                 child: Text(_formatDate(entry.date),
                                     style: GoogleFonts.poppins(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w600)),
+                                        fontWeight: FontWeight.w600,
+                                        color: c.onSurface)),
                               ),
                               Icon(
                                 _expanded
                                     ? Icons.keyboard_arrow_up_rounded
                                     : Icons.keyboard_arrow_down_rounded,
-                                color: Colors.grey[400],
+                                color: c.textHint,
                               ),
                             ],
                           ),
@@ -421,16 +427,11 @@ class _TimelineItemState extends State<_TimelineItem> {
                               runSpacing: 4,
                               children: [
                                 if (entry.tadarusJuz > 0)
-                                  _badge(
-                                      'Tadarus ${entry.tadarusJuz} Juz',
-                                      _kTeal),
+                                  _badge('Tadarus ${entry.tadarusJuz} Juz', kTeal),
                                 if (entry.infakAmount > 0)
-                                  _badge(
-                                      'Infak Rp ${_fmtMoney(entry.infakAmount)}',
-                                      _kGold),
+                                  _badge('Infak Rp ${_fmtMoney(entry.infakAmount)}', kGold),
                                 if (entry.shalatTarawih)
-                                  _badge('Tarawih',
-                                      const Color(0xFF7B1FA2)),
+                                  _badge('Tarawih', const Color(0xFF7B1FA2)),
                               ],
                             ),
                           ],
@@ -438,8 +439,8 @@ class _TimelineItemState extends State<_TimelineItem> {
                       ),
                     ),
                     if (_expanded) ...[
-                      Divider(height: 1, color: Colors.grey[100]),
-                      _buildExpandedDetail(entry),
+                      Divider(height: 1, color: c.divider),
+                      _buildExpandedDetail(context, entry, c),
                     ],
                   ],
                 ),
@@ -464,45 +465,45 @@ class _TimelineItemState extends State<_TimelineItem> {
     );
   }
 
-  Widget _buildExpandedDetail(RamadhanEntry entry) {
+  Widget _buildExpandedDetail(BuildContext context, RamadhanEntry entry, AppColors c) {
     return Padding(
       padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _detailSection('Shalat', Icons.self_improvement_rounded, _kTeal,
-              Column(
-                children: [
-                  _checkRow('Subuh',   entry.shalatSubuh),
-                  _checkRow('Dzuhur',  entry.shalatDzuhur),
-                  _checkRow('Ashar',   entry.shalatAshar),
-                  _checkRow('Maghrib', entry.shalatMaghrib),
-                  _checkRow('Isya',    entry.shalatIsya),
-                  if (entry.shalatTarawih || entry.shalatTahajud) ...[
-                    const Divider(),
-                    if (entry.shalatTarawih) _checkRow('Tarawih', true),
-                    if (entry.shalatTahajud) _checkRow('Tahajud', true),
-                  ],
+          _detailSection('Shalat', Icons.self_improvement_rounded, kTeal, c,
+              Column(children: [
+                _checkRow('Subuh', entry.shalatSubuh, c),
+                _checkRow('Dzuhur', entry.shalatDzuhur, c),
+                _checkRow('Ashar', entry.shalatAshar, c),
+                _checkRow('Maghrib', entry.shalatMaghrib, c),
+                _checkRow('Isya', entry.shalatIsya, c),
+                if (entry.shalatTarawih || entry.shalatTahajud) ...[
+                  Divider(color: c.divider),
+                  if (entry.shalatTarawih) _checkRow('Tarawih', true, c),
+                  if (entry.shalatTahajud) _checkRow('Tahajud', true, c),
                 ],
-              )),
+              ])),
           if (entry.tadarusJuz > 0)
             _detailSection('Tadarus', Icons.menu_book_rounded,
-                const Color(0xFF388E3C),
+                const Color(0xFF388E3C), c,
                 Text('Juz ${entry.tadarusJuz}',
-                    style: GoogleFonts.poppins(fontSize: 13))),
+                    style: GoogleFonts.poppins(
+                        fontSize: 13, color: c.onSurface))),
           if (entry.infakAmount > 0)
-            _detailSection('Infak', Icons.volunteer_activism_rounded,
-                _kGold,
+            _detailSection('Infak', Icons.volunteer_activism_rounded, kGold, c,
                 Text('Rp ${_fmtMoney(entry.infakAmount)}',
                     style: GoogleFonts.poppins(
-                        fontSize: 13, fontWeight: FontWeight.w600))),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: c.onSurface))),
           const SizedBox(height: 8),
           Center(
             child: TextButton.icon(
               icon: const Icon(Icons.edit_rounded, size: 16),
               label: Text('Edit Catatan',
                   style: GoogleFonts.poppins(fontSize: 13)),
-              style: TextButton.styleFrom(foregroundColor: _kTeal),
+              style: TextButton.styleFrom(foregroundColor: kTeal),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -516,7 +517,7 @@ class _TimelineItemState extends State<_TimelineItem> {
   }
 
   Widget _detailSection(
-      String title, IconData icon, Color color, Widget child) {
+      String title, IconData icon, Color color, AppColors c, Widget child) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
@@ -527,17 +528,15 @@ class _TimelineItemState extends State<_TimelineItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 15, color: color),
-              const SizedBox(width: 6),
-              Text(title,
-                  style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: color)),
-            ],
-          ),
+          Row(children: [
+            Icon(icon, size: 15, color: color),
+            const SizedBox(width: 6),
+            Text(title,
+                style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: color)),
+          ]),
           const SizedBox(height: 8),
           child,
         ],
@@ -545,7 +544,7 @@ class _TimelineItemState extends State<_TimelineItem> {
     );
   }
 
-  Widget _checkRow(String label, bool checked) {
+  Widget _checkRow(String label, bool checked, AppColors c) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -555,29 +554,27 @@ class _TimelineItemState extends State<_TimelineItem> {
                 ? Icons.check_circle_rounded
                 : Icons.radio_button_unchecked_rounded,
             size: 15,
-            color: checked ? _kTeal : Colors.grey[300],
+            color: checked ? kTeal : c.textHint,
           ),
           const SizedBox(width: 8),
           Text(label,
               style: GoogleFonts.poppins(
                   fontSize: 12,
-                  color: checked
-                      ? Colors.black87
-                      : Colors.grey[500])),
+                  color: checked ? c.onSurface : c.textSecondary)),
         ],
       ),
     );
   }
 
   String _formatDate(DateTime date) {
-    const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
     return '${days[date.weekday % 7]}, ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   String _fmtMoney(double v) {
     if (v >= 1000000) return '${(v / 1000000).toStringAsFixed(1)}jt';
-    if (v >= 1000)    return '${(v / 1000).toStringAsFixed(0)}rb';
+    if (v >= 1000) return '${(v / 1000).toStringAsFixed(0)}rb';
     return v.toStringAsFixed(0);
   }
 }
@@ -588,6 +585,7 @@ class _TimelineItemState extends State<_TimelineItem> {
 class _StatistikTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Consumer<RamadhanViewModel>(
       builder: (_, vm, __) {
         final stats = vm.statistics;
@@ -597,9 +595,9 @@ class _StatistikTab extends StatelessWidget {
             children: [
               _buildProgress(stats),
               const SizedBox(height: 18),
-              _buildGrid(stats),
+              _buildGrid(context, stats, c),
               const SizedBox(height: 18),
-              _buildDetailStats(stats),
+              _buildDetailStats(stats, c),
             ],
           ),
         );
@@ -611,12 +609,11 @@ class _StatistikTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-            colors: [_kTealDark, _kTeal]),
+        gradient: const LinearGradient(colors: [kTealDark, kTeal]),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-              color: _kTeal.withOpacity(0.3),
+              color: kTeal.withOpacity(0.3),
               blurRadius: 14,
               offset: const Offset(0, 5)),
         ],
@@ -640,8 +637,7 @@ class _StatistikTab extends StatelessWidget {
             child: LinearProgressIndicator(
               value: stats.totalDays / 30,
               backgroundColor: Colors.white.withOpacity(0.25),
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
               minHeight: 10,
             ),
           ),
@@ -650,7 +646,7 @@ class _StatistikTab extends StatelessWidget {
     );
   }
 
-  Widget _buildGrid(RamadhanStatistics stats) {
+  Widget _buildGrid(BuildContext context, RamadhanStatistics stats, AppColors c) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -659,41 +655,42 @@ class _StatistikTab extends StatelessWidget {
       crossAxisSpacing: 12,
       childAspectRatio: 1.3,
       children: [
-        _StatCard('Puasa', '${stats.puasaCount}',
+        _StatCard(c, 'Puasa', '${stats.puasaCount}',
             '${stats.puasaPercentage.toStringAsFixed(0)}%',
             Icons.wb_sunny_rounded, const Color(0xFFE8650A)),
-        _StatCard('Shalat Lengkap', '${stats.allShalatCompleteCount}',
+        _StatCard(c, 'Shalat Lengkap', '${stats.allShalatCompleteCount}',
             '${stats.shalatPercentage.toStringAsFixed(0)}%',
-            Icons.self_improvement_rounded, _kTeal),
-        _StatCard('Tadarus', '${stats.totalTadarusJuz} Juz', 'Total',
+            Icons.self_improvement_rounded, kTeal),
+        _StatCard(c, 'Tadarus', '${stats.totalTadarusJuz} Juz', 'Total',
             Icons.menu_book_rounded, const Color(0xFF388E3C)),
-        _StatCard('Infak', 'Rp ${_fmtNum(stats.totalInfak)}', 'Total',
-            Icons.volunteer_activism_rounded, _kGold),
+        _StatCard(c, 'Infak', 'Rp ${_fmtNum(stats.totalInfak)}', 'Total',
+            Icons.volunteer_activism_rounded, kGold),
       ],
     );
   }
 
-  Widget _buildDetailStats(RamadhanStatistics stats) {
+  Widget _buildDetailStats(RamadhanStatistics stats, AppColors c) {
     return _SectionCard(
+      c: c,
       title: 'Detail Statistik',
       icon: Icons.bar_chart_rounded,
-      color: _kTeal,
+      color: kTeal,
       child: Column(
         children: [
-          _row('Hari dicatat',        '${stats.totalDays} hari'),
-          _row('Puasa',               '${stats.puasaCount} hari'),
-          _row('Shalat 5 waktu',      '${stats.allShalatCompleteCount} hari'),
-          _row('Tarawih',             '${stats.tarawihCount} hari'),
-          _row('Tahajud',             '${stats.tahajudCount} hari'),
-          _row('Total tadarus',        '${stats.totalTadarusJuz} juz'),
-          _row('Total infak',          'Rp ${_fmtNum(stats.totalInfak)}'),
-          _row('Ceramah dirangkum',   '${stats.ceramahCount} ceramah'),
+          _row(c, 'Hari dicatat', '${stats.totalDays} hari'),
+          _row(c, 'Puasa', '${stats.puasaCount} hari'),
+          _row(c, 'Shalat 5 waktu', '${stats.allShalatCompleteCount} hari'),
+          _row(c, 'Tarawih', '${stats.tarawihCount} hari'),
+          _row(c, 'Tahajud', '${stats.tahajudCount} hari'),
+          _row(c, 'Total tadarus', '${stats.totalTadarusJuz} juz'),
+          _row(c, 'Total infak', 'Rp ${_fmtNum(stats.totalInfak)}'),
+          _row(c, 'Ceramah dirangkum', '${stats.ceramahCount} ceramah'),
         ],
       ),
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _row(AppColors c, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -701,10 +698,12 @@ class _StatistikTab extends StatelessWidget {
         children: [
           Text(label,
               style: GoogleFonts.poppins(
-                  fontSize: 13, color: Colors.grey[700])),
+                  fontSize: 13, color: c.textSecondary)),
           Text(value,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w600)),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: c.onSurface)),
         ],
       ),
     );
@@ -712,7 +711,7 @@ class _StatistikTab extends StatelessWidget {
 
   String _fmtNum(double v) {
     if (v >= 1000000) return '${(v / 1000000).toStringAsFixed(1)} jt';
-    if (v >= 1000)    return '${(v / 1000).toStringAsFixed(0)} rb';
+    if (v >= 1000) return '${(v / 1000).toStringAsFixed(0)} rb';
     return v.toStringAsFixed(0);
   }
 }
@@ -723,70 +722,87 @@ class _StatistikTab extends StatelessWidget {
 class _KaromahTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Consumer<RamadhanViewModel>(
       builder: (_, vm, __) {
         final entry = vm.currentEntry;
         if (entry == null) {
           return Center(
               child: Text('Tidak ada data',
-                  style: GoogleFonts.poppins(color: Colors.grey)));
+                  style: GoogleFonts.poppins(color: c.textSecondary)));
         }
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              _buildDateNav(context, vm),
+              _buildDateNav(context, vm, c),
               const SizedBox(height: 16),
-              _DiaryCard(title: 'Doa yang Terkabul',
+              _DiaryCard(
+                  c: c,
+                  title: 'Doa yang Terkabul',
                   icon: Icons.favorite_rounded,
                   color: const Color(0xFFD32F2F),
                   child: TextField(
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: c.onSurface),
+                    decoration: InputDecoration(
                         hintText: 'Doa yang dikabulkan hari ini...',
+                        hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
                     onChanged: vm.updateDoaTerkabul,
-                    controller: TextEditingController(
-                        text: entry.doaTerkabul),
+                    controller:
+                        TextEditingController(text: entry.doaTerkabul),
                   )),
               const SizedBox(height: 12),
-              _DiaryCard(title: 'Momen Spesial',
+              _DiaryCard(
+                  c: c,
+                  title: 'Momen Spesial',
                   icon: Icons.star_rounded,
-                  color: _kGold,
+                  color: kGold,
                   child: TextField(
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: c.onSurface),
+                    decoration: InputDecoration(
                         hintText: 'Momen berkesan hari ini...',
+                        hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
                     onChanged: vm.updateMomenSpesial,
-                    controller: TextEditingController(
-                        text: entry.momenSpesial),
+                    controller:
+                        TextEditingController(text: entry.momenSpesial),
                   )),
               const SizedBox(height: 12),
-              _DiaryCard(title: 'Refleksi & Muhasabah',
+              _DiaryCard(
+                  c: c,
+                  title: 'Refleksi & Muhasabah',
                   icon: Icons.self_improvement_rounded,
-                  color: _kTeal,
+                  color: kTeal,
                   child: TextField(
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: c.onSurface),
+                    decoration: InputDecoration(
                         hintText: 'Apa yang kamu rasakan hari ini?',
+                        hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
                     onChanged: vm.updateRefleksi,
-                    controller: TextEditingController(
-                        text: entry.refleksi),
+                    controller:
+                        TextEditingController(text: entry.refleksi),
                   )),
               const SizedBox(height: 12),
-              _DiaryCard(title: 'Pembelajaran & Hikmah',
+              _DiaryCard(
+                  c: c,
+                  title: 'Pembelajaran & Hikmah',
                   icon: Icons.school_rounded,
                   color: const Color(0xFF1565C0),
                   child: TextField(
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: c.onSurface),
+                    decoration: InputDecoration(
                         hintText: 'Hikmah hari ini...',
+                        hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
                     onChanged: vm.updatePembelajaran,
-                    controller: TextEditingController(
-                        text: entry.pembelajaran),
+                    controller:
+                        TextEditingController(text: entry.pembelajaran),
                   )),
               const SizedBox(height: 80),
             ],
@@ -796,17 +812,15 @@ class _KaromahTab extends StatelessWidget {
     );
   }
 
-  Widget _buildDateNav(BuildContext context, RamadhanViewModel vm) {
+  Widget _buildDateNav(BuildContext context, RamadhanViewModel vm, AppColors c) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2)),
+              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Row(
@@ -815,24 +829,26 @@ class _KaromahTab extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.chevron_left_rounded),
             onPressed: vm.previousDay,
-            color: _kTeal,
+            color: kTeal,
           ),
           Column(
             children: [
               Text('Hari ke-${vm.currentEntry?.ramadhanDay ?? 1}',
                   style: GoogleFonts.poppins(
-                      fontSize: 15, fontWeight: FontWeight.bold)),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: c.onSurface)),
               Text(
                 '${vm.selectedDate.day}/${vm.selectedDate.month}/${vm.selectedDate.year}',
                 style: GoogleFonts.poppins(
-                    fontSize: 12, color: Colors.grey),
+                    fontSize: 12, color: c.textSecondary),
               ),
             ],
           ),
           IconButton(
             icon: const Icon(Icons.chevron_right_rounded),
             onPressed: vm.nextDay,
-            color: _kTeal,
+            color: kTeal,
           ),
         ],
       ),
@@ -844,27 +860,31 @@ class _KaromahTab extends StatelessWidget {
 // REUSABLE WIDGETS
 // ─────────────────────────────────────────────
 class _SectionCard extends StatelessWidget {
-  final String   title;
+  final String title;
   final IconData icon;
-  final Color    color;
-  final Widget   child;
-  const _SectionCard(
-      {required this.title,
-      required this.icon,
-      required this.color,
-      required this.child});
+  final Color color;
+  final Widget child;
+  final AppColors c;
+
+  const _SectionCard({
+    required this.c,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+            color: c.isDark ? Colors.transparent : Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2)),
+              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -898,24 +918,24 @@ class _SectionCard extends StatelessWidget {
 }
 
 class _StatCard extends StatelessWidget {
-  final String   title, value, subtitle;
+  final AppColors c;
+  final String title, value, subtitle;
   final IconData icon;
-  final Color    color;
-  const _StatCard(this.title, this.value, this.subtitle, this.icon,
-      this.color);
+  final Color color;
+
+  const _StatCard(
+      this.c, this.title, this.value, this.subtitle, this.icon, this.color);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2)),
+              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -930,10 +950,10 @@ class _StatCard extends StatelessWidget {
                   color: color)),
           Text(title,
               style: GoogleFonts.poppins(
-                  fontSize: 11, color: Colors.grey[600])),
+                  fontSize: 11, color: c.textSecondary)),
           Text(subtitle,
               style: GoogleFonts.poppins(
-                  fontSize: 10, color: Colors.grey[400])),
+                  fontSize: 10, color: c.textHint)),
         ],
       ),
     );
@@ -941,29 +961,31 @@ class _StatCard extends StatelessWidget {
 }
 
 class _DiaryCard extends StatelessWidget {
-  final String   title;
+  final AppColors c;
+  final String title;
   final IconData icon;
-  final Color    color;
-  final Widget   child;
-  const _DiaryCard(
-      {required this.title,
-      required this.icon,
-      required this.color,
-      required this.child});
+  final Color color;
+  final Widget child;
+
+  const _DiaryCard({
+    required this.c,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2)),
+              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -1016,16 +1038,16 @@ class _EditEntryPageState extends State<_EditEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final vm             = context.read<RamadhanViewModel>();
-    final bottomPadding  = MediaQuery.of(context).padding.bottom;
+    final c = context.colors;
+    final vm = context.read<RamadhanViewModel>();
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: c.background,
       appBar: AppBar(
-        backgroundColor: _kTealDark,
+        backgroundColor: kTealDark,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded,
-              color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('Edit Catatan',
@@ -1041,7 +1063,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('✅ Catatan disimpan',
                       style: GoogleFonts.poppins()),
-                  backgroundColor: _kTeal,
+                  backgroundColor: kTeal,
                   behavior: SnackBarBehavior.floating,
                 ));
               }
@@ -1057,12 +1079,18 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: c.surface,
                 borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                      color: c.shadow,
+                      blurRadius: 6,
+                      offset: const Offset(0, 2)),
+                ],
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.edit_calendar_rounded, color: _kTeal),
+                  const Icon(Icons.edit_calendar_rounded, color: kTeal),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1070,11 +1098,11 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                       Text('Hari ke-${_entry.ramadhanDay}',
                           style: GoogleFonts.poppins(
                               fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold,
+                              color: c.onSurface)),
                       Text(_formatDate(_entry.date),
                           style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: Colors.grey[600])),
+                              fontSize: 12, color: c.textSecondary)),
                     ],
                   ),
                 ],
@@ -1084,11 +1112,14 @@ class _EditEntryPageState extends State<_EditEntryPage> {
 
             // Puasa
             _SectionCard(
-              title: 'Puasa', icon: Icons.wb_sunny_rounded,
+              c: c,
+              title: 'Puasa',
+              icon: Icons.wb_sunny_rounded,
               color: const Color(0xFFE8650A),
               child: CheckboxListTile(
                 title: Text('Puasa hari ini',
-                    style: GoogleFonts.poppins(fontSize: 14)),
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, color: c.onSurface)),
                 value: _entry.puasa,
                 onChanged: (v) {
                   setState(() => _entry = _entry.copyWith(puasa: v));
@@ -1101,8 +1132,10 @@ class _EditEntryPageState extends State<_EditEntryPage> {
 
             // Shalat
             _SectionCard(
-              title: 'Shalat', icon: Icons.self_improvement_rounded,
-              color: _kTeal,
+              c: c,
+              title: 'Shalat',
+              icon: Icons.self_improvement_rounded,
+              color: kTeal,
               child: Column(
                 children: [
                   for (final pair in [
@@ -1114,35 +1147,41 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                   ])
                     CheckboxListTile(
                       title: Text(pair[0] as String,
-                          style: GoogleFonts.poppins(fontSize: 14)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 14, color: c.onSurface)),
                       value: pair[1] as bool,
                       onChanged: pair[2] as Function(bool?),
-                      activeColor: _kTeal, dense: true,
+                      activeColor: kTeal,
+                      dense: true,
                     ),
-                  const Divider(),
+                  Divider(color: c.divider),
                   CheckboxListTile(
                     title: Text('Tarawih',
                         style: GoogleFonts.poppins(
-                            fontSize: 14, fontWeight: FontWeight.w600)),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: c.onSurface)),
                     value: _entry.shalatTarawih,
                     onChanged: (v) {
-                      setState(
-                          () => _entry = _entry.copyWith(shalatTarawih: v));
+                      setState(() => _entry = _entry.copyWith(shalatTarawih: v));
                       vm.updateShalatTarawih(v ?? false);
                     },
-                    activeColor: const Color(0xFF7B1FA2), dense: true,
+                    activeColor: const Color(0xFF7B1FA2),
+                    dense: true,
                   ),
                   CheckboxListTile(
                     title: Text('Tahajud',
                         style: GoogleFonts.poppins(
-                            fontSize: 14, fontWeight: FontWeight.w600)),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: c.onSurface)),
                     value: _entry.shalatTahajud,
                     onChanged: (v) {
-                      setState(
-                          () => _entry = _entry.copyWith(shalatTahajud: v));
+                      setState(() => _entry = _entry.copyWith(shalatTahajud: v));
                       vm.updateShalatTahajud(v ?? false);
                     },
-                    activeColor: const Color(0xFF7B1FA2), dense: true,
+                    activeColor: const Color(0xFF7B1FA2),
+                    dense: true,
                   ),
                 ],
               ),
@@ -1151,6 +1190,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
 
             // Tadarus
             _SectionCard(
+              c: c,
               title: 'Tadarus Al-Quran',
               icon: Icons.menu_book_rounded,
               color: const Color(0xFF388E3C),
@@ -1158,12 +1198,15 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                 children: [
                   ListTile(
                     title: Text('Juz yang dibaca',
-                        style: GoogleFonts.poppins(fontSize: 14)),
+                        style: GoogleFonts.poppins(
+                            fontSize: 14, color: c.onSurface)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.remove_circle_outline_rounded),
+                          icon: const Icon(
+                              Icons.remove_circle_outline_rounded),
+                          color: c.textSecondary,
                           onPressed: () {
                             if (_entry.tadarusJuz > 0) {
                               setState(() => _entry = _entry.copyWith(
@@ -1175,9 +1218,12 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                         Text('${_entry.tadarusJuz}',
                             style: GoogleFonts.poppins(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold,
+                                color: c.onSurface)),
                         IconButton(
-                          icon: const Icon(Icons.add_circle_outline_rounded),
+                          icon: const Icon(
+                              Icons.add_circle_outline_rounded),
+                          color: c.textSecondary,
                           onPressed: () {
                             if (_entry.tadarusJuz < 30) {
                               setState(() => _entry = _entry.copyWith(
@@ -1192,8 +1238,10 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     child: TextField(
+                      style: TextStyle(color: c.onSurface),
                       decoration: InputDecoration(
                         labelText: 'Surat yang dibaca',
+                        labelStyle: TextStyle(color: c.textSecondary),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                       ),
@@ -1209,15 +1257,19 @@ class _EditEntryPageState extends State<_EditEntryPage> {
 
             // Catatan harian
             _SectionCard(
+              c: c,
               title: 'Catatan Tambahan',
               icon: Icons.note_rounded,
               color: const Color(0xFF546E7A),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextField(
+                  style: TextStyle(color: c.onSurface),
                   decoration: InputDecoration(
                     labelText: 'Catatan',
+                    labelStyle: TextStyle(color: c.textSecondary),
                     hintText: 'Tulis catatan atau refleksi...',
+                    hintStyle: TextStyle(color: c.textHint),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
@@ -1235,8 +1287,8 @@ class _EditEntryPageState extends State<_EditEntryPage> {
   }
 
   String _formatDate(DateTime date) {
-    const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
     return '${days[date.weekday % 7]}, ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 }

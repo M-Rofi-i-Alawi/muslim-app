@@ -1,131 +1,111 @@
+// lib/viewmodel/shalat_viewmodel.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../model/shalat_model.dart';
 import '../repository/shalat_repository.dart';
+import '../services/settings_service.dart';
 
 class ShalatViewModel extends ChangeNotifier {
   final ShalatRepository repository;
 
-  // ✅ FIX 1: Hapus auto-call di constructor → cegah fetch 2-3x
-  // MenuPage.initState() sudah memanggil getJadwalShalat(), jadi tidak perlu di sini
   ShalatViewModel(this.repository);
 
-  bool isLoading = false;
-  String error = '';
+  bool         isLoading = false;
+  String       error     = '';
   ShalatModel? jadwal;
 
-  String? selectedKota;       // null = GPS mode
+  String?  selectedKota;
   DateTime selectedDate = DateTime.now();
-  bool useGPS = true;
+  bool     useGPS       = true;
 
-  // ✅ GPS mode
+  // ─── INIT DARI KOTA TERSIMPAN ─────────────────────────────────────────────
+  Future<void> initWithSavedCity() async {
+    final settings = SettingsService();
+    await settings.load();
+
+    final savedCity = settings.lastCity;
+    final savedGPS  = settings.useGPS;
+
+    if (savedCity != null && !savedGPS) {
+      debugPrint('📍 Restoring saved city: $savedCity');
+      await selectCityByName(savedCity, saveToPrefs: false);
+    } else {
+      debugPrint('🌍 Starting with GPS mode');
+      await getJadwalShalatGPS();
+    }
+  }
+
+  // ─── GPS MODE ─────────────────────────────────────────────────────────────
   Future<void> getJadwalShalatGPS() async {
     try {
       isLoading = true;
-      error = '';
+      error     = '';
       notifyListeners();
-
-      debugPrint('🔄 Fetching jadwal with GPS...'); // ✅ FIX 2: debugPrint
 
       jadwal = await repository.fetchJadwal(
         tanggal: selectedDate,
-        useGPS: true,
+        useGPS:  true,
       );
 
-      debugPrint('✅ Jadwal loaded successfully: ${jadwal?.namaKota}');
-
       selectedKota = null;
-      useGPS = true;
+      useGPS       = true;
+
+      // ✅ Simpan bahwa user pakai GPS (koordinat dikelola SettingsService)
+      await SettingsService().saveLocation(
+        lat:      SettingsService().lastLat,
+        lng:      SettingsService().lastLng,
+        cityName: null, // null = GPS mode
+      );
+
+      debugPrint('✅ GPS jadwal: ${jadwal?.namaKota}');
     } catch (e) {
       error = e.toString();
-      debugPrint('❌ Error loading jadwal: $e');
+      debugPrint('❌ GPS error: $e');
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 
-  // ✅ Manual city selection — pakai nama kota, bukan kode
-  Future<void> getJadwalShalat({String? kodeKota, DateTime? tanggal}) async {
-    try {
-      isLoading = true;
-      error = '';
-      notifyListeners();
-
-      if (kodeKota != null) selectedKota = kodeKota;
-      if (tanggal != null) selectedDate = tanggal;
-
-      if (selectedKota != null) {
-        // ✅ FIX 3: Ambil koordinat dari cityCoordinates, bukan fallback Jakarta
-        final cityName = ShalatRepository.getCityName(selectedKota!);
-        final coords = ShalatRepository.cityCoordinates[cityName];
-
-        debugPrint('📍 Fetching jadwal for city: $cityName');
-
-        if (coords != null) {
-          // ✅ Pakai koordinat kota yang benar
-          jadwal = await repository.fetchJadwal(
-            tanggal: selectedDate,
-            useGPS: false,
-            manualLat: coords['lat'],
-            manualLon: coords['lon'],
-            manualCity: cityName,
-          );
-        } else {
-          // Fallback GPS kalau kota tidak ditemukan
-          debugPrint('⚠️ Koordinat kota $cityName tidak ditemukan, fallback GPS');
-          jadwal = await repository.fetchJadwal(
-            tanggal: selectedDate,
-            useGPS: true,
-          );
-        }
-
-        useGPS = false;
-      } else {
-        // GPS mode
-        debugPrint('🔄 Fetching jadwal with GPS...');
-        jadwal = await repository.fetchJadwal(
-          tanggal: selectedDate,
-          useGPS: true,
-        );
-        useGPS = true;
-      }
-
-      debugPrint('✅ Jadwal loaded successfully: ${jadwal?.namaKota}');
-    } catch (e) {
-      error = e.toString();
-      debugPrint('❌ Error loading jadwal: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  // ✅ Pilih kota dari nama langsung (untuk UI yang pakai nama kota)
-  Future<void> selectCityByName(String cityName) async {
+  // ─── PILIH KOTA MANUAL ────────────────────────────────────────────────────
+  Future<void> selectCityByName(String cityName,
+      {bool saveToPrefs = true}) async {
     debugPrint('📍 User selected city: $cityName');
-    selectedKota = null; // Clear kode kota
-    useGPS = false;
+    selectedKota = null;
+    useGPS       = false;
 
     try {
       isLoading = true;
-      error = '';
+      error     = '';
       notifyListeners();
 
       final coords = ShalatRepository.cityCoordinates[cityName];
-
       if (coords != null) {
+        final lat = coords['lat']!;
+        final lng = coords['lon']!;
+
         jadwal = await repository.fetchJadwal(
-          tanggal: selectedDate,
-          useGPS: false,
-          manualLat: coords['lat'],
-          manualLon: coords['lon'],
+          tanggal:    selectedDate,
+          useGPS:     false,
+          manualLat:  lat,
+          manualLon:  lng,
           manualCity: cityName,
         );
-        debugPrint('✅ Jadwal loaded for: $cityName');
+
+        // ✅ FIX: pakai saveLocation dengan koordinat kota
+        if (saveToPrefs) {
+          await SettingsService().saveLocation(
+            lat:      lat,
+            lng:      lng,
+            cityName: cityName,
+          );
+          debugPrint('💾 Saved city: $cityName');
+        }
+
+        debugPrint('✅ Jadwal loaded: $cityName');
       } else {
-        debugPrint('⚠️ Kota $cityName tidak ada di daftar koordinat');
         error = 'Kota tidak ditemukan';
+        debugPrint('⚠️ Kota $cityName tidak ada di daftar');
       }
     } catch (e) {
       error = e.toString();
@@ -136,40 +116,50 @@ class ShalatViewModel extends ChangeNotifier {
     }
   }
 
-  // ✅ Pilih kota dari kode (backward compatibility)
-  void setKota(String kodeKota) {
-    final cityName = ShalatRepository.getCityName(kodeKota);
-    debugPrint('📍 User selected city code: $kodeKota → $cityName');
-    selectedKota = kodeKota;
-    useGPS = false;
-    getJadwalShalat(kodeKota: kodeKota);
+  // ─── BACKWARD COMPAT ──────────────────────────────────────────────────────
+  Future<void> getJadwalShalat({
+    String?   kodeKota,
+    DateTime? tanggal,
+  }) async {
+    if (tanggal != null) selectedDate = tanggal;
+    if (kodeKota != null) {
+      final cityName = ShalatRepository.getCityName(kodeKota);
+      await selectCityByName(cityName);
+    } else {
+      await getJadwalShalatGPS();
+    }
   }
 
-  // ✅ Ganti tanggal
-  void setDate(DateTime date) {
-    debugPrint('📅 User selected date: ${date.day}/${date.month}/${date.year}');
-    selectedDate = date;
+  void setKota(String kodeKota) {
+    final cityName = ShalatRepository.getCityName(kodeKota);
+    selectedKota   = kodeKota;
+    useGPS         = false;
+    selectCityByName(cityName);
+  }
 
+  void setDate(DateTime date) {
+    selectedDate = date;
     if (selectedKota != null) {
       getJadwalShalat(tanggal: date);
+    } else if (!useGPS) {
+      final city = jadwal?.namaKota;
+      if (city != null) selectCityByName(city);
     } else {
       getJadwalShalatGPS();
     }
   }
 
-  // ✅ Reset ke GPS
-  void resetToGPS() {
-    debugPrint('🌍 Resetting to GPS mode...');
+  Future<void> resetToGPS() async {
+    debugPrint('🌍 Reset to GPS mode');
     selectedKota = null;
-    useGPS = true;
-    getJadwalShalatGPS();
+    useGPS       = true;
+    await getJadwalShalatGPS();
   }
 
-  // ✅ Refresh
   Future<void> refresh() async {
-    debugPrint('🔄 Refreshing jadwal...');
-    if (selectedKota != null) {
-      await getJadwalShalat();
+    final city = jadwal?.namaKota;
+    if (!useGPS && city != null) {
+      await selectCityByName(city, saveToPrefs: false);
     } else {
       await getJadwalShalatGPS();
     }
@@ -177,10 +167,11 @@ class ShalatViewModel extends ChangeNotifier {
 
   String getCityName() {
     if (jadwal?.namaKota != null) return jadwal!.namaKota;
-    if (selectedKota != null) return ShalatRepository.getCityName(selectedKota!);
+    if (selectedKota != null)
+      return ShalatRepository.getCityName(selectedKota!);
     return 'Detecting...';
   }
 
-  bool get isUsingGPS => selectedKota == null && useGPS;
+  bool   get isUsingGPS  => selectedKota == null && useGPS;
   String get modeDisplay => isUsingGPS ? 'GPS Auto' : 'Manual';
 }

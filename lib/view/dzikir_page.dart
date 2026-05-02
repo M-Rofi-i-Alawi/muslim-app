@@ -4,20 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/dzikir_viewmodel.dart';
 import '../model/dzikir_model.dart';
+import '../utils/theme_helper.dart';
 
-// ─────────────────────────────────────────────
-// KONSTANTA — konsisten dengan seluruh app
-// ─────────────────────────────────────────────
-const _kTeal      = Color(0xFF00A086);
-const _kTealDark  = Color(0xFF007A68);
+const _kTeal = Color(0xFF00A086);
+const _kTealDark = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
-const _kGold      = Color(0xFFE8A020);
-const _kBg        = Color(0xFFF2F4F7);
+const _kGold = Color(0xFFE8A020);
 
-// Warna per kategori — tetap dibedakan tapi harmonis dengan teal
-const _kPagi    = Color(0xFF1976D2); // biru fajar
-const _kPetang  = Color.fromARGB(255, 237, 155, 3); // oren
-const _kShalat  = Color(0xFF00897B); // teal hijau (dekat dengan tema utama)
+const _kPagi = Color(0xFF1976D2);
+const _kPetang = Color.fromARGB(255, 167, 36, 200);
+const _kShalat = Color(0xFF00897B);
 
 class DzikirPage extends StatefulWidget {
   const DzikirPage({super.key});
@@ -29,13 +25,27 @@ class DzikirPage extends StatefulWidget {
 class _DzikirPageState extends State<DzikirPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int _selectedTab = 0;
+
+  // ── data tab ──────────────────────────────────────────────────────────────
+  static const _tabs = [
+    {'label': 'Pagi', 'emoji': '🌅', 'key': 'pagi'},
+    {'label': 'Petang', 'emoji': '🌆', 'key': 'petang'},
+    {'label': 'Shalat', 'emoji': '🕌', 'key': 'shalat'},
+  ];
+
+  static const _tabColors = [_kPagi, _kPetang, _kShalat];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    Future.microtask(
-        () => context.read<DzikirViewModel>().fetchAllDzikir());
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() => _selectedTab = _tabController.index);
+      }
+    });
+    Future.microtask(() => context.read<DzikirViewModel>().fetchAllDzikir());
   }
 
   @override
@@ -47,7 +57,7 @@ class _DzikirPageState extends State<DzikirPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBg,
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -63,9 +73,20 @@ class _DzikirPageState extends State<DzikirPage>
                   return TabBarView(
                     controller: _tabController,
                     children: [
-                      _buildDzikirList(vm.dzikirPagi,    'pagi',   vm.pagiProgress,   vm.pagiTotal,   vm.pagiPercentage),
-                      _buildDzikirList(vm.dzikirPetang,  'petang', vm.petangProgress, vm.petangTotal, vm.petangPercentage),
-                      _buildDzikirList(vm.dzikirShalat,  'shalat', vm.shalatProgress, vm.shalatTotal, vm.shalatPercentage),
+                      _buildDzikirList(vm.dzikirPagi, 'pagi', vm.pagiProgress,
+                          vm.pagiTotal, vm.pagiPercentage),
+                      _buildDzikirList(
+                          vm.dzikirPetang,
+                          'petang',
+                          vm.petangProgress,
+                          vm.petangTotal,
+                          vm.petangPercentage),
+                      _buildDzikirList(
+                          vm.dzikirShalat,
+                          'shalat',
+                          vm.shalatProgress,
+                          vm.shalatTotal,
+                          vm.shalatPercentage),
                     ],
                   );
                 },
@@ -91,8 +112,7 @@ class _DzikirPageState extends State<DzikirPage>
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 4),
@@ -100,45 +120,34 @@ class _DzikirPageState extends State<DzikirPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Dzikir & Wirid',
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Dzikir pagi, petang, dan setelah shalat',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: Colors.white.withOpacity(0.85),
-                  ),
-                ),
+                Text('Dzikir & Wirid',
+                    style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                Text('Dzikir pagi, petang, dan setelah shalat',
+                    style: GoogleFonts.poppins(
+                        fontSize: 12, color: Colors.white.withOpacity(0.85))),
               ],
             ),
           ),
-          // Dekorasi Arab
-          Text(
-            'الذكر',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.2),
-              fontSize: 24,
-              fontFamily: 'serif',
-            ),
-          ),
+          Text('الذكر',
+              style: TextStyle(
+                  color: Colors.white.withOpacity(0.2),
+                  fontSize: 24,
+                  fontFamily: 'serif')),
         ],
       ),
     );
   }
 
-  // ─── TAB BAR ──────────────────────────────────────────────────────────────
+  // ─── CUSTOM TAB BAR ───────────────────────────────────────────────────────
   Widget _buildTabBar() {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -148,26 +157,50 @@ class _DzikirPageState extends State<DzikirPage>
           ),
         ],
       ),
-      child: TabBar(
-        controller: _tabController,
-        indicator: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [_kTealDark, _kTeal],
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: Colors.grey[600],
-        labelStyle: GoogleFonts.poppins(
-            fontSize: 13, fontWeight: FontWeight.w600),
-        unselectedLabelStyle:
-            GoogleFonts.poppins(fontSize: 13),
-        dividerColor: Colors.transparent,
-        tabs: const [
-          Tab(text: '🌅 Pagi'),
-          Tab(text: '🌆 Petang'),
-          Tab(text: '🕌 Shalat'),
-        ],
+      child: Row(
+        children: List.generate(_tabs.length, (i) {
+          final isSelected = _selectedTab == i;
+          final color = _tabColors[i];
+          final tab = _tabs[i];
+
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedTab = i);
+                _tabController.animateTo(i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 11),
+                decoration: BoxDecoration(
+                  color: isSelected ? color : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      tab['emoji']!,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      tab['label']!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: isSelected
+                            ? Colors.white
+                            : context.colors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -218,10 +251,9 @@ class _DzikirPageState extends State<DzikirPage>
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
-          ),
+              color: color.withOpacity(0.3),
+              blurRadius: 14,
+              offset: const Offset(0, 5)),
         ],
       ),
       child: Column(
@@ -238,17 +270,14 @@ class _DzikirPageState extends State<DzikirPage>
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
                   const SizedBox(height: 3),
-                  Text(
-                    '$progress dari $total dzikir selesai',
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.85)),
-                  ),
+                  Text('$progress dari $total dzikir selesai',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12, color: Colors.white.withOpacity(0.85))),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -256,10 +285,7 @@ class _DzikirPageState extends State<DzikirPage>
                 child: Text(
                   '${(percentage * 100).toStringAsFixed(0)}%',
                   style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
+                      fontSize: 16, fontWeight: FontWeight.bold, color: color),
                 ),
               ),
             ],
@@ -271,8 +297,7 @@ class _DzikirPageState extends State<DzikirPage>
               value: percentage,
               minHeight: 8,
               backgroundColor: Colors.white.withOpacity(0.25),
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ),
           if (progress < total) ...[
@@ -283,11 +308,11 @@ class _DzikirPageState extends State<DzikirPage>
                 icon: const Icon(Icons.refresh_rounded,
                     size: 16, color: Colors.white),
                 label: Text('Reset Semua',
-                    style: GoogleFonts.poppins(
-                        fontSize: 12, color: Colors.white)),
+                    style:
+                        GoogleFonts.poppins(fontSize: 12, color: Colors.white)),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 ),
               ),
             ),
@@ -298,25 +323,22 @@ class _DzikirPageState extends State<DzikirPage>
   }
 
   // ─── DZIKIR CARD ──────────────────────────────────────────────────────────
-  Widget _buildDzikirCard(
-      DzikirModel dzikir, String kategori, Color color) {
+  Widget _buildDzikirCard(DzikirModel dzikir, String kategori, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: dzikir.isCompleted
-              ? color.withOpacity(0.5)
-              : Colors.transparent,
+          color:
+              dzikir.isCompleted ? color.withOpacity(0.5) : Colors.transparent,
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
         ],
       ),
       child: Material(
@@ -330,18 +352,14 @@ class _DzikirPageState extends State<DzikirPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        dzikir.nama,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                        ),
-                      ),
+                      child: Text(dzikir.nama,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: color)),
                     ),
                     if (dzikir.isCompleted)
                       Container(
@@ -368,48 +386,35 @@ class _DzikirPageState extends State<DzikirPage>
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // Arab
                 Text(
                   dzikir.arab,
                   style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'serif',
-                    height: 1.9,
-                    color: const Color(0xFF1A1A2E),
-                  ),
+                      fontSize: 18,
+                      fontFamily: 'serif',
+                      height: 1.9,
+                      color: context.colors.onSurface),
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,
                 ),
                 const SizedBox(height: 8),
-
-                // Latin
-                Text(
-                  dzikir.latin,
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.grey[600],
-                    height: 1.6,
-                  ),
-                ),
+                Text(dzikir.latin,
+                    style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                        color: context.colors.textSecondary,
+                        height: 1.6)),
                 const SizedBox(height: 12),
-
-                // Progress + tombol
                 Row(
                   children: [
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${dzikir.currentCount} / ${dzikir.jumlahBaca}x',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: color,
-                            ),
-                          ),
+                          Text('${dzikir.currentCount} / ${dzikir.jumlahBaca}x',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: color)),
                           const SizedBox(height: 4),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
@@ -417,8 +422,7 @@ class _DzikirPageState extends State<DzikirPage>
                               value: dzikir.progress,
                               minHeight: 6,
                               backgroundColor: Colors.grey[200],
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(color),
+                              valueColor: AlwaysStoppedAnimation<Color>(color),
                             ),
                           ),
                         ],
@@ -437,8 +441,7 @@ class _DzikirPageState extends State<DzikirPage>
   }
 
   // ─── COUNTER BUTTON ───────────────────────────────────────────────────────
-  Widget _buildCounterButton(
-      DzikirModel dzikir, String kategori, Color color) {
+  Widget _buildCounterButton(DzikirModel dzikir, String kategori, Color color) {
     return Consumer<DzikirViewModel>(
       builder: (context, vm, _) => GestureDetector(
         onTap: () {
@@ -448,30 +451,25 @@ class _DzikirPageState extends State<DzikirPage>
           }
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
-            color: dzikir.isCompleted
-                ? color.withOpacity(0.2)
-                : color,
+            color: dzikir.isCompleted ? color.withOpacity(0.2) : color,
             borderRadius: BorderRadius.circular(12),
             boxShadow: dzikir.isCompleted
                 ? []
                 : [
                     BoxShadow(
-                      color: color.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
+                        color: color.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3)),
                   ],
           ),
           child: Text(
             dzikir.isCompleted ? '✓' : '+1',
             style: GoogleFonts.poppins(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: dzikir.isCompleted ? color : Colors.white,
-            ),
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: dzikir.isCompleted ? color : Colors.white),
           ),
         ),
       ),
@@ -484,20 +482,18 @@ class _DzikirPageState extends State<DzikirPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.auto_stories_rounded,
-              size: 72, color: Colors.grey[300]),
+          Icon(Icons.auto_stories_rounded, size: 72, color: Colors.grey[300]),
           const SizedBox(height: 12),
           Text('Belum ada dzikir',
-              style: GoogleFonts.poppins(
-                  fontSize: 15, color: Colors.grey[500])),
+              style:
+                  GoogleFonts.poppins(fontSize: 15, color: Colors.grey[500])),
         ],
       ),
     );
   }
 
   // ─── BOTTOM SHEET DETAIL ──────────────────────────────────────────────────
-  void _showDzikirDetail(
-      DzikirModel dzikir, String kategori, Color color) {
+  void _showDzikirDetail(DzikirModel dzikir, String kategori, Color color) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -507,41 +503,32 @@ class _DzikirPageState extends State<DzikirPage>
         minChildSize: 0.5,
         maxChildSize: 0.95,
         builder: (_, ctrl) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: context.colors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
             children: [
-              // Drag handle
               Container(
                 margin: const EdgeInsets.only(top: 12),
-                width: 40, height: 4,
+                width: 40,
+                height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2)),
               ),
-
               Expanded(
                 child: ListView(
                   controller: ctrl,
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
                   children: [
-                    // Judul
-                    Text(
-                      dzikir.nama,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                      ),
-                    ),
+                    Text(dzikir.nama,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: color)),
                     const SizedBox(height: 20),
-
-                    // Arab
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
@@ -555,49 +542,35 @@ class _DzikirPageState extends State<DzikirPage>
                         dzikir.arab,
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontFamily: 'serif',
-                          height: 2.0,
-                          color: Color(0xFF1A1A2E),
-                        ),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontFamily: 'serif',
+                            height: 2.0,
+                            color: context.colors.onSurface),
                       ),
                     ),
                     const SizedBox(height: 14),
-
-                    // Latin
                     _DetailSection(
                       title: 'Transliterasi',
                       labelColor: _kTeal,
                       labelBg: _kTeal.withOpacity(0.08),
-                      child: Text(
-                        dzikir.latin,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey[700],
-                          height: 1.8,
-                        ),
-                      ),
+                      child: Text(dzikir.latin,
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey[700],
+                              height: 1.8)),
                     ),
-
-                    // Arti
                     _DetailSection(
                       title: 'Artinya',
                       labelColor: const Color(0xFF388E3C),
-                      labelBg:
-                          const Color(0xFF388E3C).withOpacity(0.08),
-                      child: Text(
-                        dzikir.arti,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: const Color(0xFF1A1A2E),
-                          height: 1.8,
-                        ),
-                      ),
+                      labelBg: const Color(0xFF388E3C).withOpacity(0.08),
+                      child: Text(dzikir.arti,
+                          style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: context.colors.onSurface,
+                              height: 1.8)),
                     ),
-
-                    // Keutamaan
                     _DetailSection(
                       title: 'Keutamaan',
                       labelColor: _kGold,
@@ -609,22 +582,16 @@ class _DzikirPageState extends State<DzikirPage>
                               color: _kGold, size: 18),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: Text(
-                              dzikir.keutamaan,
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                height: 1.8,
-                                color: Colors.grey[700],
-                              ),
-                            ),
+                            child: Text(dzikir.keutamaan,
+                                style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    height: 1.8,
+                                    color: context.colors.textSecondary)),
                           ),
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Counter section
                     Consumer<DzikirViewModel>(
                       builder: (context, vm, _) => Container(
                         padding: const EdgeInsets.all(20),
@@ -643,15 +610,12 @@ class _DzikirPageState extends State<DzikirPage>
                                     color: color)),
                             const SizedBox(height: 16),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Minus
                                 IconButton(
                                   onPressed: () {
                                     HapticFeedback.lightImpact();
-                                    vm.decrementCount(
-                                        kategori, dzikir.id);
+                                    vm.decrementCount(kategori, dzikir.id);
                                   },
                                   icon: const Icon(
                                       Icons.remove_circle_outline_rounded),
@@ -659,51 +623,42 @@ class _DzikirPageState extends State<DzikirPage>
                                   iconSize: 36,
                                 ),
                                 const SizedBox(width: 20),
-                                // Display
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 28, vertical: 14),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(14),
                                     boxShadow: [
                                       BoxShadow(
-                                        color:
-                                            color.withOpacity(0.2),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 2),
-                                      ),
+                                          color: color.withOpacity(0.2),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2)),
                                     ],
                                   ),
                                   child: Text(
                                     '${dzikir.currentCount} / ${dzikir.jumlahBaca}',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold,
-                                      color: color,
-                                    ),
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        color: color),
                                   ),
                                 ),
                                 const SizedBox(width: 20),
-                                // Plus
                                 IconButton(
                                   onPressed: () {
                                     if (!dzikir.isCompleted) {
                                       HapticFeedback.mediumImpact();
-                                      vm.incrementCount(
-                                          kategori, dzikir.id);
+                                      vm.incrementCount(kategori, dzikir.id);
                                     }
                                   },
-                                  icon: const Icon(
-                                      Icons.add_circle_rounded),
+                                  icon: const Icon(Icons.add_circle_rounded),
                                   color: color,
                                   iconSize: 36,
                                 ),
                               ],
                             ),
                             const SizedBox(height: 14),
-                            // Progress bar
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: LinearProgressIndicator(
@@ -717,22 +672,16 @@ class _DzikirPageState extends State<DzikirPage>
                             if (dzikir.isCompleted) ...[
                               const SizedBox(height: 12),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(
-                                      Icons.check_circle_rounded,
-                                      color: Color(0xFF388E3C),
-                                      size: 18),
-                                  const SizedBox(width: 20),
-                                  Text(
-                                    'Selesai! Alhamdulillah',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF388E3C),
-                                    ),
-                                  ),
+                                  const Icon(Icons.check_circle_rounded,
+                                      color: Color(0xFF388E3C), size: 18),
+                                  const SizedBox(width: 8),
+                                  Text('Selesai! Alhamdulillah',
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF388E3C))),
                                 ],
                               ),
                             ],
@@ -740,22 +689,17 @@ class _DzikirPageState extends State<DzikirPage>
                             TextButton.icon(
                               onPressed: () =>
                                   vm.resetCount(kategori, dzikir.id),
-                              icon: const Icon(Icons.refresh_rounded,
-                                  size: 16),
+                              icon: const Icon(Icons.refresh_rounded, size: 16),
                               label: Text('Reset Counter',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 13)),
-                              style: TextButton.styleFrom(
-                                  foregroundColor: color),
+                                  style: GoogleFonts.poppins(fontSize: 13)),
+                              style:
+                                  TextButton.styleFrom(foregroundColor: color),
                             ),
                           ],
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Tombol salin & tutup
                     Row(
                       children: [
                         Expanded(
@@ -772,24 +716,19 @@ class _DzikirPageState extends State<DzikirPage>
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10)),
-                                duration:
-                                    const Duration(seconds: 2),
+                                    borderRadius: BorderRadius.circular(10)),
+                                duration: const Duration(seconds: 2),
                               ));
                             },
-                            icon: const Icon(Icons.copy_rounded,
-                                size: 16),
+                            icon: const Icon(Icons.copy_rounded, size: 16),
                             label: Text('Salin',
-                                style:
-                                    GoogleFonts.poppins(fontSize: 13)),
+                                style: GoogleFonts.poppins(fontSize: 13)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: _kTeal,
                               side: const BorderSide(color: _kTeal),
                               padding: const EdgeInsets.all(14),
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12)),
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),
@@ -801,15 +740,13 @@ class _DzikirPageState extends State<DzikirPage>
                                 size: 16, color: Colors.white),
                             label: Text('Tutup',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: Colors.white)),
+                                    fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _kTeal,
                               padding: const EdgeInsets.all(14),
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(12)),
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),
@@ -825,13 +762,16 @@ class _DzikirPageState extends State<DzikirPage>
     );
   }
 
-  // ─── HELPER ───────────────────────────────────────────────────────────────
   Color _categoryColor(String kategori) {
     switch (kategori) {
-      case 'pagi':    return _kPagi;
-      case 'petang':  return _kPetang;
-      case 'shalat':  return _kShalat;
-      default:        return _kTeal;
+      case 'pagi':
+        return _kPagi;
+      case 'petang':
+        return _kPetang;
+      case 'shalat':
+        return _kShalat;
+      default:
+        return _kTeal;
     }
   }
 }
@@ -841,8 +781,8 @@ class _DzikirPageState extends State<DzikirPage>
 // ─────────────────────────────────────────────
 class _DetailSection extends StatelessWidget {
   final String title;
-  final Color  labelColor;
-  final Color  labelBg;
+  final Color labelColor;
+  final Color labelBg;
   final Widget child;
 
   const _DetailSection({
@@ -858,36 +798,30 @@ class _DetailSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: labelBg,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: labelColor,
-            ),
-          ),
+          child: Text(title,
+              style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: labelColor)),
         ),
         const SizedBox(height: 10),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(12),
-            border:
-                Border.all(color: labelColor.withOpacity(0.15)),
+            border: Border.all(color: labelColor.withOpacity(0.15)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.03),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2)),
             ],
           ),
           child: child,

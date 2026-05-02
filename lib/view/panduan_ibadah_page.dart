@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../utils/theme_helper.dart';
 import '../viewmodel/panduan_ibadahn_viewmodel.dart';
 import '../model/panduan_ibadah_model.dart';
 
@@ -8,7 +9,6 @@ const _kTeal      = Color(0xFF00A086);
 const _kTealDark  = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
 const _kGold      = Color(0xFFE8A020);
-const _kBg        = Color(0xFFF2F4F7);
 
 class PanduanIbadahPage extends StatelessWidget {
   const PanduanIbadahPage({super.key});
@@ -16,7 +16,8 @@ class PanduanIbadahPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBg,
+      // FIX: ganti _kBg hardcoded → adaptive dark/light
+      backgroundColor: context.colors.background,
       body: Consumer<PanduanIbadahViewModel>(
         builder: (context, vm, _) {
           if (vm.selectedItem != null) {
@@ -58,8 +59,7 @@ class _CategoriesPage extends StatelessWidget {
                             color: Colors.grey, size: 60),
                         const SizedBox(height: 12),
                         Text('Error: ${vm.error}',
-                            style:
-                                GoogleFonts.poppins(color: Colors.grey)),
+                            style: GoogleFonts.poppins(color: Colors.grey)),
                       ],
                     ),
                   );
@@ -91,8 +91,7 @@ class _CategoriesPage extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 4),
@@ -139,8 +138,7 @@ class _CategoryCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.8)]),
+        gradient: LinearGradient(colors: [color, color.withOpacity(0.8)]),
         boxShadow: [
           BoxShadow(
               color: color.withOpacity(0.3),
@@ -180,8 +178,7 @@ class _CategoryCard extends StatelessWidget {
                       Text(category.description,
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              color:
-                                  Colors.white.withOpacity(0.9))),
+                              color: Colors.white.withOpacity(0.9))),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -213,12 +210,12 @@ class _CategoryCard extends StatelessWidget {
 
   IconData _getIcon(String icon) {
     switch (icon) {
-      case 'prayer':           return Icons.self_improvement_rounded;
-      case 'water_drop':       return Icons.water_drop_rounded;
-      case 'fastfood_off':     return Icons.no_food_rounded;
+      case 'prayer':             return Icons.self_improvement_rounded;
+      case 'water_drop':         return Icons.water_drop_rounded;
+      case 'fastfood_off':       return Icons.no_food_rounded;
       case 'volunteer_activism': return Icons.volunteer_activism_rounded;
-      case 'flight':           return Icons.flight_rounded;
-      default:                 return Icons.menu_book_rounded;
+      case 'flight':             return Icons.flight_rounded;
+      default:                   return Icons.menu_book_rounded;
     }
   }
 }
@@ -243,8 +240,8 @@ class _CategoryItemsPage extends StatelessWidget {
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: category.items.length,
-              itemBuilder: (_, i) => _ItemCard(
-                  item: category.items[i], color: color),
+              itemBuilder: (_, i) =>
+                  _ItemCard(item: category.items[i], color: color),
             ),
           ),
         ],
@@ -256,7 +253,7 @@ class _CategoryItemsPage extends StatelessWidget {
       BuildContext context, Color color, PanduanIbadahViewModel vm) {
     return Container(
       padding: const EdgeInsets.fromLTRB(4, 8, 16, 16),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -265,8 +262,7 @@ class _CategoryItemsPage extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: vm.backToCategories,
           ),
           const SizedBox(width: 4),
@@ -303,14 +299,19 @@ class _ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = context.read<PanduanIbadahViewModel>();
+    // FIX: ambil warna dari theme helper
+    final c  = context.colors;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // FIX: Colors.white hardcoded → c.surface
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              // FIX: Colors.black.withOpacity → c.shadow
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -343,17 +344,19 @@ class _ItemCard extends StatelessWidget {
                           style: GoogleFonts.poppins(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1A1A2E))),
+                              // FIX: hardcoded Color(0xFF1A1A2E) → c.onSurface
+                              color: c.onSurface)),
                       const SizedBox(height: 4),
                       Text(item.shortDesc,
                           style: GoogleFonts.poppins(
                               fontSize: 12,
-                              color: Colors.grey[600])),
+                              // FIX: Colors.grey[600] → c.textSecondary
+                              color: c.textSecondary)),
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right_rounded,
-                    color: Colors.grey[400]),
+                // FIX: Colors.grey[400] → c.textHint
+                Icon(Icons.chevron_right_rounded, color: c.textHint),
               ],
             ),
           ),
@@ -385,8 +388,8 @@ class _DetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ...item.sections.map(_buildSection),
-                  if (item.references.isNotEmpty) _buildReferences(),
+                  ...item.sections.map((s) => _buildSection(context, s)),
+                  if (item.references.isNotEmpty) _buildReferences(context),
                 ],
               ),
             ),
@@ -410,8 +413,7 @@ class _DetailPage extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_rounded,
-                color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
             onPressed: vm.backToItems,
           ),
           const SizedBox(width: 4),
@@ -438,7 +440,8 @@ class _DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(PanduanSection section) {
+  Widget _buildSection(BuildContext context, PanduanSection section) {
+    final c = context.colors;
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -448,57 +451,65 @@ class _DetailPage extends StatelessWidget {
               style: GoogleFonts.poppins(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: _kTealDark)),
+                  // FIX: _kTealDark hardcoded → tetap teal tapi tetap kontras di dark
+                  color: _kTeal)),
           const SizedBox(height: 10),
-          _buildContent(section),
+          _buildContent(context, section),
         ],
       ),
     );
   }
 
-  Widget _buildContent(PanduanSection section) {
+  Widget _buildContent(BuildContext context, PanduanSection section) {
     switch (section.type) {
-      case 'text':   return _buildTextContent(section.content);
-      case 'list':   return _buildListContent(section.content);
-      case 'steps':  return _buildStepsContent(section.content);
-      case 'arabic': return _buildArabicContent(section.content);
+      case 'text':   return _buildTextContent(context, section.content);
+      case 'list':   return _buildListContent(context, section.content);
+      case 'steps':  return _buildStepsContent(context, section.content);
+      case 'arabic': return _buildArabicContent(context, section.content);
       default:       return const SizedBox.shrink();
     }
   }
 
-  Widget _buildTextContent(String text) {
+  Widget _buildTextContent(BuildContext context, String text) {
+    final c = context.colors;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // FIX: Colors.white → c.surface
+        color: c.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: c.shadow,
               blurRadius: 6,
               offset: const Offset(0, 2)),
         ],
       ),
       child: Text(text,
-          style: GoogleFonts.poppins(fontSize: 14, height: 1.7,
-              color: Colors.grey[800])),
+          style: GoogleFonts.poppins(
+              fontSize: 14,
+              height: 1.7,
+              // FIX: Colors.grey[800] → c.onSurface
+              color: c.onSurface)),
     );
   }
 
-  Widget _buildListContent(List<String> items) {
+  Widget _buildListContent(BuildContext context, List<String> items) {
+    final c = context.colors;
     return Column(
       children: items.asMap().entries.map((e) {
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            // FIX: Colors.white → c.surface
+            color: c.surface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: _kTeal.withOpacity(0.2)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
+                  color: c.shadow,
                   blurRadius: 6,
                   offset: const Offset(0, 2)),
             ],
@@ -522,8 +533,10 @@ class _DetailPage extends StatelessWidget {
               Expanded(
                 child: Text(e.value,
                     style: GoogleFonts.poppins(
-                        fontSize: 14, height: 1.5,
-                        color: Colors.grey[800])),
+                        fontSize: 14,
+                        height: 1.5,
+                        // FIX: Colors.grey[800] → c.onSurface
+                        color: c.onSurface)),
               ),
             ],
           ),
@@ -532,20 +545,22 @@ class _DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStepsContent(List<StepItem> steps) {
+  Widget _buildStepsContent(BuildContext context, List<StepItem> steps) {
     return Column(
-        children: steps.map(_buildStepCard).toList());
+        children: steps.map((s) => _buildStepCard(context, s)).toList());
   }
 
-  Widget _buildStepCard(StepItem step) {
+  Widget _buildStepCard(BuildContext context, StepItem step) {
+    final c = context.colors;
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // FIX: Colors.white → c.surface
+        color: c.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: c.shadow,
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -553,14 +568,13 @@ class _DetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Step header — teal
+          // Step header — gradient teal (oke di kedua mode)
           Container(
             padding: const EdgeInsets.all(14),
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [_kTealDark, _kTeal]),
+              gradient: LinearGradient(colors: [_kTealDark, _kTeal]),
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
+                topLeft:  Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
             ),
@@ -599,14 +613,17 @@ class _DetailPage extends StatelessWidget {
               children: [
                 Text(step.description,
                     style: GoogleFonts.poppins(
-                        fontSize: 14, height: 1.6,
-                        color: Colors.grey[700])),
+                        fontSize: 14,
+                        height: 1.6,
+                        // FIX: Colors.grey[700] → c.textSecondary
+                        color: c.textSecondary)),
                 if (step.arabic != null) ...[
                   const SizedBox(height: 14),
                   _arabicBox(
-                    arab: step.arabic!,
-                    latin: step.transliteration,
-                    terjemahan: step.translation,
+                    context: context,
+                    arab:        step.arabic!,
+                    latin:       step.transliteration,
+                    terjemahan:  step.translation,
                   ),
                 ],
               ],
@@ -617,23 +634,29 @@ class _DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildArabicContent(ArabicText content) {
+  Widget _buildArabicContent(BuildContext context, ArabicText content) {
     return _arabicBox(
-      arab: content.arabic,
-      latin: content.transliteration,
+      context:    context,
+      arab:       content.arabic,
+      latin:      content.transliteration,
       terjemahan: content.translation,
     );
   }
 
   Widget _arabicBox({
+    required BuildContext context,
     required String arab,
     String? latin,
     String? terjemahan,
   }) {
+    final c = context.colors;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: _kTeal.withOpacity(0.05),
+        // FIX: warna latar kotak arab adaptive
+        color: c.isDark
+            ? _kTeal.withOpacity(0.08)
+            : _kTeal.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: _kTeal.withOpacity(0.2)),
       ),
@@ -642,17 +665,19 @@ class _DetailPage extends StatelessWidget {
         children: [
           Text(arab,
               textAlign: TextAlign.right,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'serif',
                   height: 2.2,
-                  color: Color(0xFF1A1A2E))),
+                  // FIX: hardcoded Color(0xFF1A1A2E) → c.onSurface
+                  color: c.onSurface)),
           if (latin != null) ...[
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white,
+                // FIX: Colors.white → c.surfaceVariant
+                color: c.surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(latin,
@@ -674,14 +699,14 @@ class _DetailPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.translate_rounded,
-                      size: 15, color: _kGold),
+                  Icon(Icons.translate_rounded, size: 15, color: _kGold),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(terjemahan,
                         style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: Colors.grey[800],
+                            // FIX: Colors.grey[800] → c.onSurface
+                            color: c.onSurface,
                             height: 1.6)),
                   ),
                 ],
@@ -693,7 +718,8 @@ class _DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReferences() {
+  Widget _buildReferences(BuildContext context) {
+    final c = context.colors;
     return Container(
       margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.all(16),
@@ -729,7 +755,8 @@ class _DetailPage extends StatelessWidget {
                       child: Text(ref,
                           style: GoogleFonts.poppins(
                               fontSize: 13,
-                              color: Colors.grey[700])),
+                              // FIX: Colors.grey[700] → c.textSecondary
+                              color: c.textSecondary)),
                     ),
                   ],
                 ),

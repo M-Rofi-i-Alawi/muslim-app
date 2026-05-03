@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'menu_page.dart';
@@ -10,7 +11,8 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -20,9 +22,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   void initState() {
     super.initState();
 
-    // Animation setup
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 2800),
       vsync: this,
     );
 
@@ -49,14 +50,15 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     _controller.forward();
 
-    // Navigate after delay
-    Timer(const Duration(milliseconds: 1800), () {
+    Timer(const Duration(milliseconds: 6400), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const MenuPage(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const MenuPage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: SlideTransition(
@@ -83,6 +85,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -90,90 +94,133 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF007A68), // Teal Dark
-              Color(0xFF00A086), // Teal Main
-              Color(0xFF00C4A7), // Teal Light
+              Color(0xFF007A68),
+              Color(0xFF00A086),
+              Color(0xFF00C4A7),
             ],
             stops: [0.0, 0.5, 1.0],
           ),
         ),
         child: Stack(
           children: [
-            // Background Pattern (Optional decorative circles)
+            // ── Dekoratif circle atas kanan ──────────────────────
             Positioned(
-              top: -100,
-              right: -100,
+              top: -120,
+              right: -120,
               child: Container(
-                width: 300,
-                height: 300,
+                width: 320,
+                height: 320,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.06),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 60,
+              right: -60,
+              child: Container(
+                width: 160,
+                height: 160,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.04),
+                ),
+              ),
+            ),
+
+            // ── Dekoratif circle bawah kiri ──────────────────────
+            Positioned(
+              bottom: 100,
+              left: -80,
+              child: Container(
+                width: 220,
+                height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.05),
                 ),
               ),
             ),
+
+            // ── Gelombang lengkung bawah ──────────────────────────
             Positioned(
-              bottom: -50,
-              left: -50,
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.05),
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: CustomPaint(
+                  size: Size(size.width, 180),
+                  painter: _WavePainter(),
                 ),
               ),
             ),
-            
-            // Main Content
+
+            // ── Konten utama ──────────────────────────────────────
             Center(
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Animated Icon Container
+                    // Logo dengan border & shadow
                     ScaleTransition(
                       scale: _scaleAnimation,
                       child: Container(
-                        padding: const EdgeInsets.all(28),
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.18),
+                          borderRadius: BorderRadius.circular(40),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.35),
+                            width: 2.5,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 20,
-                              spreadRadius: 5,
+                              color: Colors.black.withOpacity(0.18),
+                              blurRadius: 32,
+                              spreadRadius: 4,
+                              offset: const Offset(0, 8),
+                            ),
+                            BoxShadow(
+                              color: Colors.white.withOpacity(0.1),
+                              blurRadius: 12,
+                              spreadRadius: -2,
                             ),
                           ],
                         ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.mosque_rounded,
-                            size: 72,
-                            color: Colors.white,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(34),
+                          child: Image.asset(
+                            'assets/logo_muslim_app.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                              'logo_muslim_app.png',
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.mosque_rounded,
+                                      size: 80, color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 32),
-                    
-                    // App Name with Slide Animation
+
+                    // Nama app + subtitle
                     AnimatedBuilder(
                       animation: _slideAnimation,
-                      builder: (context, child) {
-                        return Transform.translate(
-                          offset: Offset(0, _slideAnimation.value),
-                          child: child,
-                        );
-                      },
+                      builder: (context, child) => Transform.translate(
+                        offset: Offset(0, _slideAnimation.value),
+                        child: child,
+                      ),
                       child: Column(
                         children: [
                           Text(
@@ -187,28 +234,25 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                                 Shadow(
                                   color: Colors.black.withOpacity(0.2),
                                   offset: const Offset(0, 2),
-                                  blurRadius: 4,
+                                  blurRadius: 6,
                                 ),
                               ],
                             ),
                           ),
-                          
-                          const SizedBox(height: 12),
-                          
-                          // Subtitle
+                          const SizedBox(height: 10),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 8,
-                            ),
+                                horizontal: 20, vertical: 8),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.2)),
                             ),
                             child: Text(
                               'Sahabat Ibadah Anda',
                               style: GoogleFonts.poppins(
-                                fontSize: 15,
+                                fontSize: 14,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
                                 letterSpacing: 0.5,
@@ -218,64 +262,52 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                         ],
                       ),
                     ),
-                    
-                    const SizedBox(height: 50),
-                    
-                    // Loading indicator with version
+
+                    const SizedBox(height: 52),
+
+                    // Loading indicator
                     FadeTransition(
                       opacity: _fadeAnimation,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            width: 32,
-                            height: 32,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          ),
-                        ],
+                      child: const SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            
-            // Bottom Branding
+
+            // ── Branding bawah ────────────────────────────────────
             Positioned(
-              bottom: 30,
+              bottom: 36,
               left: 0,
               right: 0,
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.flutter_dash,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
-                          style: GoogleFonts.poppins(
-                            fontSize: 11,
-                            color: Colors.white.withOpacity(0.8),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white.withOpacity(0.85),
+                        fontFamily: 'serif',
+                        height: 1.6,
+                      ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
                     Text(
                       '© 2026 Muslim App',
                       style: GoogleFonts.poppins(
                         fontSize: 10,
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withOpacity(0.55),
                         fontWeight: FontWeight.w300,
                       ),
                     ),
@@ -288,4 +320,64 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       ),
     );
   }
+}
+
+// ── Wave Painter ─────────────────────────────────────────────────────────────
+class _WavePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Gelombang 1 — lebih transparan, lebih tinggi
+    final paint1 = Paint()
+      ..color = Colors.white.withOpacity(0.06)
+      ..style = PaintingStyle.fill;
+
+    final path1 = Path();
+    path1.moveTo(0, size.height * 0.55);
+    path1.cubicTo(
+      size.width * 0.25, size.height * 0.28,
+      size.width * 0.55, size.height * 0.72,
+      size.width,        size.height * 0.42,
+    );
+    path1.lineTo(size.width, size.height);
+    path1.lineTo(0, size.height);
+    path1.close();
+    canvas.drawPath(path1, paint1);
+
+    // Gelombang 2 — lebih solid
+    final paint2 = Paint()
+      ..color = Colors.white.withOpacity(0.09)
+      ..style = PaintingStyle.fill;
+
+    final path2 = Path();
+    path2.moveTo(0, size.height * 0.72);
+    path2.cubicTo(
+      size.width * 0.3,  size.height * 0.50,
+      size.width * 0.65, size.height * 0.88,
+      size.width,        size.height * 0.62,
+    );
+    path2.lineTo(size.width, size.height);
+    path2.lineTo(0, size.height);
+    path2.close();
+    canvas.drawPath(path2, paint2);
+
+    // Gelombang 3 — paling bawah, paling solid
+    final paint3 = Paint()
+      ..color = Colors.white.withOpacity(0.07)
+      ..style = PaintingStyle.fill;
+
+    final path3 = Path();
+    path3.moveTo(0, size.height * 0.85);
+    path3.cubicTo(
+      size.width * 0.4,  size.height * 0.68,
+      size.width * 0.75, size.height * 0.96,
+      size.width,        size.height * 0.80,
+    );
+    path3.lineTo(size.width, size.height);
+    path3.lineTo(0, size.height);
+    path3.close();
+    canvas.drawPath(path3, paint3);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

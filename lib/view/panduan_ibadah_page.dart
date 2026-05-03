@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 import '../viewmodel/panduan_ibadahn_viewmodel.dart';
 import '../model/panduan_ibadah_model.dart';
@@ -99,12 +100,12 @@ class _CategoriesPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Panduan Ibadah',
+                Text(AppLocalizations.of(context).panduanIbadahTitle,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text('Pedoman lengkap ibadah sehari-hari',
+                Text(AppLocalizations.of(context).panduanIbadahSubtitle,
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -735,7 +736,7 @@ class _DetailPage extends StatelessWidget {
             children: [
               Icon(Icons.menu_book_rounded, size: 18, color: _kGold),
               const SizedBox(width: 8),
-              Text('Referensi',
+              Text(AppLocalizations.of(context).referensi,
                   style: GoogleFonts.poppins(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,

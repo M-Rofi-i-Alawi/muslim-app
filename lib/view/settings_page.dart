@@ -3,58 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/settings_service.dart';
 import '../utils/theme_helper.dart';
+import '../l10n/app_localizations.dart';
 
-  void _confirmReset(BuildContext context, SettingsService settings) {
-    final c = context.colors;
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: c.surface,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
-
-        title: Text(
-          'Reset Pengaturan?',
-          style: TextStyle(
-              color: c.onSurface,
-              fontWeight: FontWeight.bold),
-        ),
-
-        content: Text(
-          'Semua pengaturan akan dikembalikan ke awal, termasuk notifikasi shalat.',
-          style: TextStyle(color: c.textSecondary),
-        ),
-
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Batal',
-                style: TextStyle(color: c.textSecondary)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              settings.resetAll();
-              Navigator.pop(context);
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Pengaturan berhasil direset'),
-                  backgroundColor: kTeal,
-                ),
-              );
-            },
-            child: const Text('Reset'),
-          ),
-        ],
-      ),
-    );
-  }
-  
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -62,11 +12,12 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final c        = context.colors;
     final settings = context.watch<SettingsService>();
+    final l        = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: c.background,   // ← ubah ini
+      backgroundColor: c.background,
       appBar: AppBar(
-        title: const Text('Pengaturan'),
+        title: Text(l.pengaturan),
         backgroundColor: kTealDark,
         foregroundColor: Colors.white,
       ),
@@ -75,50 +26,50 @@ class SettingsPage extends StatelessWidget {
         children: [
 
           // ── NOTIFIKASI SHALAT ─────────────────────────
-          _SectionHeader('Notifikasi Shalat', c),
+          _SectionHeader(l.notifikasiShalat, c),
           const SizedBox(height: 8),
 
           _SettingsCard(
             c: c,
             children: [
               _waktuTile(context, settings, 'imsak',
-                  Icons.alarm, const Color(0xFF00695C), 'Imsak',
-                  'Pengingat sebelum sahur berakhir'),
+                  Icons.alarm, const Color(0xFF00695C),
+                  l.imsak, l.imsakSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'subuh',
-                  Icons.wb_twilight_rounded, const Color(0xFF1565C0), 'Subuh',
-                  'Awal waktu shalat Subuh'),
+                  Icons.wb_twilight_rounded, const Color(0xFF1565C0),
+                  l.subuh, l.subuhSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'terbit',
-                  Icons.wb_sunny, const Color(0xFFF57F17), 'Terbit',
-                  'Matahari terbit — batas akhir Subuh'),
+                  Icons.wb_sunny, const Color(0xFFF57F17),
+                  l.terbit, l.terbitSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'dhuha',
-                  Icons.wb_sunny_outlined, const Color(0xFFFFB300), 'Dhuha',
-                  '± 20 menit setelah matahari terbit'),
+                  Icons.wb_sunny_outlined, const Color(0xFFFFB300),
+                  l.dhuha, l.dhuhaSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'dzuhur',
-                  Icons.wb_sunny_rounded, const Color(0xFFE8650A), 'Dzuhur',
-                  'Tengah hari'),
+                  Icons.wb_sunny_rounded, const Color(0xFFE8650A),
+                  l.dzuhur, l.dzuhurSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'ashar',
-                  Icons.cloud_rounded, const Color(0xFF6D4C41), 'Ashar',
-                  'Sore hari'),
+                  Icons.cloud_rounded, const Color(0xFF6D4C41),
+                  l.ashar, l.asharSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'maghrib',
-                  Icons.nights_stay_rounded, const Color(0xFF7B1FA2), 'Maghrib',
-                  'Saat matahari terbenam'),
+                  Icons.nights_stay_rounded, const Color(0xFF7B1FA2),
+                  l.maghrib, l.maghribSubtitle),
               _divider(c),
               _waktuTile(context, settings, 'isya',
-                  Icons.nightlight_round, const Color(0xFF0D47A1), 'Isya',
-                  'Malam hari'),
+                  Icons.nightlight_round, const Color(0xFF0D47A1),
+                  l.isya, l.isyaSubtitle),
             ],
           ),
 
           const SizedBox(height: 20),
 
           // ── TAMPILAN ─────────────────────────
-          _SectionHeader('Tampilan', c),
+          _SectionHeader(l.tampilan, c),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -127,8 +78,8 @@ class SettingsPage extends StatelessWidget {
               _SwitchTile(
                 icon: Icons.dark_mode_rounded,
                 iconColor: const Color(0xFF5C6BC0),
-                title: 'Mode Gelap',
-                subtitle: 'Tampilan gelap untuk kenyamanan mata',
+                title: l.modeGelap,
+                subtitle: l.modeGelapSubtitle,
                 value: settings.darkMode,
                 onChanged: (v) => settings.setDarkMode(v),
                 c: c,
@@ -156,24 +107,21 @@ class SettingsPage extends StatelessWidget {
                           color: kTeal, size: 20),
                     ),
                     const SizedBox(width: 12),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Ukuran Font Al-Qur\'an',
+                          Text(l.ukuranFontQuran,
                               style: TextStyle(
                                   color: c.onSurface,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14)),
-                          Text('Ukuran teks Arab',
+                          Text(l.ukuranTeksArab,
                               style: TextStyle(
-                                  color: c.textSecondary,
-                                  fontSize: 12)),
+                                  color: c.textSecondary, fontSize: 12)),
                         ],
                       ),
                     ),
-
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
@@ -193,7 +141,6 @@ class SettingsPage extends StatelessWidget {
                   ],
                 ),
               ),
-
               Slider(
                 value: settings.quranFontSize,
                 min: 18,
@@ -202,7 +149,6 @@ class SettingsPage extends StatelessWidget {
                 activeColor: kTeal,
                 onChanged: (v) => settings.setQuranFontSize(v),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                 child: Container(
@@ -231,7 +177,7 @@ class SettingsPage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // ── BAHASA ─────────────────────────
-          _SectionHeader('Bahasa', c),
+          _SectionHeader(l.bahasa, c),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -251,66 +197,93 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 40),
-
           const SizedBox(height: 20),
 
-        // ── RESET ─────────────────────────
-        _SectionHeader('Lainnya', c),
-        const SizedBox(height: 8),
+          // ── RESET ─────────────────────────
+          _SectionHeader(l.lainnya, c),
+          const SizedBox(height: 8),
 
-        _SettingsCard(
-          c: c,
-          children: [
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+          _SettingsCard(
+            c: c,
+            children: [
+              ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.refresh_rounded,
+                      color: Colors.red, size: 20),
                 ),
-                child: const Icon(Icons.refresh_rounded,
-                    color: Colors.red, size: 20),
+                title: Text(l.resetSemuaPengaturan,
+                    style: TextStyle(
+                        color: c.onSurface,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14)),
+                subtitle: Text(l.resetSubtitle,
+                    style:
+                        TextStyle(color: c.textSecondary, fontSize: 12)),
+                trailing:
+                    Icon(Icons.chevron_right_rounded, color: c.textHint),
+                onTap: () => _confirmReset(context, settings),
               ),
+            ],
+          ),
 
-              title: Text(
-                'Reset Semua Pengaturan',
-                style: TextStyle(
-                  color: c.onSurface,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
 
-              subtitle: Text(
-                'Kembalikan ke pengaturan awal',
-                style: TextStyle(
-                  color: c.textSecondary,
-                  fontSize: 12,
-                ),
-              ),
+  // ─── DIALOG KONFIRMASI RESET ──────────────────────────────────────────────
+  void _confirmReset(BuildContext context, SettingsService settings) {
+    final c = context.colors;
+    final l = AppLocalizations.of(context);
 
-              trailing: Icon(
-                Icons.chevron_right_rounded,
-                color: c.textHint,
-              ),
-
-              onTap: () => _confirmReset(context, settings),
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: c.surface,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(l.resetPengaturan,
+            style: TextStyle(
+                color: c.onSurface, fontWeight: FontWeight.bold)),
+        content: Text(l.resetKonfirmasi,
+            style: TextStyle(color: c.textSecondary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l.batal,
+                style: TextStyle(color: c.textSecondary)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
             ),
-          ],
-        ),
-                ],
-              ),
-            );
-          }
+            onPressed: () {
+              settings.resetAll();
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(l.resetBerhasil),
+                backgroundColor: kTeal,
+              ));
+            },
+            child: Text(l.reset),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _divider(AppColors c) => Divider(
         height: 1,
-        color: c.isDark
-            ? Colors.grey.shade800
-            : Colors.grey.shade200,
+        color: c.isDark ? Colors.grey.shade800 : Colors.grey.shade200,
         indent: 60,
       );
 
@@ -324,7 +297,6 @@ class SettingsPage extends StatelessWidget {
     String subtitle,
   ) {
     final c = context.colors;
-
     final bool value = switch (waktu) {
       'imsak'   => settings.notifImsak,
       'subuh'   => settings.notifSubuh,
@@ -336,7 +308,6 @@ class SettingsPage extends StatelessWidget {
       'isya'    => settings.notifIsya,
       _         => false,
     };
-
     return _SwitchTile(
       icon: icon,
       iconColor: iconColor,
@@ -349,12 +320,11 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-// ─── UI COMPONENTS ─────────────────────────
+// ─── UI COMPONENTS ────────────────────────────────────────────────────────────
 
 class _SettingsCard extends StatelessWidget {
   final List<Widget> children;
   final AppColors c;
-
   const _SettingsCard({required this.children, required this.c});
 
   @override
@@ -364,9 +334,7 @@ class _SettingsCard extends StatelessWidget {
         color: c.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: c.isDark
-              ? Colors.transparent
-              : Colors.grey.shade200,
+          color: c.isDark ? Colors.transparent : Colors.grey.shade200,
         ),
         boxShadow: [
           BoxShadow(
@@ -407,7 +375,6 @@ class _SwitchTile extends StatelessWidget {
     return SwitchListTile(
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-
       secondary: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -416,26 +383,20 @@ class _SwitchTile extends StatelessWidget {
         ),
         child: Icon(icon, color: iconColor, size: 20),
       ),
-
       title: Text(title,
           style: TextStyle(
               color: c.onSurface,
               fontWeight: FontWeight.w600,
               fontSize: 14)),
-
       subtitle: subtitle.isEmpty
           ? null
           : Text(subtitle,
-              style:
-                  TextStyle(color: c.textSecondary, fontSize: 12)),
-
+              style: TextStyle(color: c.textSecondary, fontSize: 12)),
       value: value,
-
       activeColor: Colors.white,
       activeTrackColor: kTeal,
       inactiveThumbColor: Colors.white,
       inactiveTrackColor: Colors.grey.shade300,
-
       onChanged: onChanged,
     );
   }
@@ -444,7 +405,6 @@ class _SwitchTile extends StatelessWidget {
 class _SectionHeader extends StatelessWidget {
   final String title;
   final AppColors c;
-
   const _SectionHeader(this.title, this.c);
 
   @override
@@ -480,13 +440,11 @@ class _LangTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = settings.language == lang;
-
     return ListTile(
       title: Text(label,
           style: TextStyle(
             color: isSelected ? kTeal : c.onSurface,
-            fontWeight:
-                isSelected ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           )),
       trailing: isSelected
           ? const Icon(Icons.check_circle_rounded, color: kTeal)
@@ -495,4 +453,3 @@ class _LangTile extends StatelessWidget {
     );
   }
 }
-

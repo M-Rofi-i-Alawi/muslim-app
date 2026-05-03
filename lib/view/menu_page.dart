@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/shalat_viewmodel.dart';
 import '../model/shalat_model.dart';
+import '../l10n/app_localizations.dart';
 import 'surat_list_page.dart';
 import 'doa_list_page.dart';
 import 'shalat_page.dart';
@@ -34,10 +35,10 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  Timer?    _timer;
-  Duration  _countdown       = Duration.zero;
-  String    _nextPrayerName  = '';
-  String    _nextPrayerTime  = '';
+  Timer?   _timer;
+  Duration _countdown      = Duration.zero;
+  String   _nextPrayerName = '';
+  String   _nextPrayerTime = '';
 
   int _getOffset(String kota) {
     if (['Jayapura', 'Sorong'].contains(kota)) return 9;
@@ -77,7 +78,6 @@ class _MenuPageState extends State<MenuPage> {
 
     final jadwal = vm.jadwal!;
     final now    = DateTime.now();
-    // FIX: hitung dalam total detik, bukan menit + detik terpisah
     final nowSec = now.hour * 3600 + now.minute * 60 + now.second;
 
     final prayers = [
@@ -99,7 +99,7 @@ class _MenuPageState extends State<MenuPage> {
     final parts   = next['time']!.split(':');
     final pSec    = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
     var   diffSec = pSec - nowSec;
-    if (diffSec < 0) diffSec += 86400; // wrap ke hari berikutnya
+    if (diffSec < 0) diffSec += 86400;
 
     if (mounted) {
       setState(() {
@@ -119,26 +119,93 @@ class _MenuPageState extends State<MenuPage> {
     return '${_pad(h)} : ${_pad(m)} : ${_pad(s)}';
   }
 
+  String _translatePrayer(String name, AppLocalizations l) {
+    switch (name) {
+      case 'Subuh':   return l.subuh;
+      case 'Dzuhur':  return l.dzuhur;
+      case 'Ashar':   return l.ashar;
+      case 'Maghrib': return l.maghrib;
+      case 'Isya':    return l.isya;
+      default:        return name;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark   = Theme.of(context).brightness == Brightness.dark;
-    final bgColor  = isDark ? const Color(0xFF121212) : _kBg;
+    final isDark  = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121212) : _kBg;
+    final l       = AppLocalizations.of(context);
+
+    // ── Semua menu items ──────────────────────────────────────────────────
+    final mainItems = <_MenuItemData>[
+      _MenuItemData(Icons.access_time_rounded,      l.jadwalShalat.replaceFirst(' ', '\n'), const Color(0xFF00897B), () => _push(context, const ShalatPage())),
+      _MenuItemData(Icons.menu_book_rounded,         l.wiridDoa.replaceFirst(' ', '\n'),     const Color(0xFFE67E22), () => _push(context, const DoaListPage())),
+      _MenuItemData(Icons.auto_stories_rounded,      "Al-\nQur'an",                          const Color(0xFF1976D2), () => _push(context, const SuratListPage())),
+      _MenuItemData(Icons.explore_rounded,           l.arahKiblat.replaceFirst(' ', '\n'),   const Color(0xFF7B1FA2), () => _push(context, const KiblatPage())),
+      _MenuItemData(Icons.track_changes_rounded,     l.tasbihDigital.replaceFirst(' ', '\n'),const Color(0xFF388E3C), () => _push(context, const TasbihPage())),
+      _MenuItemData(Icons.volunteer_activism_rounded,l.dzikirHarian.replaceFirst(' ', '\n'), const Color(0xFF00796B), () => _push(context, const DzikirPage())),
+      _MenuItemData(Icons.checklist_rounded,         l.panduanIbadah.replaceFirst(' ', '\n'),const Color(0xFF6A1B9A), () => _push(context, const PanduanIbadahPage())),
+      _MenuItemData(Icons.history_edu_rounded,       l.hadist,                               const Color(0xFF5D4037), () => _push(context, const HadistPage())),
+      _MenuItemData(Icons.auto_awesome_rounded,      l.asmaulHusna.replaceFirst(' ', '\n'),  const Color(0xFFF9A825), () => _push(context, const AsmaulHusnaPage())),
+      _MenuItemData(Icons.calculate_rounded,         l.zakat,                                const Color(0xFF00838F), () => _push(context, const ZakatPage())),
+      _MenuItemData(Icons.calendar_month_rounded,    l.kalenderHijri.replaceFirst(' ', '\n'),const Color(0xFF1565C0), () => _push(context, const HijriCalendarPage())),
+      _MenuItemData(Icons.question_answer_rounded,   l.tanyaIslam.replaceFirst(' ', '\n'),   const Color(0xFF00897B), () => _push(context, const ChatPage())),
+    ];
+
+    // 3 item baris terakhir — ditampilkan centered
+    final lastItems = <_MenuItemData>[
+      _MenuItemData(Icons.nightlight_round,     l.ramadhan,   const Color(0xFFC62828), () => _push(context, const RamadhanPage())),
+      _MenuItemData(Icons.info_outline_rounded, l.tentang,    const Color(0xFF546E7A), () => _push(context, const AboutPage())),
+      _MenuItemData(Icons.settings_rounded,     l.pengaturan, const Color(0xFF37474F), () => _push(context, const SettingsPage())),
+    ];
 
     return Scaffold(
       backgroundColor: bgColor,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _buildHeroHeader()),
+
+          // ── Grid 12 item (3 baris penuh) ────────────────────────────────
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:  4,
-                mainAxisSpacing: 20,
+                crossAxisCount:   4,
+                mainAxisSpacing:  20,
                 crossAxisSpacing: 12,
                 childAspectRatio: 0.72,
               ),
-              delegate: SliverChildListDelegate(_buildMenuItems(context)),
+              delegate: SliverChildListDelegate(
+                mainItems.map((d) => _MenuItem(
+                  icon:  d.icon,
+                  label: d.label,
+                  color: d.color,
+                  onTap: d.onTap,
+                )).toList(),
+              ),
+            ),
+          ),
+
+          // ── Baris terakhir 3 item — centered ────────────────────────────
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: lastItems.map((d) {
+                  // Lebar tiap item = (layar - 40 padding - 24 gap) / 4
+                  // supaya ukurannya sama persis dengan grid di atas
+                  return SizedBox(
+                    width: (MediaQuery.of(context).size.width - 40 - 36) / 4,
+                    child: _MenuItem(
+                      icon:  d.icon,
+                      label: d.label,
+                      color: d.color,
+                      onTap: d.onTap,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],
@@ -150,11 +217,13 @@ class _MenuPageState extends State<MenuPage> {
   Widget _buildHeroHeader() {
     return Consumer<ShalatViewModel>(
       builder: (context, vm, _) {
-        final cityName = vm.jadwal?.namaKota ?? 'Mendeteksi lokasi...';
+        final l        = AppLocalizations.of(context);
+        final cityName = vm.jadwal?.namaKota ?? l.mendeteksiLokasi;
         final tanggal  = vm.jadwal?.tanggal  ?? '';
         final zona     = _getZona(cityName);
         final isDark   = Theme.of(context).brightness == Brightness.dark;
         final bgColor  = isDark ? const Color(0xFF121212) : _kBg;
+        final nextName = _translatePrayer(_nextPrayerName, l);
 
         return Container(
           decoration: const BoxDecoration(
@@ -168,7 +237,6 @@ class _MenuPageState extends State<MenuPage> {
             bottom: false,
             child: Column(
               children: [
-                // Lokasi + tombol Ganti
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                   child: Row(
@@ -177,42 +245,31 @@ class _MenuPageState extends State<MenuPage> {
                           color: Colors.white70, size: 16),
                       const SizedBox(width: 4),
                       Expanded(
-                        child: Text(
-                          cityName,
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        child: Text(cityName,
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
+                            overflow: TextOverflow.ellipsis),
                       ),
-                      // FIX: ganti GestureDetector → InkWell + padding besar
                       InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const ShalatPage()),
-                        ),
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const ShalatPage())),
                         borderRadius: BorderRadius.circular(8),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 6),
-                          child: Text(
-                            'Ganti',
-                            style: GoogleFonts.poppins(
-                              color: _kGold,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          child: Text(l.ganti,
+                              style: GoogleFonts.poppins(
+                                  color: _kGold,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600)),
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                // Countdown
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
                   child: Column(
@@ -220,19 +277,15 @@ class _MenuPageState extends State<MenuPage> {
                       if (vm.isLoading)
                         const Padding(
                           padding: EdgeInsets.all(12),
-                          child: CircularProgressIndicator(
-                              color: Colors.white),
+                          child: CircularProgressIndicator(color: Colors.white),
                         )
                       else if (_nextPrayerName.isNotEmpty) ...[
-                        Text(
-                          '$_nextPrayerName · $_nextPrayerTime $zona',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
+                        Text('$nextName · $_nextPrayerTime $zona',
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3)),
                         const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -241,41 +294,30 @@ class _MenuPageState extends State<MenuPage> {
                             color: Colors.white.withOpacity(0.15),
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Text(
-                            '- $_countdownStr',
-                            style: GoogleFonts.courierPrime(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 4,
-                            ),
-                          ),
+                          child: Text('- $_countdownStr',
+                              style: GoogleFonts.courierPrime(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 4)),
                         ),
                       ] else
-                        Text(
-                          'Memuat jadwal shalat...',
-                          style: GoogleFonts.poppins(
-                              color: Colors.white70, fontSize: 15),
-                        ),
+                        Text(l.memuatJadwal,
+                            style: GoogleFonts.poppins(
+                                color: Colors.white70, fontSize: 15)),
                     ],
                   ),
                 ),
 
-                // Tanggal
                 if (tanggal.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      tanggal,
-                      style: GoogleFonts.poppins(
-                          color: Colors.white70, fontSize: 12),
-                    ),
+                    child: Text(tanggal,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white70, fontSize: 12)),
                   ),
 
-                // Row 5 waktu shalat
                 if (vm.jadwal != null) _buildPrayerRow(vm.jadwal!),
-
-                // Lengkung bawah
                 _buildCurvedBottom(bgColor),
               ],
             ),
@@ -287,12 +329,13 @@ class _MenuPageState extends State<MenuPage> {
 
   // ─── ROW 5 WAKTU SHALAT ───────────────────────────────────────────────────
   Widget _buildPrayerRow(ShalatModel jadwal) {
+    final l = AppLocalizations.of(context);
     final prayers = [
-      ('Subuh',   jadwal.subuh),
-      ('Dzuhur',  jadwal.dzuhur),
-      ('Ashar',   jadwal.ashar),
-      ('Maghrib', jadwal.maghrib),
-      ('Isya',    jadwal.isya),
+      ('Subuh',   jadwal.subuh,   l.subuh),
+      ('Dzuhur',  jadwal.dzuhur,  l.dzuhur),
+      ('Ashar',   jadwal.ashar,   l.ashar),
+      ('Maghrib', jadwal.maghrib, l.maghrib),
+      ('Isya',    jadwal.isya,    l.isya),
     ];
     final offset = _getOffset(jadwal.namaKota);
     final now    = DateTime.now().toUtc().add(Duration(hours: offset));
@@ -316,16 +359,13 @@ class _MenuPageState extends State<MenuPage> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(p.$1,
+              Text(p.$3,
                   style: GoogleFonts.poppins(
                     color: isNext ? _kGold
                         : isPast ? Colors.white38
                         : Colors.white70,
-                    // FIX: naikkan 10 → 12
                     fontSize: 12,
-                    fontWeight: isNext
-                        ? FontWeight.bold
-                        : FontWeight.normal,
+                    fontWeight: isNext ? FontWeight.bold : FontWeight.normal,
                   )),
               const SizedBox(height: 2),
               Text(p.$2,
@@ -334,9 +374,7 @@ class _MenuPageState extends State<MenuPage> {
                         : isPast ? Colors.white38
                         : Colors.white,
                     fontSize: 13,
-                    fontWeight: isNext
-                        ? FontWeight.bold
-                        : FontWeight.w500,
+                    fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
                   )),
               if (isNext)
                 Container(
@@ -357,97 +395,25 @@ class _MenuPageState extends State<MenuPage> {
       margin: const EdgeInsets.only(top: 16),
       height: 28,
       decoration: BoxDecoration(
-        // FIX: pakai bgColor dinamis untuk dark/light mode
         color: bgColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
     );
   }
 
-  // ─── MENU ITEMS ───────────────────────────────────────────────────────────
-  List<Widget> _buildMenuItems(BuildContext context) {
-    return [
-      _MenuItem(
-        icon: Icons.access_time_rounded, label: 'Jadwal\nShalat',
-        color: const Color(0xFF00897B),
-        onTap: () => _push(context, const ShalatPage()),
-      ),
-      _MenuItem(
-        icon: Icons.menu_book_rounded, label: 'Wirid\n& Doa',
-        color: const Color(0xFFE67E22),
-        onTap: () => _push(context, const DoaListPage()),
-      ),
-      _MenuItem(
-        icon: Icons.auto_stories_rounded, label: 'Al-\nQur\'an',
-        color: const Color(0xFF1976D2),
-        onTap: () => _push(context, const SuratListPage()),
-      ),
-      _MenuItem(
-        icon: Icons.explore_rounded, label: 'Arah\nKiblat',
-        color: const Color(0xFF7B1FA2),
-        onTap: () => _push(context, const KiblatPage()),
-      ),
-      _MenuItem(
-        icon: Icons.track_changes_rounded, label: 'Tasbih\nDigital',
-        color: const Color(0xFF388E3C),
-        onTap: () => _push(context, const TasbihPage()),
-      ),
-      _MenuItem(
-        icon: Icons.volunteer_activism_rounded, label: 'Dzikir\nHarian',
-        color: const Color(0xFF00796B),
-        onTap: () => _push(context, const DzikirPage()),
-      ),
-      _MenuItem(
-        icon: Icons.checklist_rounded, label: 'Panduan\nIbadah',
-        color: const Color(0xFF6A1B9A),
-        onTap: () => _push(context, const PanduanIbadahPage()),
-      ),
-      _MenuItem(
-        icon: Icons.history_edu_rounded, label: 'Hadist',
-        color: const Color(0xFF5D4037),
-        onTap: () => _push(context, const HadistPage()),
-      ),
-      _MenuItem(
-        icon: Icons.auto_awesome_rounded, label: 'Asmaul\nHusna',
-        color: const Color(0xFFF9A825),
-        onTap: () => _push(context, const AsmaulHusnaPage()),
-      ),
-      // FIX: ganti ikon duplikat volunteer_activism → calculate untuk Zakat
-      _MenuItem(
-        icon: Icons.calculate_rounded, label: 'Zakat',
-        color: const Color(0xFF00838F),
-        onTap: () => _push(context, const ZakatPage()),
-      ),
-      _MenuItem(
-        icon: Icons.calendar_month_rounded, label: 'Kalender\nHijri',
-        color: const Color(0xFF1565C0),
-        onTap: () => _push(context, const HijriCalendarPage()),
-      ),
-      _MenuItem(
-        icon: Icons.question_answer_rounded, label: 'Tanya\nISLAM',
-        color: const Color(0xFF00897B),
-        onTap: () => _push(context, const ChatPage()),
-      ),
-      _MenuItem(
-        icon: Icons.nightlight_round, label: 'Ramadhan',
-        color: const Color(0xFFC62828),
-        onTap: () => _push(context, const RamadhanPage()),
-      ),
-      _MenuItem(
-        icon: Icons.info_outline_rounded, label: 'Tentang',
-        color: const Color(0xFF546E7A),
-        onTap: () => _push(context, const AboutPage()),
-      ),
-      _MenuItem(
-        icon: Icons.settings_rounded, label: 'Pengaturan',
-        color: const Color(0xFF37474F),
-        onTap: () => _push(context, const SettingsPage()),
-      ),
-    ];
-  }
-
   void _push(BuildContext context, Widget page) =>
       Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+}
+
+// ─────────────────────────────────────────────
+// DATA CLASS
+// ─────────────────────────────────────────────
+class _MenuItemData {
+  final IconData     icon;
+  final String       label;
+  final Color        color;
+  final VoidCallback onTap;
+  const _MenuItemData(this.icon, this.label, this.color, this.onTap);
 }
 
 // ─────────────────────────────────────────────
@@ -468,11 +434,9 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FIX: ambil warna label dari theme agar kompatibel dark/light mode
     final labelColor = Theme.of(context).colorScheme.onSurface;
 
     return InkWell(
-      // FIX: ganti GestureDetector → InkWell untuk ripple effect Material
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
@@ -486,7 +450,7 @@ class _MenuItem extends StatelessWidget {
                 color: color.withOpacity(0.12),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: color.withOpacity(0.25), width: 1.5),
+                    color: color.withOpacity(0.25), width: 1.5),
               ),
               child: Icon(icon, color: color, size: 30),
             ),
@@ -495,10 +459,8 @@ class _MenuItem extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                // FIX: naikkan 11 → 13
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                // FIX: ganti hardcoded #2C3E50 → theme-aware
                 color: labelColor,
                 height: 1.3,
               ),

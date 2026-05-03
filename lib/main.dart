@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'repository/doa_repository.dart';
@@ -35,13 +36,13 @@ import 'viewmodel/kalender_viewmodel.dart';
 import 'viewmodel/panduan_ibadahn_viewmodel.dart';
 import 'viewmodel/ramadhan_viewmodel.dart';
 
+import 'l10n/app_localizations.dart'; // ✅ relative import, BUKAN package:l10n/...
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-  // Load settings (juga inisialisasi notifikasi)
   await SettingsService().load();
   await DzikirLocalService().cleanupOldData();
   await dotenv.load(fileName: "assets/.env");
@@ -56,8 +57,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<SettingsService>(
-          create: (_) => SettingsService(),
+        ChangeNotifierProvider<SettingsService>.value(
+          value: SettingsService(),
         ),
         ChangeNotifierProvider(
           create: (_) => ShalatViewModel(ShalatRepository()),
@@ -105,9 +106,6 @@ void main() async {
   );
 }
 
-// ─────────────────────────────────────────────
-// ROOT APP
-// ─────────────────────────────────────────────
 class _MuslimApp extends StatelessWidget {
   final SettingsService settings;
   const _MuslimApp({required this.settings});
@@ -120,6 +118,20 @@ class _MuslimApp extends StatelessWidget {
       themeMode: settings.themeMode,
       theme:     _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
+
+      // ✅ Localization
+      locale: Locale(settings.language),
+      supportedLocales: const [
+        Locale('id'),
+        Locale('en'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
       home: const SplashPage(),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/asmaul_husna_viewmodel.dart';
 import '../model/asmaul_husna_model.dart';
 import '../utils/theme_helper.dart';
@@ -51,7 +52,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                           Icon(Icons.search_off_rounded,
                               size: 72, color: Colors.grey[300]),
                           const SizedBox(height: 12),
-                          Text('Tidak ada hasil',
+                          Text(AppLocalizations.of(context).tidakAdaHasil,
                               style:
                                   GoogleFonts.poppins(color: Colors.grey[500])),
                         ],
@@ -95,12 +96,12 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Asmaul Husna',
+                Text(AppLocalizations.of(context).asmaulHusnaTitle,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text('99 Nama Allah Yang Maha Agung',
+                Text(AppLocalizations.of(context).asmaulHusnaSubtitle,
                     style: GoogleFonts.poppins(
                         fontSize: 12, color: Colors.white.withOpacity(0.9))),
               ],
@@ -149,7 +150,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Progress Hafalan',
+                      Text(AppLocalizations.of(context).progressHafalan,
                           style: GoogleFonts.poppins(
                               fontSize: 14,
                               color: Colors.white,
@@ -200,7 +201,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
       child: Consumer<AsmaulHusnaViewModel>(
         builder: (_, vm, __) => TextField(
           decoration: InputDecoration(
-            hintText: 'Cari nama Allah...',
+            hintText: AppLocalizations.of(context).cariNamaAllah,
             hintStyle: GoogleFonts.poppins(fontSize: 13, color: Colors.grey),
             prefixIcon: const Icon(Icons.search_rounded, color: _kTeal),
             filled: true,
@@ -404,7 +405,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                               color: _kTeal.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Text('Penjelasan',
+                            child: Text(AppLocalizations.of(context).pelajaran,
                                 style: GoogleFonts.poppins(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
@@ -467,7 +468,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                               ));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text('Berhasil disalin!',
+                                content: Text(AppLocalizations.of(context).berhasilDisalin,
                                     style: GoogleFonts.poppins()),
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,
@@ -478,7 +479,7 @@ class _AsmaulHusnaPageState extends State<AsmaulHusnaPage> {
                             },
                             icon: const Icon(Icons.copy_rounded,
                                 size: 16, color: Colors.white),
-                            label: Text('Salin',
+                            label: Text(AppLocalizations.of(context).salin,
                                 style: GoogleFonts.poppins(
                                     fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(

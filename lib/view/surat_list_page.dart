@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 import '../viewmodel/surat_viewmodel.dart';
 import 'surat_detail_page.dart';
@@ -112,7 +113,7 @@ class _SuratListPageState extends State<SuratListPage>
                   icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text("Al-Qur'an",
+                title: Text(AppLocalizations.of(context).alQuran,
                     style: GoogleFonts.poppins(
                         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
                 centerTitle: true,
@@ -154,7 +155,7 @@ class _SuratListPageState extends State<SuratListPage>
               onChanged: (v) => setState(() => _query = v),
               style: TextStyle(color: c.onSurface),
               decoration: InputDecoration(
-                hintText: 'Cari surat, nomor, atau arti...',
+                hintText: AppLocalizations.of(context).cariSurat,
                 hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
                 prefixIcon: const Icon(Icons.search_rounded, color: _kTeal),
                 suffixIcon: _query.isNotEmpty
@@ -250,10 +251,10 @@ class _SuratListPageState extends State<SuratListPage>
       return Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Icon(Icons.bookmark_border_rounded, color: c.textHint, size: 80),
         const SizedBox(height: 16),
-        Text('Belum ada bookmark',
+        Text(AppLocalizations.of(context).belumAdaBookmark,
             style: GoogleFonts.poppins(color: c.textSecondary, fontSize: 16, fontWeight: FontWeight.w500)),
         const SizedBox(height: 8),
-        Text('Tandai ayat favoritmu saat membaca',
+        Text(AppLocalizations.of(context).tandaiAyat,
             style: GoogleFonts.poppins(color: c.textHint, fontSize: 13)),
       ]));
     }
@@ -358,7 +359,7 @@ class _SuratListPageState extends State<SuratListPage>
           ),
           const SizedBox(width: 12),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Lanjutkan membaca',
+            Text(AppLocalizations.of(context).lanjutkanMembaca,
                 style: GoogleFonts.poppins(fontSize: 11, color: _kGold, fontWeight: FontWeight.w600)),
             Text('${lr.namaSurat} · Ayat ${lr.nomorAyat}',
                 // FIX: hardcoded 0xFF1A1A2E → c.onSurface

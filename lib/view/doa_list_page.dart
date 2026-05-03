@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 import '../viewmodel/doa_viewmodel.dart';
 import 'doa_detail_page.dart';
@@ -50,7 +51,7 @@ class _DoaListPageState extends State<DoaListPage> {
                   icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text('Doa Harian',
+                title: Text(AppLocalizations.of(context).doaHarian,
                     style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
                 centerTitle: true,
               ),
@@ -63,7 +64,7 @@ class _DoaListPageState extends State<DoaListPage> {
                     onChanged: (v) { vm.searchDoa(v); setState(() {}); },
                     style: TextStyle(color: c.onSurface),
                     decoration: InputDecoration(
-                      hintText: 'Cari doa...',
+                      hintText: AppLocalizations.of(context).cariDoa,
                       hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
                       prefixIcon: const Icon(Icons.search_rounded, color: _kTeal),
                       suffixIcon: _searchCtrl.text.isNotEmpty

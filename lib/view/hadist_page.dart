@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/hadist_viewmodel.dart';
 import '../model/hadist_model.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 
 class HadistPage extends StatefulWidget {
@@ -105,12 +106,12 @@ class _HadistPageState extends State<HadistPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hadist Arbain Nawawi',
+                Text(AppLocalizations.of(context).hadistArbain,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text('40 Hadist pilihan untuk kehidupan sehari-hari',
+                Text(AppLocalizations.of(context).hadistSubtitle,
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -161,7 +162,7 @@ class _HadistPageState extends State<HadistPage>
                     const Icon(Icons.wb_sunny_rounded,
                         color: Colors.white, size: 20),
                     const SizedBox(width: 8),
-                    Text('Hadist Hari Ini',
+                    Text(AppLocalizations.of(context).hadistHariIni,
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -260,7 +261,7 @@ class _HadistPageState extends State<HadistPage>
         TextField(
           style: TextStyle(color: c.onSurface),
           decoration: InputDecoration(
-            hintText: 'Cari hadist...',
+            hintText: AppLocalizations.of(context).cariHadist,
             hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
             prefixIcon: const Icon(Icons.search_rounded, color: kTeal),
             filled: true,
@@ -420,8 +421,8 @@ class _HadistPageState extends State<HadistPage>
           const SizedBox(height: 12),
           Text(
             _selectedTab == 0
-                ? 'Tidak ada hadist ditemukan'
-                : 'Belum ada hadist favorit',
+                ? AppLocalizations.of(context).tidakAdaHadist
+                : AppLocalizations.of(context).belumAdaFavorit,
             style: GoogleFonts.poppins(
                 fontSize: 15, color: c.textSecondary),
           ),
@@ -542,7 +543,7 @@ class _HadistPageState extends State<HadistPage>
                               ));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text('Hadist disalin!',
+                                content: Text(AppLocalizations.of(context).hadistDisalin,
                                     style: GoogleFonts.poppins()),
                                 backgroundColor: kTeal,
                                 behavior: SnackBarBehavior.floating,
@@ -553,7 +554,7 @@ class _HadistPageState extends State<HadistPage>
                               ));
                             },
                             icon: const Icon(Icons.copy_rounded, size: 16),
-                            label: Text('Salin',
+                            label: Text(AppLocalizations.of(context).salin,
                                 style: GoogleFonts.poppins(fontSize: 13)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: kTeal,
@@ -570,7 +571,7 @@ class _HadistPageState extends State<HadistPage>
                             onPressed: () => Navigator.pop(context),
                             icon: const Icon(Icons.close_rounded,
                                 size: 16, color: Colors.white),
-                            label: Text('Tutup',
+                            label: Text(AppLocalizations.of(context).tutup,
                                 style: GoogleFonts.poppins(
                                     fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(

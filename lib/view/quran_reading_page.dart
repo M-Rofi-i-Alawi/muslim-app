@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/quran_bookmark_service.dart';
+import '../l10n/app_localizations.dart';
 
 const _kTeal     = Color(0xFF00A086);
 const _kTealDark = Color(0xFF007A68);

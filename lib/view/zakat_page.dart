@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/zakat_viewmodel.dart';
 import '../model/zakat_model.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 
 class ZakatPage extends StatefulWidget {
@@ -83,12 +84,12 @@ class _ZakatPageState extends State<ZakatPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Kalkulator Zakat',
+                Text(AppLocalizations.of(context).kalkulatorZakat,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text('Hitung zakat maal, penghasilan, fitrah & lainnya',
+                Text(AppLocalizations.of(context).kalkulatorSubtitle,
                     style: GoogleFonts.poppins(
                         fontSize: 12, color: Colors.white.withOpacity(0.9))),
               ],
@@ -745,7 +746,7 @@ class _ResultCard extends StatelessWidget {
                     size: 24),
               ),
               const SizedBox(width: 12),
-              Text(isWajib ? 'Wajib Zakat' : 'Belum Wajib Zakat',
+              Text(isWajib ? AppLocalizations.of(context).wajibZakat : AppLocalizations.of(context).belumWajibZakat,
                   style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

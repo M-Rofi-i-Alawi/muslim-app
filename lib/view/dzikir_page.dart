@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/dzikir_viewmodel.dart';
 import '../model/dzikir_model.dart';
+import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 
 const _kTeal = Color(0xFF00A086);
@@ -28,10 +29,10 @@ class _DzikirPageState extends State<DzikirPage>
   int _selectedTab = 0;
 
   // ── data tab ──────────────────────────────────────────────────────────────
-  static const _tabs = [
-    {'label': 'Pagi', 'emoji': '🌅', 'key': 'pagi'},
-    {'label': 'Petang', 'emoji': '🌆', 'key': 'petang'},
-    {'label': 'Shalat', 'emoji': '🕌', 'key': 'shalat'},
+  List<Map<String, String>> _getTabs(AppLocalizations l) => [
+    {'label': l.pagi,       'emoji': '🌅', 'key': 'pagi'},
+    {'label': l.petang,     'emoji': '🌆', 'key': 'petang'},
+    {'label': l.shalatLabel,'emoji': '🕌', 'key': 'shalat'},
   ];
 
   static const _tabColors = [_kPagi, _kPetang, _kShalat];
@@ -120,12 +121,12 @@ class _DzikirPageState extends State<DzikirPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Dzikir & Wirid',
+                Text(AppLocalizations.of(context).dzikirWirid,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text('Dzikir pagi, petang, dan setelah shalat',
+                Text(AppLocalizations.of(context).dzikirSubtitle,
                     style: GoogleFonts.poppins(
                         fontSize: 12, color: Colors.white.withOpacity(0.85))),
               ],
@@ -158,10 +159,11 @@ class _DzikirPageState extends State<DzikirPage>
         ],
       ),
       child: Row(
-        children: List.generate(_tabs.length, (i) {
+        children: List.generate(_getTabs(AppLocalizations.of(context)).length, (i) {
           final isSelected = _selectedTab == i;
           final color = _tabColors[i];
-          final tab = _tabs[i];
+          final tabs = _getTabs(AppLocalizations.of(context));
+          final tab = tabs[i];
 
           return Expanded(
             child: GestureDetector(
@@ -264,7 +266,7 @@ class _DzikirPageState extends State<DzikirPage>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Progress Hari Ini',
+                  Text(AppLocalizations.of(context).progressHariIni,
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.white,
@@ -307,7 +309,7 @@ class _DzikirPageState extends State<DzikirPage>
                 onPressed: () => vm.resetAll(kategori),
                 icon: const Icon(Icons.refresh_rounded,
                     size: 16, color: Colors.white),
-                label: Text('Reset Semua',
+                label: Text(AppLocalizations.of(context).resetSemua,
                     style:
                         GoogleFonts.poppins(fontSize: 12, color: Colors.white)),
                 style: TextButton.styleFrom(
@@ -375,7 +377,7 @@ class _DzikirPageState extends State<DzikirPage>
                             const Icon(Icons.check_circle_rounded,
                                 color: Colors.white, size: 13),
                             const SizedBox(width: 4),
-                            Text('Selesai',
+                            Text(AppLocalizations.of(context).selesai,
                                 style: GoogleFonts.poppins(
                                     fontSize: 11,
                                     color: Colors.white,
@@ -484,7 +486,7 @@ class _DzikirPageState extends State<DzikirPage>
         children: [
           Icon(Icons.auto_stories_rounded, size: 72, color: Colors.grey[300]),
           const SizedBox(height: 12),
-          Text('Belum ada dzikir',
+          Text(AppLocalizations.of(context).belumAdaDzikir,
               style:
                   GoogleFonts.poppins(fontSize: 15, color: Colors.grey[500])),
         ],
@@ -551,7 +553,7 @@ class _DzikirPageState extends State<DzikirPage>
                     ),
                     const SizedBox(height: 14),
                     _DetailSection(
-                      title: 'Transliterasi',
+                      title: AppLocalizations.of(context).transliterasi,
                       labelColor: _kTeal,
                       labelBg: _kTeal.withOpacity(0.08),
                       child: Text(dzikir.latin,
@@ -562,7 +564,7 @@ class _DzikirPageState extends State<DzikirPage>
                               height: 1.8)),
                     ),
                     _DetailSection(
-                      title: 'Artinya',
+                      title: AppLocalizations.of(context).artinya,
                       labelColor: const Color(0xFF388E3C),
                       labelBg: const Color(0xFF388E3C).withOpacity(0.08),
                       child: Text(dzikir.arti,
@@ -572,7 +574,7 @@ class _DzikirPageState extends State<DzikirPage>
                               height: 1.8)),
                     ),
                     _DetailSection(
-                      title: 'Keutamaan',
+                      title: AppLocalizations.of(context).keutamaan,
                       labelColor: _kGold,
                       labelBg: _kGold.withOpacity(0.08),
                       child: Row(
@@ -603,7 +605,7 @@ class _DzikirPageState extends State<DzikirPage>
                         ),
                         child: Column(
                           children: [
-                            Text('Counter',
+                            Text(AppLocalizations.of(context).counter,
                                 style: GoogleFonts.poppins(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -677,7 +679,7 @@ class _DzikirPageState extends State<DzikirPage>
                                   const Icon(Icons.check_circle_rounded,
                                       color: Color(0xFF388E3C), size: 18),
                                   const SizedBox(width: 8),
-                                  Text('Selesai! Alhamdulillah',
+                                  Text(AppLocalizations.of(context).selesaiAlhamdulillah,
                                       style: GoogleFonts.poppins(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,
@@ -690,7 +692,7 @@ class _DzikirPageState extends State<DzikirPage>
                               onPressed: () =>
                                   vm.resetCount(kategori, dzikir.id),
                               icon: const Icon(Icons.refresh_rounded, size: 16),
-                              label: Text('Reset Counter',
+                              label: Text(AppLocalizations.of(context).resetCounter,
                                   style: GoogleFonts.poppins(fontSize: 13)),
                               style:
                                   TextButton.styleFrom(foregroundColor: color),
@@ -711,7 +713,7 @@ class _DzikirPageState extends State<DzikirPage>
                               ));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text('Dzikir disalin!',
+                                content: Text(AppLocalizations.of(context).disalin,
                                     style: GoogleFonts.poppins()),
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,
@@ -721,7 +723,7 @@ class _DzikirPageState extends State<DzikirPage>
                               ));
                             },
                             icon: const Icon(Icons.copy_rounded, size: 16),
-                            label: Text('Salin',
+                            label: Text(AppLocalizations.of(context).salin,
                                 style: GoogleFonts.poppins(fontSize: 13)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: _kTeal,
@@ -738,7 +740,7 @@ class _DzikirPageState extends State<DzikirPage>
                             onPressed: () => Navigator.pop(context),
                             icon: const Icon(Icons.close_rounded,
                                 size: 16, color: Colors.white),
-                            label: Text('Tutup',
+                            label: Text(AppLocalizations.of(context).tutup,
                                 style: GoogleFonts.poppins(
                                     fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(

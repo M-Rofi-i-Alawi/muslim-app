@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 
 // shalat_detail_page: background adalah gradient dari warna shalat
 // tidak butuh dark mode adaptive — selalu dark/colorful background

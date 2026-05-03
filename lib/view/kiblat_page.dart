@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../utils/theme_helper.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/kiblat_viewmodel.dart';
 
 const _kTeal      = Color(0xFF00A086);
@@ -75,7 +76,7 @@ class _KiblatPageState extends State<KiblatPage> {
                       color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text('Arah Kiblat',
+                title: Text(AppLocalizations.of(context).arahKiblatTitle,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -100,7 +101,7 @@ class _KiblatPageState extends State<KiblatPage> {
                       children: [
                         const CircularProgressIndicator(color: _kTeal),
                         const SizedBox(height: 16),
-                        Text('Mendapatkan lokasi Anda...',
+                        Text(AppLocalizations.of(context).mendapatkanLokasi,
                             style: GoogleFonts.poppins(
                                 // FIX: Colors.grey → c.textSecondary
                                 color: c.textSecondary)),
@@ -120,7 +121,7 @@ class _KiblatPageState extends State<KiblatPage> {
                           Icon(Icons.wifi_off_rounded,
                               size: 64, color: c.textHint),
                           const SizedBox(height: 16),
-                          Text('Gagal mendapatkan lokasi',
+                          Text(AppLocalizations.of(context).gagalLokasi,
                               style: GoogleFonts.poppins(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -137,7 +138,7 @@ class _KiblatPageState extends State<KiblatPage> {
                                 backgroundColor: _kTeal),
                             icon: const Icon(Icons.refresh_rounded,
                                 color: Colors.white),
-                            label: Text('Coba Lagi',
+                            label: Text(AppLocalizations.of(context).cobaLagi,
                                 style: GoogleFonts.poppins(
                                     color: Colors.white)),
                           ),
@@ -150,7 +151,7 @@ class _KiblatPageState extends State<KiblatPage> {
               else if (vm.kiblat == null)
                 SliverFillRemaining(
                   child: Center(
-                    child: Text('Data kiblat tidak tersedia',
+                    child: Text(AppLocalizations.of(context).dataKiblatTidakAda,
                         style: GoogleFonts.poppins(
                             color: c.textSecondary)),
                   ),
@@ -215,7 +216,7 @@ class _KiblatPageState extends State<KiblatPage> {
                 color: Colors.white, size: 32),
           ),
           const SizedBox(height: 12),
-          Text('Arah Kiblat',
+          Text(AppLocalizations.of(context).arahKiblatTitle,
               style: GoogleFonts.poppins(
                   color: Colors.white70, fontSize: 14)),
           const SizedBox(height: 4),
@@ -225,7 +226,7 @@ class _KiblatPageState extends State<KiblatPage> {
                   fontSize: 52,
                   fontWeight: FontWeight.bold,
                   height: 1.1)),
-          Text('dari Utara',
+          Text(AppLocalizations.of(context).dariUtara,
               style: GoogleFonts.poppins(
                   color: Colors.white70, fontSize: 13)),
           if (vm.currentPosition != null) ...[
@@ -358,7 +359,7 @@ class _KiblatPageState extends State<KiblatPage> {
                           offset: const Offset(0, 3)),
                     ],
                   ),
-                  child: Text("Ka'bah",
+                  child: Text(AppLocalizations.of(context).kaabah,
                       style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontSize: 12,
@@ -392,11 +393,11 @@ class _KiblatPageState extends State<KiblatPage> {
           children: [
             Icon(Icons.explore_off_rounded, size: 64, color: c.textHint),
             const SizedBox(height: 12),
-            Text('Kompas tidak tersedia',
+            Text(AppLocalizations.of(context).kompasKompass,
                 style: GoogleFonts.poppins(
                     color: c.textSecondary, fontSize: 15)),
             const SizedBox(height: 6),
-            Text('Aktifkan sensor kompas perangkat',
+            Text(AppLocalizations.of(context).aktifkanKompas,
                 style: GoogleFonts.poppins(
                     color: c.textHint, fontSize: 12)),
           ],
@@ -435,7 +436,7 @@ class _KiblatPageState extends State<KiblatPage> {
                     color: _kTeal, size: 20),
               ),
               const SizedBox(width: 12),
-              Text('Cara Menggunakan',
+              Text(AppLocalizations.of(context).caraMenggunakan,
                   style: GoogleFonts.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

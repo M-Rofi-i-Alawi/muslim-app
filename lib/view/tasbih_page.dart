@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vibration/vibration.dart';
 import '../utils/theme_helper.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/tasbih_viewmodel.dart';
 import '../model/tasbih_model.dart';
 
@@ -74,13 +75,13 @@ class _TasbihPageState extends State<TasbihPage>
             const Icon(Icons.check_circle_outline,
                 color: Colors.white, size: 80),
             const SizedBox(height: 16),
-            Text('Alhamdulillah!',
+            Text(AppLocalizations.of(context).alhamdulillah,
                 style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
             const SizedBox(height: 8),
-            Text('Target ${vm.currentTasbih.target}x tercapai',
+            Text('${AppLocalizations.of(context).targetTercapai} ${vm.currentTasbih.target}x',
                 style: GoogleFonts.poppins(
                     fontSize: 16, color: Colors.white.withOpacity(0.9)),
                 textAlign: TextAlign.center),
@@ -100,7 +101,7 @@ class _TasbihPageState extends State<TasbihPage>
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25)),
-              child: Text('Lanjut Dzikir',
+              child: Text(AppLocalizations.of(context).lanjutDzikir,
                   style: GoogleFonts.poppins(
                       color: _kGreen, fontWeight: FontWeight.w600)),
             ),
@@ -171,7 +172,7 @@ class _TasbihPageState extends State<TasbihPage>
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
-          Text('TASBIH DIGITAL',
+          Text(AppLocalizations.of(context).tasbihDigitalTitle,
               style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -305,7 +306,7 @@ class _TasbihPageState extends State<TasbihPage>
           _buildActionButton(
               context: context,
               icon: Icons.refresh,
-              label: 'Reset',
+              label: AppLocalizations.of(context).reset,
               onTap: () {
                 HapticFeedback.lightImpact();
                 vm.reset();
@@ -313,12 +314,12 @@ class _TasbihPageState extends State<TasbihPage>
           _buildActionButton(
               context: context,
               icon: Icons.history,
-              label: 'Riwayat',
+              label: AppLocalizations.of(context).riwayat,
               onTap: () => _showHistory(vm)),
           _buildActionButton(
               context: context,
               icon: Icons.track_changes,
-              label: 'Target',
+              label: AppLocalizations.of(context).target,
               onTap: () => _showTargetDialog(vm)),
         ],
       ),
@@ -360,7 +361,7 @@ class _TasbihPageState extends State<TasbihPage>
 
   Widget _buildBottomText(BuildContext context) {
     final c = context.colors;
-    return Text('Ketuk lingkaran besar untuk menghitung dzikir',
+    return Text(AppLocalizations.of(context).ketukUntukHitung,
         // FIX: Colors.grey[400] → c.textHint
         style: GoogleFonts.poppins(fontSize: 12, color: c.textHint));
   }
@@ -376,7 +377,7 @@ class _TasbihPageState extends State<TasbihPage>
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           backgroundColor: c.surface,
-          title: Text('Pilih Target',
+          title: Text(AppLocalizations.of(context).pilihTarget,
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, color: c.onSurface)),
           content: Column(
@@ -393,7 +394,7 @@ class _TasbihPageState extends State<TasbihPage>
                   _showCustomTargetDialog(vm);
                 },
                 icon: const Icon(Icons.edit),
-                label: Text('Custom Target', style: GoogleFonts.poppins()),
+                label: Text(AppLocalizations.of(context).customTarget, style: GoogleFonts.poppins()),
               ),
             ],
           ),
@@ -428,15 +429,15 @@ class _TasbihPageState extends State<TasbihPage>
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           backgroundColor: c.surface,
-          title: Text('Custom Target',
+          title: Text(AppLocalizations.of(context).customTarget,
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, color: c.onSurface)),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Jumlah Target',
-              hintText: 'Misal: 500',
+              labelText: AppLocalizations.of(context).jumlahTarget,
+              hintText: AppLocalizations.of(context).misal500,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -444,7 +445,7 @@ class _TasbihPageState extends State<TasbihPage>
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Batal', style: GoogleFonts.poppins())),
+                child: Text(AppLocalizations.of(context).batal, style: GoogleFonts.poppins())),
             ElevatedButton(
               onPressed: () {
                 final target = int.tryParse(controller.text);
@@ -457,7 +458,7 @@ class _TasbihPageState extends State<TasbihPage>
                   backgroundColor: _kGreen,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              child: Text('Simpan',
+              child: Text(AppLocalizations.of(context).simpan,
                   style: GoogleFonts.poppins(color: Colors.white)),
             ),
           ],
@@ -500,7 +501,7 @@ class _TasbihPageState extends State<TasbihPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Riwayat Dzikir',
+                      Text(AppLocalizations.of(context).riwayatDzikir,
                           style: GoogleFonts.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -513,7 +514,7 @@ class _TasbihPageState extends State<TasbihPage>
                             Navigator.pop(context);
                           },
                           icon: const Icon(Icons.delete_outline, size: 18),
-                          label: Text('Hapus',
+                          label: Text(AppLocalizations.of(context).hapus,
                               style: GoogleFonts.poppins(fontSize: 12)),
                         ),
                     ],
@@ -791,7 +792,7 @@ class _TasbihPageState extends State<TasbihPage>
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: Text('Batal',
+                            child: Text(AppLocalizations.of(context).batal,
                                 style: GoogleFonts.poppins(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600)),

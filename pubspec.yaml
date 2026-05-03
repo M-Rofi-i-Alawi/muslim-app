@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: 
+    sdk: flutter
   flutter_dotenv: ^6.0.0
   vibration: ^1.8.4
 
@@ -46,6 +48,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: false
 
   assets:
     - assets/doa.json
@@ -61,3 +64,4 @@ flutter:
     - assets/panduan/haji.json
     - assets/.env
     - assets/kompas.jpg
+    - assets/logo_muslim_app.png

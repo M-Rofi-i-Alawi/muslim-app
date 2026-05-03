@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/ramadhan_viewmodel.dart';
 import '../model/ramadhan_model.dart';
 import '../utils/theme_helper.dart';
@@ -94,7 +95,7 @@ class _RamadhanPageState extends State<RamadhanPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Catatan Ramadhan',
+                Text(AppLocalizations.of(context).catatanRamadhan,
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -119,7 +120,7 @@ class _RamadhanPageState extends State<RamadhanPage>
             onPressed: () {
               context.read<RamadhanViewModel>().saveCurrentEntry();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('✅ Data berhasil disimpan',
+                content: Text(AppLocalizations.of(context).dataBerhasilDisimpan,
                     style: GoogleFonts.poppins()),
                 backgroundColor: kTeal,
                 behavior: SnackBarBehavior.floating,
@@ -135,7 +136,12 @@ class _RamadhanPageState extends State<RamadhanPage>
 
   // ─── TAB BAR ──────────────────────────────────────────────────────────────
   Widget _buildTabBar(AppColors c) {
-    final tabs = ['Amalan', 'Statistik', 'Karomah'];
+    final l = AppLocalizations.of(context);
+    final tabs = [
+      l.isEn ? 'Deeds' : 'Amalan',
+      l.isEn ? 'Statistics' : 'Statistik',
+      l.isEn ? 'Karomah' : 'Karomah',
+    ];
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
@@ -251,14 +257,14 @@ class _AmalanTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('JURNAL HARIAN',
+                Text(AppLocalizations.of(context).jurnalHarian,
                     style: GoogleFonts.poppins(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.white.withOpacity(0.85),
                         letterSpacing: 1)),
                 const SizedBox(height: 4),
-                Text('Catatan Ibadah Ramadhan',
+                Text(AppLocalizations.of(context).catatanIbadah,
                     style: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -303,11 +309,11 @@ class _AmalanTab extends StatelessWidget {
                   Icon(Icons.edit_calendar_rounded,
                       size: 64, color: c.textHint),
                   const SizedBox(height: 12),
-                  Text('Belum ada catatan',
+                  Text(AppLocalizations.of(context).belumAdaCatatan,
                       style: GoogleFonts.poppins(
                           fontSize: 15, color: c.textSecondary)),
                   const SizedBox(height: 6),
-                  Text('Tap tombol + untuk mulai',
+                  Text(AppLocalizations.of(context).tapTambah,
                       style: GoogleFonts.poppins(
                           fontSize: 12, color: c.textHint)),
                 ],
@@ -501,7 +507,7 @@ class _TimelineItemState extends State<_TimelineItem> {
           Center(
             child: TextButton.icon(
               icon: const Icon(Icons.edit_rounded, size: 16),
-              label: Text('Edit Catatan',
+              label: Text(AppLocalizations.of(context).editCatatan,
                   style: GoogleFonts.poppins(fontSize: 13)),
               style: TextButton.styleFrom(foregroundColor: kTeal),
               onPressed: () => Navigator.push(
@@ -593,11 +599,11 @@ class _StatistikTab extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              _buildProgress(stats),
+              _buildProgress(context, stats),
               const SizedBox(height: 18),
               _buildGrid(context, stats, c),
               const SizedBox(height: 18),
-              _buildDetailStats(stats, c),
+              _buildDetailStats(context, stats, c),
             ],
           ),
         );
@@ -605,7 +611,7 @@ class _StatistikTab extends StatelessWidget {
     );
   }
 
-  Widget _buildProgress(RamadhanStatistics stats) {
+  Widget _buildProgress(BuildContext context, RamadhanStatistics stats) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -620,7 +626,7 @@ class _StatistikTab extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('Progress Ramadhan',
+          Text(AppLocalizations.of(context).progressRamadhan,
               style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -655,36 +661,36 @@ class _StatistikTab extends StatelessWidget {
       crossAxisSpacing: 12,
       childAspectRatio: 1.3,
       children: [
-        _StatCard(c, 'Puasa', '${stats.puasaCount}',
+        _StatCard(c, AppLocalizations.of(context).isEn ? 'Fasting' : 'Puasa', '${stats.puasaCount}',
             '${stats.puasaPercentage.toStringAsFixed(0)}%',
             Icons.wb_sunny_rounded, const Color(0xFFE8650A)),
-        _StatCard(c, 'Shalat Lengkap', '${stats.allShalatCompleteCount}',
+        _StatCard(c, AppLocalizations.of(context).isEn ? 'Full Prayer' : 'Shalat Lengkap', '${stats.allShalatCompleteCount}',
             '${stats.shalatPercentage.toStringAsFixed(0)}%',
             Icons.self_improvement_rounded, kTeal),
-        _StatCard(c, 'Tadarus', '${stats.totalTadarusJuz} Juz', 'Total',
+        _StatCard(c, AppLocalizations.of(context).isEn ? 'Recitation' : 'Tadarus', '${stats.totalTadarusJuz} Juz', 'Total',
             Icons.menu_book_rounded, const Color(0xFF388E3C)),
-        _StatCard(c, 'Infak', 'Rp ${_fmtNum(stats.totalInfak)}', 'Total',
+        _StatCard(c, AppLocalizations.of(context).isEn ? 'Charity' : 'Infak', 'Rp ${_fmtNum(stats.totalInfak)}', 'Total',
             Icons.volunteer_activism_rounded, kGold),
       ],
     );
   }
 
-  Widget _buildDetailStats(RamadhanStatistics stats, AppColors c) {
+  Widget _buildDetailStats(BuildContext context, RamadhanStatistics stats, AppColors c) {
     return _SectionCard(
       c: c,
-      title: 'Detail Statistik',
+      title: AppLocalizations.of(context).isEn ? 'Detailed Statistics' : 'Detail Statistik',
       icon: Icons.bar_chart_rounded,
       color: kTeal,
       child: Column(
         children: [
-          _row(c, 'Hari dicatat', '${stats.totalDays} hari'),
-          _row(c, 'Puasa', '${stats.puasaCount} hari'),
-          _row(c, 'Shalat 5 waktu', '${stats.allShalatCompleteCount} hari'),
-          _row(c, 'Tarawih', '${stats.tarawihCount} hari'),
-          _row(c, 'Tahajud', '${stats.tahajudCount} hari'),
-          _row(c, 'Total tadarus', '${stats.totalTadarusJuz} juz'),
-          _row(c, 'Total infak', 'Rp ${_fmtNum(stats.totalInfak)}'),
-          _row(c, 'Ceramah dirangkum', '${stats.ceramahCount} ceramah'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Days recorded' : 'Hari dicatat', '${stats.totalDays} hari'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Fasting' : 'Puasa', '${stats.puasaCount} hari'),
+          _row(c, AppLocalizations.of(context).isEn ? '5 daily prayers' : 'Shalat 5 waktu', '${stats.allShalatCompleteCount} hari'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Tarawih' : 'Tarawih', '${stats.tarawihCount} hari'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Tahajud' : 'Tahajud', '${stats.tahajudCount} hari'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Total recitation' : 'Total tadarus', '${stats.totalTadarusJuz} juz'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Total charity' : 'Total infak', 'Rp ${_fmtNum(stats.totalInfak)}'),
+          _row(c, AppLocalizations.of(context).isEn ? 'Lectures summarized' : 'Ceramah dirangkum', '${stats.ceramahCount} ceramah'),
         ],
       ),
     );
@@ -728,7 +734,7 @@ class _KaromahTab extends StatelessWidget {
         final entry = vm.currentEntry;
         if (entry == null) {
           return Center(
-              child: Text('Tidak ada data',
+              child: Text(AppLocalizations.of(context).tidakAdaData,
                   style: GoogleFonts.poppins(color: c.textSecondary)));
         }
         return SingleChildScrollView(
@@ -739,13 +745,13 @@ class _KaromahTab extends StatelessWidget {
               const SizedBox(height: 16),
               _DiaryCard(
                   c: c,
-                  title: 'Doa yang Terkabul',
+                  title: AppLocalizations.of(context).doaTerkabul,
                   icon: Icons.favorite_rounded,
                   color: const Color(0xFFD32F2F),
                   child: TextField(
                     style: TextStyle(color: c.onSurface),
                     decoration: InputDecoration(
-                        hintText: 'Doa yang dikabulkan hari ini...',
+                        hintText: AppLocalizations.of(context).doaHint,
                         hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
@@ -756,13 +762,13 @@ class _KaromahTab extends StatelessWidget {
               const SizedBox(height: 12),
               _DiaryCard(
                   c: c,
-                  title: 'Momen Spesial',
+                  title: AppLocalizations.of(context).momenSpesial,
                   icon: Icons.star_rounded,
                   color: kGold,
                   child: TextField(
                     style: TextStyle(color: c.onSurface),
                     decoration: InputDecoration(
-                        hintText: 'Momen berkesan hari ini...',
+                        hintText: AppLocalizations.of(context).momenHint,
                         hintStyle: TextStyle(color: c.textHint),
                         border: InputBorder.none),
                     maxLines: 5,
@@ -773,7 +779,7 @@ class _KaromahTab extends StatelessWidget {
               const SizedBox(height: 12),
               _DiaryCard(
                   c: c,
-                  title: 'Refleksi & Muhasabah',
+                  title: AppLocalizations.of(context).refleksi,
                   icon: Icons.self_improvement_rounded,
                   color: kTeal,
                   child: TextField(
@@ -1050,7 +1056,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
           icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Edit Catatan',
+        title: Text(AppLocalizations.of(context).editCatatan,
             style: GoogleFonts.poppins(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         actions: [
@@ -1061,7 +1067,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('✅ Catatan disimpan',
+                  content: Text(AppLocalizations.of(context).isEn ? '✅ Notes saved' : '✅ Catatan disimpan',
                       style: GoogleFonts.poppins()),
                   backgroundColor: kTeal,
                   behavior: SnackBarBehavior.floating,
@@ -1113,11 +1119,11 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Puasa
             _SectionCard(
               c: c,
-              title: 'Puasa',
+              title: AppLocalizations.of(context).isEn ? 'Fasting' : 'Puasa',
               icon: Icons.wb_sunny_rounded,
               color: const Color(0xFFE8650A),
               child: CheckboxListTile(
-                title: Text('Puasa hari ini',
+                title: Text(AppLocalizations.of(context).isEn ? 'Fasting today' : 'Puasa hari ini',
                     style: GoogleFonts.poppins(
                         fontSize: 14, color: c.onSurface)),
                 value: _entry.puasa,
@@ -1133,7 +1139,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Shalat
             _SectionCard(
               c: c,
-              title: 'Shalat',
+              title: AppLocalizations.of(context).isEn ? 'Prayer' : 'Shalat',
               icon: Icons.self_improvement_rounded,
               color: kTeal,
               child: Column(
@@ -1191,13 +1197,13 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Tadarus
             _SectionCard(
               c: c,
-              title: 'Tadarus Al-Quran',
+              title: AppLocalizations.of(context).isEn ? 'Quran Recitation' : 'Tadarus Al-Quran',
               icon: Icons.menu_book_rounded,
               color: const Color(0xFF388E3C),
               child: Column(
                 children: [
                   ListTile(
-                    title: Text('Juz yang dibaca',
+                    title: Text(AppLocalizations.of(context).isEn ? 'Juz recited' : 'Juz yang dibaca',
                         style: GoogleFonts.poppins(
                             fontSize: 14, color: c.onSurface)),
                     trailing: Row(
@@ -1240,7 +1246,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                     child: TextField(
                       style: TextStyle(color: c.onSurface),
                       decoration: InputDecoration(
-                        labelText: 'Surat yang dibaca',
+                        labelText: AppLocalizations.of(context).isEn ? 'Surah recited' : 'Surat yang dibaca',
                         labelStyle: TextStyle(color: c.textSecondary),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
@@ -1258,7 +1264,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Catatan harian
             _SectionCard(
               c: c,
-              title: 'Catatan Tambahan',
+              title: AppLocalizations.of(context).isEn ? 'Additional Notes' : 'Catatan Tambahan',
               icon: Icons.note_rounded,
               color: const Color(0xFF546E7A),
               child: Padding(
@@ -1266,9 +1272,9 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                 child: TextField(
                   style: TextStyle(color: c.onSurface),
                   decoration: InputDecoration(
-                    labelText: 'Catatan',
+                    labelText: AppLocalizations.of(context).isEn ? 'Notes' : 'Catatan',
                     labelStyle: TextStyle(color: c.textSecondary),
-                    hintText: 'Tulis catatan atau refleksi...',
+                    hintText: AppLocalizations.of(context).isEn ? 'Write notes or reflections...' : 'Tulis catatan atau refleksi...',
                     hintStyle: TextStyle(color: c.textHint),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),

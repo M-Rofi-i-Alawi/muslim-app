@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/chat_viewmodel.dart';
 import '../model/chat_message_model.dart';
 import '../utils/theme_helper.dart'; // ← import ThemeHelper
@@ -141,7 +142,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Tanya ISLAM',
+                    Text(AppLocalizations.of(context).tanyaIslam2,
                         style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -156,7 +157,7 @@ class _ChatPageState extends State<ChatPage> {
                               shape: BoxShape.circle),
                         ),
                         const SizedBox(width: 4),
-                        Text('Online · siap menjawab',
+                        Text(AppLocalizations.of(context).onlineSiap,
                             style: GoogleFonts.poppins(
                                 fontSize: 11,
                                 color: Colors.white.withOpacity(0.85))),
@@ -198,15 +199,16 @@ class _ChatPageState extends State<ChatPage> {
                 color: _kTeal, size: 46),
           ),
           const SizedBox(height: 18),
-          Text('Tanya Seputar Islam',
+          Text(AppLocalizations.of(context).tanyaSeputarIslam,
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: c.onSurface)), // ← adaptive
           const SizedBox(height: 8),
           Text(
-            'Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\n'
-            'hadist, doa, dan seputar Islam lainnya.',
+            AppLocalizations.of(context).isEn
+                    ? 'Ask questions about worship, Al-Quran,\nhadiths, prayers, and other Islamic topics.'
+                    : 'Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\nhadist, doa, dan seputar Islam lainnya.',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
                 fontSize: 13, color: c.textSecondary, height: 1.6), // ← adaptive
@@ -214,7 +216,7 @@ class _ChatPageState extends State<ChatPage> {
           const SizedBox(height: 28),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('Coba tanya:',
+            child: Text(AppLocalizations.of(context).cobaTanya,
                 style: GoogleFonts.poppins(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -290,7 +292,7 @@ class _ChatPageState extends State<ChatPage> {
                     fontSize: 14,
                     color: c.onSurface), // ← adaptive
                 decoration: InputDecoration(
-                  hintText: 'Tanya sesuatu tentang Islam...',
+                  hintText: AppLocalizations.of(context).chatHint,
                   hintStyle: GoogleFonts.poppins(
                       fontSize: 13, color: c.textHint), // ← adaptive
                   border: InputBorder.none,
@@ -335,18 +337,18 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: c.surface, // ← adaptive
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
-        title: Text('Hapus Percakapan?',
+        title: Text(AppLocalizations.of(context).hapusPercakapan,
             style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 color: c.onSurface)), // ← adaptive
-        content: Text('Semua pesan akan dihapus.',
+        content: Text(AppLocalizations.of(context).semuaPesanDihapus,
             style: GoogleFonts.poppins(
                 fontSize: 13,
                 color: c.textSecondary)), // ← adaptive
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal',
+            child: Text(AppLocalizations.of(context).batal,
                 style: GoogleFonts.poppins(
                     color: c.textSecondary)), // ← adaptive
           ),
@@ -360,7 +362,7 @@ class _ChatPageState extends State<ChatPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
-            child: Text('Hapus',
+            child: Text(AppLocalizations.of(context).hapus2,
                 style: GoogleFonts.poppins(color: Colors.white)),
           ),
         ],
@@ -455,7 +457,7 @@ class _ChatBubble extends StatelessWidget {
                               const Icon(Icons.link_rounded,
                                   color: _kTeal, size: 14),
                               const SizedBox(width: 6),
-                              Text('Sumber:',
+                              Text(AppLocalizations.of(context).sumber,
                                   style: GoogleFonts.poppins(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
@@ -473,7 +475,7 @@ class _ChatBubble extends StatelessWidget {
                                       ClipboardData(text: e.value));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                    content: Text('Link disalin',
+                                    content: Text(AppLocalizations.of(context).linkDisalin,
                                         style: GoogleFonts.poppins()),
                                     backgroundColor: _kTeal,
                                     behavior: SnackBarBehavior.floating,

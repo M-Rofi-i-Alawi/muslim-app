@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../utils/theme_helper.dart';
+import '../l10n/app_localizations.dart';
 import '../viewmodel/shalat_viewmodel.dart';
 import '../model/shalat_model.dart';
 import '../repository/shalat_repository.dart';
@@ -125,13 +126,13 @@ class _ShalatPageState extends State<ShalatPage> {
                   children: [
                     Icon(Icons.wifi_off_rounded, color: c.textHint, size: 60),
                     const SizedBox(height: 12),
-                    Text('Gagal memuat jadwal',
+                    Text(AppLocalizations.of(context).gagalMemuat,
                         style: GoogleFonts.poppins(color: c.textSecondary)),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => context.read<ShalatViewModel>().refresh(),
                       style: ElevatedButton.styleFrom(backgroundColor: _kTeal),
-                      child: Text('Coba Lagi',
+                      child: Text(AppLocalizations.of(context).cobaLagi,
                           style: GoogleFonts.poppins(color: Colors.white)),
                     ),
                   ],
@@ -151,7 +152,7 @@ class _ShalatPageState extends State<ShalatPage> {
                 )
               else
                 SliverFillRemaining(child: Center(
-                  child: Text('Memuat...',
+                  child: Text(AppLocalizations.of(context).memuat,
                       style: GoogleFonts.poppins(color: c.textSecondary)))),
             ],
           );
@@ -163,7 +164,7 @@ class _ShalatPageState extends State<ShalatPage> {
   // ─── APP BAR — lebih tinggi, info kota + tanggal lebih jelas ─────────────
   Widget _buildAppBar(ShalatViewModel vm) {
     final jadwal   = vm.jadwal;
-    final cityName = jadwal?.namaKota ?? 'Mendeteksi...';
+    final cityName = jadwal?.namaKota ?? AppLocalizations.of(context).mendeteksi;
     final tanggal  = jadwal?.tanggal  ?? '';
 
     return SliverAppBar(
@@ -174,7 +175,7 @@ class _ShalatPageState extends State<ShalatPage> {
         icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
         onPressed: () => Navigator.pop(context),
       ),
-      title: Text('Jadwal Shalat',
+      title: Text(AppLocalizations.of(context).jadwalShalat,
           style: GoogleFonts.poppins(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
       centerTitle: true,
@@ -231,7 +232,7 @@ class _ShalatPageState extends State<ShalatPage> {
                               decoration: BoxDecoration(
                                   color: _kGold,
                                   borderRadius: BorderRadius.circular(12)),
-                              child: Text('Ganti',
+                              child: Text(AppLocalizations.of(context).ganti,
                                   style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: 10,
@@ -295,7 +296,7 @@ class _ShalatPageState extends State<ShalatPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Shalat Berikutnya',
+                Text(AppLocalizations.of(context).shalatBerikutnya,
                     style: GoogleFonts.poppins(
                         fontSize: 11,
                         color: _kGold,
@@ -324,7 +325,7 @@ class _ShalatPageState extends State<ShalatPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 13)),
-                Text('lagi',
+                Text(AppLocalizations.of(context).lagi,
                     style: GoogleFonts.poppins(
                         color: Colors.white70, fontSize: 10)),
               ],
@@ -436,18 +437,18 @@ class _ShalatPageState extends State<ShalatPage> {
                                 color: _kTeal, shape: BoxShape.circle),
                           ),
                           const SizedBox(width: 5),
-                          Text('Shalat berikutnya',
+                          Text(AppLocalizations.of(context).shalatBerikutnya,
                               style: GoogleFonts.poppins(
                                   fontSize: 11,
                                   color: _kTeal,
                                   fontWeight: FontWeight.w500)),
                         ])
                       else if (isPast)
-                        Text('Sudah lewat',
+                        Text(AppLocalizations.of(context).sudahLewat,
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: c.textHint))
                       else
-                        Text('Belum tiba',
+                        Text(AppLocalizations.of(context).belumTiba,
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: c.textSecondary)),
                     ],
@@ -527,7 +528,7 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-          child: Text('Pilih Lokasi',
+          child: Text(AppLocalizations.of(context).pilihLokasi,
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -539,7 +540,7 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
             onChanged: (v) => setState(() => _query = v),
             style: TextStyle(color: c.onSurface),
             decoration: InputDecoration(
-              hintText: 'Cari kota...',
+              hintText: AppLocalizations.of(context).cariKota,
               hintStyle: GoogleFonts.poppins(fontSize: 14, color: c.textHint),
               prefixIcon: Icon(Icons.search_rounded, color: c.textHint),
               filled: true,
@@ -559,10 +560,10 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
                 borderRadius: BorderRadius.circular(10)),
             child: const Icon(Icons.gps_fixed_rounded, color: _kTeal, size: 22),
           ),
-          title: Text('Auto GPS',
+          title: Text(AppLocalizations.of(context).autoGps,
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600, color: c.onSurface)),
-          subtitle: Text('Deteksi otomatis dari lokasi Anda',
+          subtitle: Text(AppLocalizations.of(context).autoGpsSubtitle,
               style: GoogleFonts.poppins(fontSize: 12, color: c.textSecondary)),
           trailing: Icon(Icons.chevron_right_rounded, color: c.textHint),
           onTap: widget.onGPS,

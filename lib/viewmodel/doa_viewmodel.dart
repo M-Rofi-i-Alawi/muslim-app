@@ -14,6 +14,9 @@ class DoaViewModel extends ChangeNotifier {
   List<DoaModel> filteredDoa = [];
 
   Future<void> getDoa() async {
+    // ✅ Jangan fetch ulang kalau data sudah ada
+    if (doaList.isNotEmpty) return;
+    
     try {
       isLoading = true;
       error = '';

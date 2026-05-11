@@ -22,7 +22,7 @@ class DoaRepository {
 
     // 📦 Jika API gagal, gunakan data lokal (PASTI JALAN!)
     try {
-      final String jsonString = await rootBundle.loadString('doa.json');
+      final String jsonString = await rootBundle.loadString('assets/doa.json');
       print('✅ Doa loaded from local assets');
       final List data = jsonDecode(jsonString);
       return data.map((e) => DoaModel.fromJson(e)).toList();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 import '../viewmodel/doa_viewmodel.dart';
 import 'doa_detail_page.dart';
@@ -51,7 +51,7 @@ class _DoaListPageState extends State<DoaListPage> {
                   icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text(AppLocalizations.of(context).doaHarian,
+                title: TrText('Doa Harian',
                     style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
                 centerTitle: true,
               ),
@@ -64,7 +64,7 @@ class _DoaListPageState extends State<DoaListPage> {
                     onChanged: (v) { vm.searchDoa(v); setState(() {}); },
                     style: TextStyle(color: c.onSurface),
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).cariDoa,
+                      hintText: context.tr('Cari doa...'),
                       hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
                       prefixIcon: const Icon(Icons.search_rounded, color: _kTeal),
                       suffixIcon: _searchCtrl.text.isNotEmpty
@@ -95,12 +95,12 @@ class _DoaListPageState extends State<DoaListPage> {
                   child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Icon(Icons.wifi_off_rounded, color: c.textHint, size: 60),
                     const SizedBox(height: 12),
-                    Text('Gagal memuat doa', style: GoogleFonts.poppins(color: c.textSecondary, fontSize: 15)),
+                    TrText('Gagal memuat doa', style: GoogleFonts.poppins(color: c.textSecondary, fontSize: 15)),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => vm.getDoa(),
                       style: ElevatedButton.styleFrom(backgroundColor: _kTeal),
-                      child: Text('Coba Lagi', style: GoogleFonts.poppins(color: Colors.white)),
+                      child: TrText('Coba Lagi', style: GoogleFonts.poppins(color: Colors.white)),
                     ),
                   ])),
                 )
@@ -109,7 +109,7 @@ class _DoaListPageState extends State<DoaListPage> {
                   child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Icon(Icons.search_off_rounded, color: c.textHint, size: 70),
                     const SizedBox(height: 12),
-                    Text('Doa tidak ditemukan', style: GoogleFonts.poppins(color: c.textSecondary, fontSize: 15)),
+                    TrText('Doa tidak ditemukan', style: GoogleFonts.poppins(color: c.textSecondary, fontSize: 15)),
                   ])),
                 )
               else
@@ -149,8 +149,8 @@ class _DoaListPageState extends State<DoaListPage> {
         ),
         const SizedBox(width: 16),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Doa Harian', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-          Text(vm.filteredDoa.isNotEmpty ? '${vm.filteredDoa.length} doa tersedia' : 'Koleksi doa sehari-hari',
+          TrText('Doa Harian', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+          Text(vm.filteredDoa.isNotEmpty ? '${vm.filteredDoa.length} ${context.tr('doa tersedia')}' : context.tr('Koleksi doa sehari-hari'),
               style: GoogleFonts.poppins(color: Colors.white70, fontSize: 13)),
         ])),
         Text('الدعاء', style: TextStyle(color: Colors.white.withOpacity(0.25), fontSize: 28, fontFamily: 'serif')),
@@ -190,7 +190,7 @@ class _DoaListPageState extends State<DoaListPage> {
                 child: Icon(Icons.menu_book_rounded, color: color, size: 24),
               ),
               const SizedBox(width: 14),
-              Expanded(child: Text(doa.judul,
+              Expanded(child: Text(context.tr(doa.judul),
                   style: GoogleFonts.poppins(
                       fontSize: 14, fontWeight: FontWeight.w600,
                       // FIX: hardcoded 0xFF1A1A2E → c.onSurface

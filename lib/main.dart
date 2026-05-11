@@ -19,6 +19,7 @@ import 'view/splash_page.dart';
 
 import 'services/gemini_service.dart';
 import 'services/settings_service.dart';
+import 'services/tr_service.dart';
 import 'services/dzikir_local_service.dart';
 
 import 'viewmodel/doa_viewmodel.dart';
@@ -36,7 +37,6 @@ import 'viewmodel/kalender_viewmodel.dart';
 import 'viewmodel/panduan_ibadahn_viewmodel.dart';
 import 'viewmodel/ramadhan_viewmodel.dart';
 
-import 'l10n/app_localizations.dart'; // ✅ relative import, BUKAN package:l10n/...
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -44,6 +44,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await SettingsService().load();
+  await TrService().loadCache();
   await DzikirLocalService().cleanupOldData();
   await dotenv.load(fileName: "assets/.env");
 
@@ -59,6 +60,10 @@ void main() async {
       providers: [
         ChangeNotifierProvider<SettingsService>.value(
           value: SettingsService(),
+        ),
+        // ✅ TrService di provider tree agar notifyListeners() rebuild semua TrText
+        ChangeNotifierProvider<TrService>.value(
+          value: TrService(),
         ),
         ChangeNotifierProvider(
           create: (_) => ShalatViewModel(ShalatRepository()),
@@ -126,7 +131,6 @@ class _MuslimApp extends StatelessWidget {
         Locale('en'),
       ],
       localizationsDelegates: const [
-        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

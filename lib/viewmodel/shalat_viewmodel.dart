@@ -174,4 +174,6 @@ class ShalatViewModel extends ChangeNotifier {
 
   bool   get isUsingGPS  => selectedKota == null && useGPS;
   String get modeDisplay => isUsingGPS ? 'GPS Auto' : 'Manual';
+
+  void fetchJadwalByCity(String city) {}
 }

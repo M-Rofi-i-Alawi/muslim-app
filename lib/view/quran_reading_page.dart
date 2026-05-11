@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import '../services/tr_service.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/quran_bookmark_service.dart';
-import '../l10n/app_localizations.dart';
-
 const _kTeal     = Color(0xFF00A086);
 const _kTealDark = Color(0xFF007A68);
 const _kNavyBg   = Color(0xFF0D1B2A);   // background immersive reading
@@ -101,7 +100,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
         '${ayat.arab}\n\n${ayat.latin}\n\n"${ayat.arti}"\n\n— ${widget.namaSurat}, Ayat ${ayat.nomorAyat}';
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Ayat disalin ke clipboard', style: GoogleFonts.poppins()),
+      content: TrText('Ayat disalin ke clipboard', style: GoogleFonts.poppins()),
       backgroundColor: _kTealDark,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -414,7 +413,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
                     borderRadius: BorderRadius.circular(2)),
               ),
               const SizedBox(height: 20),
-              Text('Ukuran Tulisan Arab',
+              TrText('Ukuran Tulisan Arab',
                   style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -477,7 +476,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),
-                child: Text('Selesai', style: GoogleFonts.poppins(color: Colors.white)),
+                child: TrText('Selesai', style: GoogleFonts.poppins(color: Colors.white)),
               ),
             ],
           ),

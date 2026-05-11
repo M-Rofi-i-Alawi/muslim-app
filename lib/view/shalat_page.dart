@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
+import '../services/settings_service.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
 import '../viewmodel/shalat_viewmodel.dart';
 import '../model/shalat_model.dart';
 import '../repository/shalat_repository.dart';
@@ -76,7 +77,9 @@ class _ShalatPageState extends State<ShalatPage> {
   String _formatCountdown(int totalMinutes) {
     final h = totalMinutes ~/ 60;
     final m = totalMinutes % 60;
-    return h > 0 ? '$h jam $m menit' : '$m menit';
+    final jam = TrService().translate('jam', context.read<SettingsService>().language);
+    final menit = TrService().translate('menit', context.read<SettingsService>().language);
+    return h > 0 ? '$h $jam $m $menit' : '$m $menit';
   }
 
   void _showCityPicker() {
@@ -126,13 +129,13 @@ class _ShalatPageState extends State<ShalatPage> {
                   children: [
                     Icon(Icons.wifi_off_rounded, color: c.textHint, size: 60),
                     const SizedBox(height: 12),
-                    Text(AppLocalizations.of(context).gagalMemuat,
+                    TrText('Gagal memuat jadwal',
                         style: GoogleFonts.poppins(color: c.textSecondary)),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => context.read<ShalatViewModel>().refresh(),
                       style: ElevatedButton.styleFrom(backgroundColor: _kTeal),
-                      child: Text(AppLocalizations.of(context).cobaLagi,
+                      child: TrText('Coba Lagi',
                           style: GoogleFonts.poppins(color: Colors.white)),
                     ),
                   ],
@@ -142,7 +145,6 @@ class _ShalatPageState extends State<ShalatPage> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      // Countdown card langsung setelah appbar
                       if (_nextPrayerName.isNotEmpty)
                         _buildCountdownCard(context, vm.jadwal!),
                       const SizedBox(height: 8),
@@ -152,7 +154,7 @@ class _ShalatPageState extends State<ShalatPage> {
                 )
               else
                 SliverFillRemaining(child: Center(
-                  child: Text(AppLocalizations.of(context).memuat,
+                  child: TrText('Memuat...',
                       style: GoogleFonts.poppins(color: c.textSecondary)))),
             ],
           );
@@ -161,23 +163,29 @@ class _ShalatPageState extends State<ShalatPage> {
     );
   }
 
-  // ─── APP BAR — lebih tinggi, info kota + tanggal lebih jelas ─────────────
+  // ─── APP BAR ──────────────────────────────────────────────────────────────
+  // FIX: leading, title, actions dipindah ke property SliverAppBar langsung
+  // sehingga title "Jadwal Shalat" hanya muncul saat collapsed (otomatis),
+  // dan jam di background tidak akan pernah overlap dengan judul.
   Widget _buildAppBar(ShalatViewModel vm) {
     final jadwal   = vm.jadwal;
-    final cityName = jadwal?.namaKota ?? AppLocalizations.of(context).mendeteksi;
+    final cityName = jadwal?.namaKota ?? context.tr('Mendeteksi...');
     final tanggal  = jadwal?.tanggal  ?? '';
 
     return SliverAppBar(
       expandedHeight: 200,
       pinned: true,
       backgroundColor: _kTealDark,
+      automaticallyImplyLeading: false,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
         onPressed: () => Navigator.pop(context),
       ),
-      title: Text(AppLocalizations.of(context).jadwalShalat,
-          style: GoogleFonts.poppins(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+      title: TrText(
+        'Jadwal Shalat',
+        style: GoogleFonts.poppins(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+      ),
       centerTitle: true,
       actions: [
         IconButton(
@@ -185,6 +193,9 @@ class _ShalatPageState extends State<ShalatPage> {
             onPressed: _pickDate),
       ],
       flexibleSpace: FlexibleSpaceBar(
+        // titlePadding: EdgeInsets.zero menonaktifkan title bawaan FlexibleSpaceBar
+        // agar tidak double render dengan title di SliverAppBar
+        titlePadding: EdgeInsets.zero,
         collapseMode: CollapseMode.pin,
         background: Container(
           decoration: const BoxDecoration(
@@ -196,12 +207,13 @@ class _ShalatPageState extends State<ShalatPage> {
           ),
           child: SafeArea(
             child: Padding(
+              // top 56: beri ruang untuk area toolbar (back button, dll)
+              // sehingga jam tidak ketutup saat expanded
               padding: const EdgeInsets.fromLTRB(20, 56, 20, 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Jam besar di header
                   Text(_currentTime,
                       style: GoogleFonts.courierPrime(
                           fontSize: 42,
@@ -209,7 +221,6 @@ class _ShalatPageState extends State<ShalatPage> {
                           color: Colors.white,
                           letterSpacing: 2)),
                   const SizedBox(height: 6),
-                  // Baris kota + tanggal
                   Row(
                     children: [
                       Expanded(
@@ -232,7 +243,7 @@ class _ShalatPageState extends State<ShalatPage> {
                               decoration: BoxDecoration(
                                   color: _kGold,
                                   borderRadius: BorderRadius.circular(12)),
-                              child: Text(AppLocalizations.of(context).ganti,
+                              child: TrText('Ganti',
                                   style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: 10,
@@ -261,7 +272,7 @@ class _ShalatPageState extends State<ShalatPage> {
     );
   }
 
-  // ─── COUNTDOWN CARD — lebih menonjol ─────────────────────────────────────
+  // ─── COUNTDOWN CARD ───────────────────────────────────────────────────────
   Widget _buildCountdownCard(BuildContext context, ShalatModel jadwal) {
     final c = context.colors;
     return Container(
@@ -280,7 +291,6 @@ class _ShalatPageState extends State<ShalatPage> {
       ),
       child: Row(
         children: [
-          // Icon shalat berikutnya
           Container(
             width: 52, height: 52,
             decoration: BoxDecoration(
@@ -291,19 +301,18 @@ class _ShalatPageState extends State<ShalatPage> {
                 color: _kGold, size: 28),
           ),
           const SizedBox(width: 16),
-          // Info shalat berikutnya
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppLocalizations.of(context).shalatBerikutnya,
+                TrText('Shalat Berikutnya',
                     style: GoogleFonts.poppins(
                         fontSize: 11,
                         color: _kGold,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5)),
                 const SizedBox(height: 2),
-                Text(_nextPrayerName,
+                Text(context.tr(_nextPrayerName),
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -311,7 +320,6 @@ class _ShalatPageState extends State<ShalatPage> {
               ],
             ),
           ),
-          // Countdown pill
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -325,7 +333,7 @@ class _ShalatPageState extends State<ShalatPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 13)),
-                Text(AppLocalizations.of(context).lagi,
+                TrText('lagi',
                     style: GoogleFonts.poppins(
                         color: Colors.white70, fontSize: 10)),
               ],
@@ -341,14 +349,14 @@ class _ShalatPageState extends State<ShalatPage> {
     final now    = TimeOfDay.now();
     final nowMin = now.hour * 60 + now.minute;
     final prayers = [
-      _PrayerItem('Imsak',   jadwal.imsak,   Icons.nightlight_round,   const Color(0xFF3949AB), const Color(0xFF9FA8DA)),
-      _PrayerItem('Subuh',   jadwal.subuh,   Icons.wb_twilight_rounded, const Color(0xFF1565C0), const Color(0xFF64B5F6)),
-      _PrayerItem('Terbit',  jadwal.terbit,  Icons.wb_sunny_rounded,    const Color(0xFFE65100), const Color(0xFFFFB74D)),
-      _PrayerItem('Dhuha',   jadwal.dhuha,   Icons.light_mode_rounded,  const Color(0xFFF57F17), const Color(0xFFFFD54F)),
-      _PrayerItem('Dzuhur',  jadwal.dzuhur,  Icons.wb_sunny_rounded,    const Color(0xFFBF360C), const Color(0xFFFF8A65)),
-      _PrayerItem('Ashar',   jadwal.ashar,   Icons.cloud_rounded,       const Color(0xFFFF8F00), const Color(0xFFFFCA28)),
-      _PrayerItem('Maghrib', jadwal.maghrib, Icons.nights_stay_rounded, const Color(0xFF6A1B9A), const Color(0xFFCE93D8)),
-      _PrayerItem('Isya',    jadwal.isya,    Icons.nightlight_round,    const Color(0xFF0D47A1), const Color(0xFF90CAF9)),
+      _PrayerItem('Imsak',   jadwal.imsak,   Icons.nightlight_round,    const Color(0xFF3949AB), const Color(0xFF9FA8DA)),
+      _PrayerItem('Subuh',   jadwal.subuh,   Icons.wb_twilight_rounded,  const Color(0xFF1565C0), const Color(0xFF64B5F6)),
+      _PrayerItem('Terbit',  jadwal.terbit,  Icons.wb_sunny_rounded,     const Color(0xFFE65100), const Color(0xFFFFB74D)),
+      _PrayerItem('Dhuha',   jadwal.dhuha,   Icons.light_mode_rounded,   const Color(0xFFF57F17), const Color(0xFFFFD54F)),
+      _PrayerItem('Dzuhur',  jadwal.dzuhur,  Icons.wb_sunny_rounded,     const Color(0xFFBF360C), const Color(0xFFFF8A65)),
+      _PrayerItem('Ashar',   jadwal.ashar,   Icons.cloud_rounded,        const Color(0xFFFF8F00), const Color(0xFFFFCA28)),
+      _PrayerItem('Maghrib', jadwal.maghrib, Icons.nights_stay_rounded,  const Color(0xFF6A1B9A), const Color(0xFFCE93D8)),
+      _PrayerItem('Isya',    jadwal.isya,    Icons.nightlight_round,     const Color(0xFF0D47A1), const Color(0xFF90CAF9)),
     ];
 
     final widgets = <Widget>[];
@@ -397,7 +405,6 @@ class _ShalatPageState extends State<ShalatPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                // Icon container
                 Container(
                   width: 48, height: 48,
                   decoration: BoxDecoration(
@@ -413,13 +420,11 @@ class _ShalatPageState extends State<ShalatPage> {
                   ),
                 ),
                 const SizedBox(width: 14),
-
-                // Nama & status
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p.name,
+                      Text(context.tr(p.name),
                           style: GoogleFonts.poppins(
                               fontWeight: isNext ? FontWeight.bold : FontWeight.w600,
                               fontSize: 15,
@@ -437,25 +442,23 @@ class _ShalatPageState extends State<ShalatPage> {
                                 color: _kTeal, shape: BoxShape.circle),
                           ),
                           const SizedBox(width: 5),
-                          Text(AppLocalizations.of(context).shalatBerikutnya,
+                          TrText('Shalat Berikutnya',
                               style: GoogleFonts.poppins(
                                   fontSize: 11,
                                   color: _kTeal,
                                   fontWeight: FontWeight.w500)),
                         ])
                       else if (isPast)
-                        Text(AppLocalizations.of(context).sudahLewat,
+                        TrText('Sudah lewat',
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: c.textHint))
                       else
-                        Text(AppLocalizations.of(context).belumTiba,
+                        TrText('Belum tiba',
                             style: GoogleFonts.poppins(
                                 fontSize: 11, color: c.textSecondary)),
                     ],
                   ),
                 ),
-
-                // Waktu + chevron
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -485,7 +488,7 @@ class _ShalatPageState extends State<ShalatPage> {
   }
 }
 
-// ─── HELPER CLASSES ──────────────────────────────────────────────────────────
+// ─── HELPER CLASSES ───────────────────────────────────────────────────────────
 
 class _PrayerItem {
   final String name, time;
@@ -528,7 +531,7 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-          child: Text(AppLocalizations.of(context).pilihLokasi,
+          child: TrText('Pilih Lokasi',
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -540,7 +543,7 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
             onChanged: (v) => setState(() => _query = v),
             style: TextStyle(color: c.onSurface),
             decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).cariKota,
+              hintText: context.tr('Cari kota...'),
               hintStyle: GoogleFonts.poppins(fontSize: 14, color: c.textHint),
               prefixIcon: Icon(Icons.search_rounded, color: c.textHint),
               filled: true,
@@ -554,16 +557,16 @@ class _CityPickerSheetState extends State<_CityPickerSheet> {
         ),
         ListTile(
           leading: Container(
-            width: 40, height: 40,
+            width: 20, height: 20,
             decoration: BoxDecoration(
                 color: _kTeal.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10)),
             child: const Icon(Icons.gps_fixed_rounded, color: _kTeal, size: 22),
           ),
-          title: Text(AppLocalizations.of(context).autoGps,
+          title: TrText('Auto GPS',
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600, color: c.onSurface)),
-          subtitle: Text(AppLocalizations.of(context).autoGpsSubtitle,
+          subtitle: TrText('Deteksi otomatis dari lokasi Anda',
               style: GoogleFonts.poppins(fontSize: 12, color: c.textSecondary)),
           trailing: Icon(Icons.chevron_right_rounded, color: c.textHint),
           onTap: widget.onGPS,

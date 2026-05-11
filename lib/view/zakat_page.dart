@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/zakat_viewmodel.dart';
 import '../model/zakat_model.dart';
-import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 
 class ZakatPage extends StatefulWidget {
@@ -84,12 +84,12 @@ class _ZakatPageState extends State<ZakatPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppLocalizations.of(context).kalkulatorZakat,
+                TrText('Kalkulator Zakat',
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text(AppLocalizations.of(context).kalkulatorSubtitle,
+                TrText('Hitung zakat maal, penghasilan, fitrah & lainnya',
                     style: GoogleFonts.poppins(
                         fontSize: 12, color: Colors.white.withOpacity(0.9))),
               ],
@@ -174,9 +174,9 @@ class _ZakatMaalTab extends StatelessWidget {
           children: [
             _InfoCard(
               c: c,
-              title: 'Zakat Maal (Harta)',
+              title: context.tr('Zakat Maal (Harta)'),
               desc:
-                  'Zakat dari harta yang dimiliki selama 1 tahun (haul) dan mencapai nisab.',
+                  context.tr('Zakat dari harta yang dimiliki selama 1 tahun (haul) dan mencapai nisab.'),
               color: kTeal,
               icon: Icons.account_balance_wallet_rounded,
             ),
@@ -238,9 +238,9 @@ class _ZakatPenghasilanTab extends StatelessWidget {
           children: [
             _InfoCard(
                 c: c,
-                title: 'Zakat Penghasilan / Profesi',
+                title: context.tr('Zakat Penghasilan / Profesi'),
                 desc:
-                    'Zakat dari gaji, honorarium, atau penghasilan profesi sebesar 2.5%.',
+                    context.tr('Zakat dari gaji, honorarium, atau penghasilan profesi sebesar 2.5%.'),
                 color: const Color(0xFF1565C0),
                 icon: Icons.work_rounded),
             const SizedBox(height: 14),
@@ -295,9 +295,9 @@ class _ZakatFitrahTab extends StatelessWidget {
           children: [
             _InfoCard(
                 c: c,
-                title: 'Zakat Fitrah',
+                title: context.tr('Zakat Fitrah'),
                 desc:
-                    'Wajib dikeluarkan setiap Muslim di bulan Ramadan. 2.5 kg atau 3.5 liter beras per jiwa.',
+                    context.tr('Wajib dikeluarkan setiap Muslim di bulan Ramadan. 2.5 kg atau 3.5 liter beras per jiwa.'),
                 color: const Color(0xFF388E3C),
                 icon: Icons.people_rounded),
             const SizedBox(height: 14),
@@ -343,7 +343,7 @@ class _ZakatFitrahTab extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4)),
                   ),
                   Expanded(
-                    child: Text('Bayar dengan uang (bukan beras)',
+                    child: TrText('Bayar dengan uang (bukan beras)',
                         style: GoogleFonts.poppins(
                             fontSize: 13, color: c.onSurface)),
                   ),
@@ -384,9 +384,9 @@ class _ZakatPerdaganganTab extends StatelessWidget {
           children: [
             _InfoCard(
                 c: c,
-                title: 'Zakat Perdagangan',
+                title: context.tr('Zakat Perdagangan'),
                 desc:
-                    'Zakat dari (modal + keuntungan + piutang - hutang) sebesar 2.5% yang mencapai nisab dan haul.',
+                    context.tr('Zakat dari (modal + keuntungan + piutang - hutang) sebesar 2.5% yang mencapai nisab dan haul.'),
                 color: const Color(0xFF00838F),
                 icon: Icons.storefront_rounded),
             const SizedBox(height: 14),
@@ -447,9 +447,9 @@ class _ZakatPertanianTab extends StatelessWidget {
           children: [
             _InfoCard(
                 c: c,
-                title: 'Zakat Pertanian',
+                title: context.tr('Zakat Pertanian'),
                 desc:
-                    'Nisab 520 kg. Zakat 10% jika tanpa irigasi (air hujan), 5% jika menggunakan irigasi/pompa.',
+                    context.tr('Nisab 520 kg. Zakat 10% jika tanpa irigasi (air hujan), 5% jika menggunakan irigasi/pompa.'),
                 color: const Color(0xFF558B2F),
                 icon: Icons.grass_rounded),
             const SizedBox(height: 14),
@@ -478,7 +478,7 @@ class _ZakatPertanianTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Sistem Pengairan:',
+                  TrText('Sistem Pengairan:',
                       style: GoogleFonts.poppins(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -490,8 +490,8 @@ class _ZakatPertanianTab extends StatelessWidget {
                         child: _IrigasiOption(
                           c: c,
                           icon: Icons.wb_sunny_rounded,
-                          label: 'Hujan / Alami',
-                          sub: 'Zakat 10%',
+                          label: context.tr('Hujan / Alami'),
+                          sub: context.tr('Zakat 10%'),
                           selected: !vm.pertanianInput.menggunakanIrigasi,
                           onTap: () {
                             vm.pertanianInput.menggunakanIrigasi = false;
@@ -504,8 +504,8 @@ class _ZakatPertanianTab extends StatelessWidget {
                         child: _IrigasiOption(
                           c: c,
                           icon: Icons.water_drop_rounded,
-                          label: 'Irigasi / Pompa',
-                          sub: 'Zakat 5%',
+                          label: context.tr('Irigasi / Pompa'),
+                          sub: context.tr('Zakat 5%'),
                           selected: vm.pertanianInput.menggunakanIrigasi,
                           onTap: () {
                             vm.pertanianInput.menggunakanIrigasi = true;
@@ -630,9 +630,9 @@ class _InputField extends StatelessWidget {
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
         decoration: InputDecoration(
-          labelText: label,
+          labelText: context.tr(label),
           labelStyle: GoogleFonts.poppins(fontSize: 13, color: c.textSecondary),
-          hintText: hint,
+          hintText: context.tr(hint),
           hintStyle: GoogleFonts.poppins(fontSize: 12, color: c.textHint),
           prefixText: isRupiah ? 'Rp ' : null,
           prefixStyle: TextStyle(color: c.onSurface),
@@ -676,7 +676,7 @@ class _HitungButton extends StatelessWidget {
         onPressed: onPressed ?? () {},
         icon:
             const Icon(Icons.calculate_rounded, color: Colors.white, size: 20),
-        label: Text(label,
+        label: Text(context.tr(label),
             style: GoogleFonts.poppins(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -746,7 +746,7 @@ class _ResultCard extends StatelessWidget {
                     size: 24),
               ),
               const SizedBox(width: 12),
-              Text(isWajib ? AppLocalizations.of(context).wajibZakat : AppLocalizations.of(context).belumWajibZakat,
+              Text(isWajib ? context.tr('Wajib Zakat') : context.tr('Belum Wajib Zakat'),
                   style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -768,7 +768,7 @@ class _ResultCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Jumlah Zakat:',
+                  TrText('Jumlah Zakat:',
                       style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -797,7 +797,7 @@ class _ResultCard extends StatelessWidget {
             onPressed: onReset,
             icon: const Icon(Icons.refresh_rounded,
                 size: 16, color: Colors.white),
-            label: Text('Reset',
+            label: TrText('Reset',
                 style: GoogleFonts.poppins(fontSize: 13, color: Colors.white)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.white, width: 1.5),

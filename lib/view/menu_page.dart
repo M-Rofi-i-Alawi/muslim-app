@@ -2,9 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import '../viewmodel/shalat_viewmodel.dart';
 import '../model/shalat_model.dart';
-import '../l10n/app_localizations.dart';
+import '../utils/theme_helper.dart';
 import 'surat_list_page.dart';
 import 'doa_list_page.dart';
 import 'shalat_page.dart';
@@ -21,11 +22,10 @@ import 'panduan_ibadah_page.dart';
 import 'ramadhan_page.dart';
 import 'settings_page.dart';
 
-const _kTeal      = Color(0xFF00A086);
+const _kTeal = Color(0xFF00A086);
 const _kTealLight = Color(0xFF00C4A7);
-const _kTealDark  = Color(0xFF007A68);
-const _kGold      = Color(0xFFE8B84B);
-const _kBg        = Color(0xFFF4F6F9);
+const _kTealDark = Color(0xFF007A68);
+const _kGold = Color(0xFFE8B84B);
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -35,22 +35,15 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  Timer?   _timer;
-  Duration _countdown      = Duration.zero;
-  String   _nextPrayerName = '';
-  String   _nextPrayerTime = '';
-
-  int _getOffset(String kota) {
-    if (['Jayapura', 'Sorong'].contains(kota)) return 9;
-    if (['Makassar', 'Kendari', 'Palu', 'Gorontalo',
-         'Denpasar', 'Mataram'].contains(kota)) return 8;
-    return 7;
-  }
+  Timer? _timer;
+  Duration _countdown = Duration.zero;
+  String _nextPrayerName = '';
+  String _nextPrayerTime = '';
 
   String _getZona(String kota) {
     if (['Jayapura', 'Sorong'].contains(kota)) return 'WIT';
-    if (['Makassar', 'Kendari', 'Palu', 'Gorontalo',
-         'Denpasar', 'Mataram'].contains(kota)) return 'WITA';
+    if (['Makassar', 'Kendari', 'Palu', 'Gorontalo', 'Denpasar', 'Mataram']
+        .contains(kota)) return 'WITA';
     return 'WIB';
   }
 
@@ -60,10 +53,8 @@ class _MenuPageState extends State<MenuPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ShalatViewModel>().initWithSavedCity();
     });
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) => _updateCountdown(),
-    );
+    _timer =
+        Timer.periodic(const Duration(seconds: 1), (_) => _updateCountdown());
   }
 
   @override
@@ -77,9 +68,11 @@ class _MenuPageState extends State<MenuPage> {
     if (vm.jadwal == null) return;
 
     final jadwal = vm.jadwal!;
-    final now    = DateTime.now();
+    final now = DateTime.now();
     final nowSec = now.hour * 3600 + now.minute * 60 + now.second;
 
+    // ✅ FIX: jadwal.subuh bukan jadwal.context.tr('Subuh')
+    //    jadwal.xxx = waktu shalat (String jam:menit), bukan terjemahan
     final prayers = [
       {'name': 'Subuh',   'time': jadwal.subuh},
       {'name': 'Dzuhur',  'time': jadwal.dzuhur},
@@ -91,21 +84,24 @@ class _MenuPageState extends State<MenuPage> {
     Map<String, String>? next;
     for (final p in prayers) {
       final parts = p['time']!.split(':');
-      final pSec  = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
-      if (pSec > nowSec) { next = p; break; }
+      final pSec = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
+      if (pSec > nowSec) {
+        next = p;
+        break;
+      }
     }
     next ??= prayers.first;
 
-    final parts   = next['time']!.split(':');
-    final pSec    = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
-    var   diffSec = pSec - nowSec;
+    final parts = next['time']!.split(':');
+    final pSec = int.parse(parts[0]) * 3600 + int.parse(parts[1]) * 60;
+    var diffSec = pSec - nowSec;
     if (diffSec < 0) diffSec += 86400;
 
     if (mounted) {
       setState(() {
         _nextPrayerName = next!['name']!;
         _nextPrayerTime = next['time']!;
-        _countdown      = Duration(seconds: diffSec);
+        _countdown = Duration(seconds: diffSec);
       });
     }
   }
@@ -116,95 +112,114 @@ class _MenuPageState extends State<MenuPage> {
     final h = _countdown.inHours;
     final m = _countdown.inMinutes.remainder(60);
     final s = _countdown.inSeconds.remainder(60);
-    return '${_pad(h)} : ${_pad(m)} : ${_pad(s)}';
+    return '${_pad(h)}:${_pad(m)}:${_pad(s)}';
   }
 
-  String _translatePrayer(String name, AppLocalizations l) {
+  // ✅ FIX: context.tr() bukan jadwal.context.tr()
+  String _translatePrayer(String name) {
     switch (name) {
-      case 'Subuh':   return l.subuh;
-      case 'Dzuhur':  return l.dzuhur;
-      case 'Ashar':   return l.ashar;
-      case 'Maghrib': return l.maghrib;
-      case 'Isya':    return l.isya;
+      case 'Subuh':   return context.tr('Subuh');
+      case 'Dzuhur':  return context.tr('Dzuhur');
+      case 'Ashar':   return context.tr('Ashar');
+      case 'Maghrib': return context.tr('Maghrib');
+      case 'Isya':    return context.tr('Isya');
       default:        return name;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark  = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? const Color(0xFF121212) : _kBg;
-    final l       = AppLocalizations.of(context);
+    final c = context.colors;
 
-    // ── Semua menu items ──────────────────────────────────────────────────
     final mainItems = <_MenuItemData>[
-      _MenuItemData(Icons.access_time_rounded,      l.jadwalShalat.replaceFirst(' ', '\n'), const Color(0xFF00897B), () => _push(context, const ShalatPage())),
-      _MenuItemData(Icons.menu_book_rounded,         l.wiridDoa.replaceFirst(' ', '\n'),     const Color(0xFFE67E22), () => _push(context, const DoaListPage())),
-      _MenuItemData(Icons.auto_stories_rounded,      "Al-\nQur'an",                          const Color(0xFF1976D2), () => _push(context, const SuratListPage())),
-      _MenuItemData(Icons.explore_rounded,           l.arahKiblat.replaceFirst(' ', '\n'),   const Color(0xFF7B1FA2), () => _push(context, const KiblatPage())),
-      _MenuItemData(Icons.track_changes_rounded,     l.tasbihDigital.replaceFirst(' ', '\n'),const Color(0xFF388E3C), () => _push(context, const TasbihPage())),
-      _MenuItemData(Icons.volunteer_activism_rounded,l.dzikirHarian.replaceFirst(' ', '\n'), const Color(0xFF00796B), () => _push(context, const DzikirPage())),
-      _MenuItemData(Icons.checklist_rounded,         l.panduanIbadah.replaceFirst(' ', '\n'),const Color(0xFF6A1B9A), () => _push(context, const PanduanIbadahPage())),
-      _MenuItemData(Icons.history_edu_rounded,       l.hadist,                               const Color(0xFF5D4037), () => _push(context, const HadistPage())),
-      _MenuItemData(Icons.auto_awesome_rounded,      l.asmaulHusna.replaceFirst(' ', '\n'),  const Color(0xFFF9A825), () => _push(context, const AsmaulHusnaPage())),
-      _MenuItemData(Icons.calculate_rounded,         l.zakat,                                const Color(0xFF00838F), () => _push(context, const ZakatPage())),
-      _MenuItemData(Icons.calendar_month_rounded,    l.kalenderHijri.replaceFirst(' ', '\n'),const Color(0xFF1565C0), () => _push(context, const HijriCalendarPage())),
-      _MenuItemData(Icons.question_answer_rounded,   l.tanyaIslam.replaceFirst(' ', '\n'),   const Color(0xFF00897B), () => _push(context, const ChatPage())),
+      _MenuItemData(Icons.access_time_rounded, 'Jadwal\nShalat',
+          const Color(0xFF00897B), () => _push(context, const ShalatPage())),
+      _MenuItemData(Icons.menu_book_rounded, 'Wirid\n& Doa',
+          const Color(0xFFE67E22), () => _push(context, const DoaListPage())),
+      _MenuItemData(Icons.auto_stories_rounded, "Al-\nQur'an",
+          const Color(0xFF1976D2), () => _push(context, const SuratListPage())),
+      _MenuItemData(Icons.explore_rounded, 'Arah\nKiblat',
+          const Color(0xFF7B1FA2), () => _push(context, const KiblatPage())),
+      _MenuItemData(Icons.track_changes_rounded, 'Tasbih\nDigital',
+          const Color(0xFF388E3C), () => _push(context, const TasbihPage())),
+      _MenuItemData(Icons.volunteer_activism_rounded, 'Dzikir\nHarian',
+          const Color(0xFF00796B), () => _push(context, const DzikirPage())),
+      _MenuItemData(Icons.checklist_rounded, 'Panduan\nIbadah',
+          const Color(0xFF6A1B9A),
+          () => _push(context, const PanduanIbadahPage())),
+      _MenuItemData(Icons.history_edu_rounded, 'Hadist',
+          const Color(0xFF5D4037), () => _push(context, const HadistPage())),
+      _MenuItemData(Icons.auto_awesome_rounded, 'Asmaul\nHusna',
+          const Color(0xFFF9A825),
+          () => _push(context, const AsmaulHusnaPage())),
+      _MenuItemData(Icons.calculate_rounded, 'Zakat',
+          const Color(0xFF00838F), () => _push(context, const ZakatPage())),
+      _MenuItemData(Icons.calendar_month_rounded, 'Kalender\nHijri',
+          const Color(0xFF1565C0),
+          () => _push(context, const HijriCalendarPage())),
+      _MenuItemData(Icons.question_answer_rounded, 'Tanya\nISLAM',
+          const Color(0xFF00897B), () => _push(context, const ChatPage())),
     ];
 
-    // 3 item baris terakhir — ditampilkan centered
     final lastItems = <_MenuItemData>[
-      _MenuItemData(Icons.nightlight_round,     l.ramadhan,   const Color(0xFFC62828), () => _push(context, const RamadhanPage())),
-      _MenuItemData(Icons.info_outline_rounded, l.tentang,    const Color(0xFF546E7A), () => _push(context, const AboutPage())),
-      _MenuItemData(Icons.settings_rounded,     l.pengaturan, const Color(0xFF37474F), () => _push(context, const SettingsPage())),
+      _MenuItemData(Icons.nightlight_round, 'Ramadhan',
+          const Color(0xFFC62828),
+          () => _push(context, const RamadhanPage())),
+      _MenuItemData(Icons.info_outline_rounded, 'Tentang',
+          const Color(0xFF546E7A), () => _push(context, const AboutPage())),
+      _MenuItemData(Icons.settings_rounded, 'Pengaturan',
+          const Color(0xFF37474F), () => _push(context, const SettingsPage())),
     ];
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: c.background,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _buildHeroHeader()),
 
-          // ── Grid 12 item (3 baris penuh) ────────────────────────────────
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:   4,
-                mainAxisSpacing:  20,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.72,
+                crossAxisCount: 4,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.75,
               ),
               delegate: SliverChildListDelegate(
-                mainItems.map((d) => _MenuItem(
-                  icon:  d.icon,
-                  label: d.label,
-                  color: d.color,
-                  onTap: d.onTap,
-                )).toList(),
+                mainItems
+                    .map((d) => _MenuItem(
+                          icon: d.icon,
+                          label: d.label,
+                          color: d.color,
+                          onTap: d.onTap,
+                        ))
+                    .toList(),
               ),
             ),
           ),
 
-          // ── Baris terakhir 3 item — centered ────────────────────────────
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
             sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: lastItems.map((d) {
-                  // Lebar tiap item = (layar - 40 padding - 24 gap) / 4
-                  // supaya ukurannya sama persis dengan grid di atas
-                  return SizedBox(
-                    width: (MediaQuery.of(context).size.width - 40 - 36) / 4,
-                    child: _MenuItem(
-                      icon:  d.icon,
-                      label: d.label,
-                      color: d.color,
-                      onTap: d.onTap,
-                    ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final itemW = (constraints.maxWidth - 24) / 4;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: lastItems
+                        .map((d) => SizedBox(
+                              width: itemW,
+                              child: _MenuItem(
+                                icon: d.icon,
+                                label: d.label,
+                                color: d.color,
+                                onTap: d.onTap,
+                              ),
+                            ))
+                        .toList(),
                   );
-                }).toList(),
+                },
               ),
             ),
           ),
@@ -213,23 +228,21 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  // ─── HERO HEADER ──────────────────────────────────────────────────────────
   Widget _buildHeroHeader() {
     return Consumer<ShalatViewModel>(
       builder: (context, vm, _) {
-        final l        = AppLocalizations.of(context);
-        final cityName = vm.jadwal?.namaKota ?? l.mendeteksiLokasi;
-        final tanggal  = vm.jadwal?.tanggal  ?? '';
-        final zona     = _getZona(cityName);
-        final isDark   = Theme.of(context).brightness == Brightness.dark;
-        final bgColor  = isDark ? const Color(0xFF121212) : _kBg;
-        final nextName = _translatePrayer(_nextPrayerName, l);
+        final c = context.colors;
+        final cityName = vm.jadwal?.namaKota ??
+            (context.isEn ? 'Detecting...' : 'Mendeteksi...');
+        final tanggal = vm.jadwal?.tanggal ?? '';
+        final zona = _getZona(cityName);
+        final nextName = _translatePrayer(_nextPrayerName);
 
         return Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
-              end:   Alignment.bottomRight,
+              end: Alignment.bottomRight,
               colors: [_kTealDark, _kTeal, _kTealLight],
             ),
           ),
@@ -238,87 +251,107 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.location_on_rounded,
-                          color: Colors.white70, size: 16),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(cityName,
-                            style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600),
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                      InkWell(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const ShalatPage())),
-                        borderRadius: BorderRadius.circular(8),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          child: Text(l.ganti,
-                              style: GoogleFonts.poppins(
-                                  color: _kGold,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600)),
+                  padding: const EdgeInsets.fromLTRB(20, 14, 16, 0),
+                  child: Row(children: [
+                    const Icon(Icons.location_on_rounded,
+                        color: Colors.white60, size: 15),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(cityName,
+                          style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                    InkWell(
+                      onTap: () => _push(context, const ShalatPage()),
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.3)),
                         ),
+                        child: Text(context.isEn ? 'Change' : 'Ganti',
+                            style: GoogleFonts.poppins(
+                                color: _kGold,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700)),
                       ),
-                    ],
-                  ),
+                    ),
+                  ]),
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
-                  child: Column(
-                    children: [
-                      if (vm.isLoading)
-                        const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: CircularProgressIndicator(color: Colors.white),
-                        )
-                      else if (_nextPrayerName.isNotEmpty) ...[
-                        Text('$nextName · $_nextPrayerTime $zona',
-                            style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3)),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 7),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Text('- $_countdownStr',
-                              style: GoogleFonts.courierPrime(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 4)),
-                        ),
-                      ] else
-                        Text(l.memuatJadwal,
-                            style: GoogleFonts.poppins(
-                                color: Colors.white70, fontSize: 15)),
-                    ],
-                  ),
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+                  child: vm.isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2))
+                      : _nextPrayerName.isNotEmpty
+                          ? Column(children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 6, height: 6,
+                                    decoration: const BoxDecoration(
+                                        color: _kGold,
+                                        shape: BoxShape.circle),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    '${context.isEn ? "Next" : "Menuju"} $nextName · $_nextPrayerTime $zona',
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Text(_countdownStr,
+                                  style: GoogleFonts.courierPrime(
+                                      color: Colors.white,
+                                      fontSize: 44,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 3)),
+                            ])
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12),
+                              child: Text(
+                                  context.isEn
+                                      ? 'Loading schedule...'
+                                      : 'Memuat jadwal...',
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.white70, fontSize: 14)),
+                            ),
                 ),
 
                 if (tanggal.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
-                    child: Text(tanggal,
-                        style: GoogleFonts.poppins(
-                            color: Colors.white70, fontSize: 12)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.calendar_today_rounded,
+                            color: Colors.white38, size: 11),
+                        const SizedBox(width: 4),
+                        Text(tanggal,
+                            style: GoogleFonts.poppins(
+                                color: Colors.white60, fontSize: 11)),
+                      ],
+                    ),
                   ),
 
                 if (vm.jadwal != null) _buildPrayerRow(vm.jadwal!),
-                _buildCurvedBottom(bgColor),
+                _buildCurvedBottom(context),
               ],
             ),
           ),
@@ -327,18 +360,17 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  // ─── ROW 5 WAKTU SHALAT ───────────────────────────────────────────────────
+  // ✅ FIX: p.$2 = waktu jam:menit dari jadwal.xxx, p.$3 = nama terjemahan
   Widget _buildPrayerRow(ShalatModel jadwal) {
-    final l = AppLocalizations.of(context);
     final prayers = [
-      ('Subuh',   jadwal.subuh,   l.subuh),
-      ('Dzuhur',  jadwal.dzuhur,  l.dzuhur),
-      ('Ashar',   jadwal.ashar,   l.ashar),
-      ('Maghrib', jadwal.maghrib, l.maghrib),
-      ('Isya',    jadwal.isya,    l.isya),
+      ('Subuh',   jadwal.subuh,   context.tr('Subuh')),
+      ('Dzuhur',  jadwal.dzuhur,  context.tr('Dzuhur')),
+      ('Ashar',   jadwal.ashar,   context.tr('Ashar')),
+      ('Maghrib', jadwal.maghrib, context.tr('Maghrib')),
+      ('Isya',    jadwal.isya,    context.tr('Isya')),
     ];
-    final offset = _getOffset(jadwal.namaKota);
-    final now    = DateTime.now().toUtc().add(Duration(hours: offset));
+
+    final now = DateTime.now();
     final nowMin = now.hour * 60 + now.minute;
 
     return Container(
@@ -351,8 +383,8 @@ class _MenuPageState extends State<MenuPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: prayers.map((p) {
-          final parts  = p.$2.split(':');
-          final pMin   = int.parse(parts[0]) * 60 + int.parse(parts[1]);
+          final parts = p.$2.split(':');
+          final pMin = int.parse(parts[0]) * 60 + int.parse(parts[1]);
           final isPast = pMin < nowMin;
           final isNext = _nextPrayerName == p.$1;
 
@@ -361,24 +393,28 @@ class _MenuPageState extends State<MenuPage> {
             children: [
               Text(p.$3,
                   style: GoogleFonts.poppins(
-                    color: isNext ? _kGold
-                        : isPast ? Colors.white38
-                        : Colors.white70,
-                    fontSize: 12,
-                    fontWeight: isNext ? FontWeight.bold : FontWeight.normal,
-                  )),
-              const SizedBox(height: 2),
+                      color: isNext
+                          ? _kGold
+                          : isPast
+                              ? Colors.white38
+                              : Colors.white70,
+                      fontSize: 11,
+                      fontWeight:
+                          isNext ? FontWeight.bold : FontWeight.normal)),
+              const SizedBox(height: 3),
               Text(p.$2,
                   style: GoogleFonts.poppins(
-                    color: isNext ? Colors.white
-                        : isPast ? Colors.white38
-                        : Colors.white,
-                    fontSize: 13,
-                    fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
-                  )),
+                      color: isNext
+                          ? Colors.white
+                          : isPast
+                              ? Colors.white38
+                              : Colors.white,
+                      fontSize: 13,
+                      fontWeight:
+                          isNext ? FontWeight.bold : FontWeight.w500)),
               if (isNext)
                 Container(
-                  margin: const EdgeInsets.only(top: 3),
+                  margin: const EdgeInsets.only(top: 4),
                   width: 5, height: 5,
                   decoration: const BoxDecoration(
                       color: _kGold, shape: BoxShape.circle),
@@ -390,12 +426,13 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildCurvedBottom(Color bgColor) {
+  Widget _buildCurvedBottom(BuildContext context) {
+    final c = context.colors;
     return Container(
       margin: const EdgeInsets.only(top: 16),
       height: 28,
       decoration: BoxDecoration(
-        color: bgColor,
+        color: c.background,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
     );
@@ -405,24 +442,18 @@ class _MenuPageState extends State<MenuPage> {
       Navigator.push(context, MaterialPageRoute(builder: (_) => page));
 }
 
-// ─────────────────────────────────────────────
-// DATA CLASS
-// ─────────────────────────────────────────────
 class _MenuItemData {
-  final IconData     icon;
-  final String       label;
-  final Color        color;
+  final IconData icon;
+  final String label;
+  final Color color;
   final VoidCallback onTap;
   const _MenuItemData(this.icon, this.label, this.color, this.onTap);
 }
 
-// ─────────────────────────────────────────────
-// MENU ITEM WIDGET
-// ─────────────────────────────────────────────
 class _MenuItem extends StatelessWidget {
-  final IconData     icon;
-  final String       label;
-  final Color        color;
+  final IconData icon;
+  final String label;
+  final Color color;
   final VoidCallback onTap;
 
   const _MenuItem({
@@ -434,8 +465,7 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = Theme.of(context).colorScheme.onSurface;
-
+    final c = context.colors;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -445,23 +475,25 @@ class _MenuItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 64, height: 64,
+              width: 60, height: 60,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.12),
                 shape: BoxShape.circle,
-                border: Border.all(
-                    color: color.withOpacity(0.25), width: 1.5),
+                border:
+                    Border.all(color: color.withOpacity(0.25), width: 1.5),
               ),
-              child: Icon(icon, color: color, size: 30),
+              child: Icon(icon, color: color, size: 28),
             ),
             const SizedBox(height: 8),
-            Text(
-              label,
+            TrText(
+              label.replaceAll('\n', ' '),
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
-                fontSize: 13,
+                fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: labelColor,
+                color: c.onSurface,
                 height: 1.3,
               ),
             ),

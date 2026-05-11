@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vibration/vibration.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
 import '../viewmodel/tasbih_viewmodel.dart';
 import '../model/tasbih_model.dart';
 
 const _kGreen = Color(0xFF00A86B);
-const _kTeal  = Color(0xFF00A086);
+const _kTeal = Color(0xFF00A086);
 
 class TasbihPage extends StatefulWidget {
   const TasbihPage({super.key});
@@ -75,13 +75,14 @@ class _TasbihPageState extends State<TasbihPage>
             const Icon(Icons.check_circle_outline,
                 color: Colors.white, size: 80),
             const SizedBox(height: 16),
-            Text(AppLocalizations.of(context).alhamdulillah,
+            TrText('Alhamdulillah!',
                 style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
             const SizedBox(height: 8),
-            Text('${AppLocalizations.of(context).targetTercapai} ${vm.currentTasbih.target}x',
+            Text(
+                '${context.tr('Target tercapai!')} ${vm.currentTasbih.target}x',
                 style: GoogleFonts.poppins(
                     fontSize: 16, color: Colors.white.withOpacity(0.9)),
                 textAlign: TextAlign.center),
@@ -99,9 +100,8 @@ class _TasbihPageState extends State<TasbihPage>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25)),
-              child: Text(AppLocalizations.of(context).lanjutDzikir,
+                  color: Colors.white, borderRadius: BorderRadius.circular(25)),
+              child: TrText('Lanjut Dzikir',
                   style: GoogleFonts.poppins(
                       color: _kGreen, fontWeight: FontWeight.w600)),
             ),
@@ -172,7 +172,7 @@ class _TasbihPageState extends State<TasbihPage>
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
-          Text(AppLocalizations.of(context).tasbihDigitalTitle,
+          TrText('TASBIH DIGITAL',
               style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -189,7 +189,9 @@ class _TasbihPageState extends State<TasbihPage>
                 vm.toggleVibration();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
-                      vm.vibrationEnabled ? 'Getaran aktif' : 'Getaran nonaktif',
+                      vm.vibrationEnabled
+                          ? context.tr('Getaran aktif')
+                          : context.tr('Getaran nonaktif'),
                       style: GoogleFonts.poppins()),
                   duration: const Duration(seconds: 1),
                   backgroundColor: _kGreen,
@@ -227,8 +229,8 @@ class _TasbihPageState extends State<TasbihPage>
                 onTap: () => vm.selectTasbih(index),
                 borderRadius: BorderRadius.circular(25),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? Colors.white
@@ -243,9 +245,8 @@ class _TasbihPageState extends State<TasbihPage>
                   child: Text(tasbih.nama,
                       style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
                           color: isSelected ? _kGreen : Colors.white)),
                 ),
               ),
@@ -262,7 +263,8 @@ class _TasbihPageState extends State<TasbihPage>
     return ScaleTransition(
       scale: _scaleAnimation,
       child: Container(
-        width: 280, height: 280,
+        width: 280,
+        height: 280,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           // FIX: Colors.white → c.surface
@@ -284,7 +286,7 @@ class _TasbihPageState extends State<TasbihPage>
                     color: _kGreen,
                     height: 1)),
             const SizedBox(height: 8),
-            Text('DARI ${tasbih.target}',
+            Text('${context.tr("DARI")} ${tasbih.target}',
                 style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -306,7 +308,7 @@ class _TasbihPageState extends State<TasbihPage>
           _buildActionButton(
               context: context,
               icon: Icons.refresh,
-              label: AppLocalizations.of(context).reset,
+              label: context.tr('Reset'),
               onTap: () {
                 HapticFeedback.lightImpact();
                 vm.reset();
@@ -314,12 +316,12 @@ class _TasbihPageState extends State<TasbihPage>
           _buildActionButton(
               context: context,
               icon: Icons.history,
-              label: AppLocalizations.of(context).riwayat,
+              label: context.tr('Riwayat'),
               onTap: () => _showHistory(vm)),
           _buildActionButton(
               context: context,
               icon: Icons.track_changes,
-              label: AppLocalizations.of(context).target,
+              label: context.tr('Target'),
               onTap: () => _showTargetDialog(vm)),
         ],
       ),
@@ -361,7 +363,7 @@ class _TasbihPageState extends State<TasbihPage>
 
   Widget _buildBottomText(BuildContext context) {
     final c = context.colors;
-    return Text(AppLocalizations.of(context).ketukUntukHitung,
+    return TrText('Ketuk lingkaran besar untuk menghitung dzikir',
         // FIX: Colors.grey[400] → c.textHint
         style: GoogleFonts.poppins(fontSize: 12, color: c.textHint));
   }
@@ -375,9 +377,10 @@ class _TasbihPageState extends State<TasbihPage>
         // FIX: dialog adaptive
         final c = context.colors;
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           backgroundColor: c.surface,
-          title: Text(AppLocalizations.of(context).pilihTarget,
+          title: TrText('Pilih Target',
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, color: c.onSurface)),
           content: Column(
@@ -394,7 +397,7 @@ class _TasbihPageState extends State<TasbihPage>
                   _showCustomTargetDialog(vm);
                 },
                 icon: const Icon(Icons.edit),
-                label: Text(AppLocalizations.of(context).customTarget, style: GoogleFonts.poppins()),
+                label: TrText('Custom Target', style: GoogleFonts.poppins()),
               ),
             ],
           ),
@@ -406,13 +409,12 @@ class _TasbihPageState extends State<TasbihPage>
   Widget _buildTargetOption(TasbihViewModel vm, int target) {
     final isSelected = vm.currentTasbih.target == target;
     return ListTile(
-      title: Text('$target kali',
+      title: Text('$target ${context.tr("kali")}',
           style: GoogleFonts.poppins(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               color: isSelected ? _kGreen : null)),
-      trailing: isSelected
-          ? const Icon(Icons.check_circle, color: _kGreen)
-          : null,
+      trailing:
+          isSelected ? const Icon(Icons.check_circle, color: _kGreen) : null,
       onTap: () {
         vm.setTarget(target);
         Navigator.pop(context);
@@ -427,25 +429,26 @@ class _TasbihPageState extends State<TasbihPage>
       builder: (context) {
         final c = context.colors;
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           backgroundColor: c.surface,
-          title: Text(AppLocalizations.of(context).customTarget,
+          title: TrText('Custom Target',
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, color: c.onSurface)),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context).jumlahTarget,
-              hintText: AppLocalizations.of(context).misal500,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12)),
+              labelText: context.tr('Jumlah Target'),
+              hintText: context.tr('Misal: 500'),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             ),
           ),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(AppLocalizations.of(context).batal, style: GoogleFonts.poppins())),
+                child: TrText('Batal', style: GoogleFonts.poppins())),
             ElevatedButton(
               onPressed: () {
                 final target = int.tryParse(controller.text);
@@ -458,7 +461,7 @@ class _TasbihPageState extends State<TasbihPage>
                   backgroundColor: _kGreen,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              child: Text(AppLocalizations.of(context).simpan,
+              child: TrText('Simpan',
                   style: GoogleFonts.poppins(color: Colors.white)),
             ),
           ],
@@ -490,7 +493,8 @@ class _TasbihPageState extends State<TasbihPage>
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 12),
-                  width: 40, height: 4,
+                  width: 40,
+                  height: 4,
                   decoration: BoxDecoration(
                       // FIX: Colors.grey[300] → c.divider
                       color: c.divider,
@@ -501,7 +505,7 @@ class _TasbihPageState extends State<TasbihPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context).riwayatDzikir,
+                      TrText('Riwayat Dzikir',
                           style: GoogleFonts.poppins(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -514,7 +518,7 @@ class _TasbihPageState extends State<TasbihPage>
                             Navigator.pop(context);
                           },
                           icon: const Icon(Icons.delete_outline, size: 18),
-                          label: Text(AppLocalizations.of(context).hapus,
+                          label: TrText('Hapus',
                               style: GoogleFonts.poppins(fontSize: 12)),
                         ),
                     ],
@@ -526,10 +530,9 @@ class _TasbihPageState extends State<TasbihPage>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.history,
-                                  size: 80, color: c.textHint),
+                              Icon(Icons.history, size: 80, color: c.textHint),
                               const SizedBox(height: 16),
-                              Text('Belum ada riwayat',
+                              TrText('Belum ada riwayat',
                                   style: GoogleFonts.poppins(
                                       fontSize: 16, color: c.textSecondary)),
                             ],
@@ -585,7 +588,8 @@ class _TasbihPageState extends State<TasbihPage>
                         // FIX: default → c.onSurface
                         color: c.onSurface)),
                 const SizedBox(height: 4),
-                Text('${history.totalCount} kali (Target: ${history.target})',
+                Text(
+                    '${history.totalCount} ${context.tr("kali")} (Target: ${history.target})',
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         // FIX: Colors.grey[600] → c.textSecondary
@@ -596,14 +600,13 @@ class _TasbihPageState extends State<TasbihPage>
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(_formatDate(history.completedAt),
+              Text(_formatDate(context, history.completedAt),
                   style: GoogleFonts.poppins(
                       fontSize: 11,
                       // FIX: Colors.grey[500] → c.textHint
                       color: c.textHint)),
-              Text(_formatTime(history.completedAt),
-                  style: GoogleFonts.poppins(
-                      fontSize: 11, color: c.textHint)),
+              Text(_formatTime(context, history.completedAt),
+                  style: GoogleFonts.poppins(fontSize: 11, color: c.textHint)),
             ],
           ),
         ],
@@ -638,8 +641,8 @@ class _TasbihPageState extends State<TasbihPage>
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF007A68), _kTeal]),
+                      gradient:
+                          LinearGradient(colors: [Color(0xFF007A68), _kTeal]),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20)),
@@ -652,14 +655,12 @@ class _TasbihPageState extends State<TasbihPage>
                             color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
-                              Icons.add_circle_outline_rounded,
-                              color: Colors.white,
-                              size: 24),
+                          child: const Icon(Icons.add_circle_outline_rounded,
+                              color: Colors.white, size: 24),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text('Tambah Dzikir Custom',
+                          child: TrText('Tambah Dzikir Custom',
                               style: GoogleFonts.poppins(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -681,7 +682,7 @@ class _TasbihPageState extends State<TasbihPage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Nama (Latin)',
+                          TrText('Nama (Latin)',
                               style: GoogleFonts.poppins(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -711,7 +712,7 @@ class _TasbihPageState extends State<TasbihPage>
                                 fontSize: 14, color: c.onSurface),
                           ),
                           const SizedBox(height: 16),
-                          Text('Arab',
+                          TrText('Arab',
                               style: GoogleFonts.poppins(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -751,8 +752,8 @@ class _TasbihPageState extends State<TasbihPage>
                             decoration: BoxDecoration(
                               color: _kTeal.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  color: _kTeal.withOpacity(0.3)),
+                              border:
+                                  Border.all(color: _kTeal.withOpacity(0.3)),
                             ),
                             child: Row(
                               children: [
@@ -761,10 +762,9 @@ class _TasbihPageState extends State<TasbihPage>
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    'Target default: 33x',
+                                    context.tr('Target default: 33x'),
                                     style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: kTeal),
+                                        fontSize: 12, color: kTeal),
                                   ),
                                 ),
                               ],
@@ -785,17 +785,14 @@ class _TasbihPageState extends State<TasbihPage>
                             onPressed: () => Navigator.pop(context),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: _kTeal,
-                              side: const BorderSide(
-                                  color: _kTeal, width: 1.5),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 14),
+                              side: const BorderSide(color: _kTeal, width: 1.5),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: Text(AppLocalizations.of(context).batal,
+                            child: TrText('Batal',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600)),
+                                    fontSize: 14, fontWeight: FontWeight.w600)),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -807,13 +804,12 @@ class _TasbihPageState extends State<TasbihPage>
                               if (nama.isEmpty || arab.isEmpty) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
-                                  content: Text('Mohon isi semua field!',
+                                  content: TrText('Mohon isi semua field!',
                                       style: GoogleFonts.poppins()),
                                   backgroundColor: Colors.red,
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10)),
+                                      borderRadius: BorderRadius.circular(10)),
                                 ));
                                 return;
                               }
@@ -826,23 +822,20 @@ class _TasbihPageState extends State<TasbihPage>
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10)),
                               ));
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: _kTeal,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 14),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: Text('Tambah',
+                            child: TrText('Tambah',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600)),
+                                    fontSize: 14, fontWeight: FontWeight.w600)),
                           ),
                         ),
                       ],
@@ -857,15 +850,37 @@ class _TasbihPageState extends State<TasbihPage>
     );
   }
 
-  String _formatDate(DateTime date) {
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+  String _formatDate(BuildContext context, DateTime date) {
+    final days = [
+      // <-- hapus "const"
+      context.tr('Minggu'),
+      context.tr('Senin'),
+      context.tr('Selasa'),
+      context.tr('Rabu'),
+      context.tr('Kamis'),
+      context.tr('Jumat'),
+      context.tr('Sabtu'),
     ];
-    return '${date.day} ${months[date.month - 1]} ${date.year}';
+    final months = [
+      context.tr('Jan'),
+      context.tr('Feb'),
+      context.tr('Mar'),
+      context.tr('Apr'),
+      context.tr('Mei'),
+      context.tr('Jun'),
+      context.tr('Jul'),
+      context.tr('Agu'),
+      context.tr('Sep'),
+      context.tr('Okt'),
+      context.tr('Nov'),
+      context.tr('Des'),
+    ];
+    return '${days[date.weekday % 7]}, ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
-  String _formatTime(DateTime date) =>
-      '${date.hour.toString().padLeft(2, '0')}:'
-      '${date.minute.toString().padLeft(2, '0')}';
+  String _formatTime(BuildContext context, DateTime dateTime) {
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
 }

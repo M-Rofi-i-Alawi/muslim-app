@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../l10n/app_localizations.dart';
 import '../model/surat_model.dart';
 import '../viewmodel/ayat_viewmodel.dart';
 import '../utils/theme_helper.dart';
@@ -107,13 +107,13 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                         // FIX: Colors.grey → c.textHint
                         Icon(Icons.wifi_off_rounded, color: c.textHint, size: 60),
                         const SizedBox(height: 12),
-                        Text('Gagal memuat ayat',
+                        TrText('Gagal memuat ayat',
                             style: GoogleFonts.poppins(color: c.textSecondary)),
                         const SizedBox(height: 12),
                         ElevatedButton(
                           onPressed: () => vm.getAyat(widget.surat.nomor),
                           style: ElevatedButton.styleFrom(backgroundColor: _kTeal),
-                          child: Text('Coba Lagi',
+                          child: TrText('Coba Lagi',
                               style: GoogleFonts.poppins(color: Colors.white)),
                         ),
                       ],
@@ -137,7 +137,7 @@ class SuratDetailPageState extends State<SuratDetailPage> {
               else
                 SliverFillRemaining(
                   child: Center(
-                    child: Text('Tidak ada data',
+                    child: TrText('Tidak ada data',
                         // FIX: Colors.grey → c.textSecondary
                         style: GoogleFonts.poppins(color: c.textSecondary)),
                   ),
@@ -274,7 +274,7 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                 children: [
                   const Icon(Icons.menu_book_rounded, color: Colors.white, size: 18),
                   const SizedBox(width: 8),
-                  Text('Mode Baca Full Screen',
+                  TrText('Mode Baca Full Screen',
                       style: GoogleFonts.poppins(
                           color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
                 ],
@@ -414,7 +414,7 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                     Clipboard.setData(ClipboardData(
                         text: '${ayat.arab}\n\n${ayat.latin}\n\n${ayat.arti}'));
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Ayat ${ayat.nomorAyat} disalin',
+                      content: Text('${context.tr('Ayat')} ${ayat.nomorAyat} ${context.tr('disalin')}',
                           style: GoogleFonts.poppins()),
                       backgroundColor: _kTeal,
                       behavior: SnackBarBehavior.floating,
@@ -497,7 +497,7 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                           color: c.divider,
                           borderRadius: BorderRadius.circular(2))),
                   const SizedBox(height: 20),
-                  Text('Ukuran Tulisan Arab',
+                  TrText('Ukuran Tulisan Arab',
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -533,7 +533,7 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: Text('Selesai',
+                    child: TrText('Selesai',
                         style: GoogleFonts.poppins(color: Colors.white)),
                   ),
                 ],

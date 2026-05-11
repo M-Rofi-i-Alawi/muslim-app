@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../l10n/app_localizations.dart';
-
 // shalat_detail_page: background adalah gradient dari warna shalat
 // tidak butuh dark mode adaptive — selalu dark/colorful background
 class ShalatDetailPage extends StatelessWidget {
@@ -24,7 +23,7 @@ class ShalatDetailPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.white,
-        title: Text('Waktu $title', style: GoogleFonts.poppins(color: Colors.white)),
+        title: Text('${context.tr('Waktu')} $title', style: GoogleFonts.poppins(color: Colors.white)),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -74,7 +73,7 @@ class ShalatDetailPage extends StatelessWidget {
                   const Icon(Icons.info_outline, color: Colors.white70),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(_getPrayerInfo(title),
+                    child: Text(_getPrayerInfo(context, title),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(color: Colors.white70, fontSize: 14)),
                   ),
@@ -100,17 +99,17 @@ class ShalatDetailPage extends StatelessWidget {
     }
   }
 
-  String _getPrayerInfo(String title) {
+  String _getPrayerInfo(BuildContext context, String title) {
     switch (title.toLowerCase()) {
-      case 'imsak':   return 'Waktu untuk memulai puasa dan berhenti makan sahur';
-      case 'subuh':   return 'Waktu shalat di awal pagi sebelum matahari terbit';
-      case 'terbit':  return 'Waktu matahari mulai terbit';
-      case 'dhuha':   return 'Waktu shalat sunnah setelah matahari terbit';
-      case 'dzuhur':  return 'Waktu shalat di tengah hari setelah matahari condong';
-      case 'ashar':   return 'Waktu shalat di sore hari';
-      case 'maghrib': return 'Waktu shalat setelah matahari terbenam';
-      case 'isya':    return 'Waktu shalat di malam hari setelah hilang mega merah';
-      default:        return 'Waktu untuk menunaikan shalat';
+      case 'imsak':   return context.tr('Waktu untuk memulai puasa dan berhenti makan sahur');
+      case 'subuh':   return context.tr('Waktu shalat di awal pagi sebelum matahari terbit');
+      case 'terbit':  return context.tr('Waktu matahari mulai terbit');
+      case 'dhuha':   return context.tr('Waktu shalat sunnah setelah matahari terbit');
+      case 'dzuhur':  return context.tr('Waktu shalat di tengah hari setelah matahari condong');
+      case 'ashar':   return context.tr('Waktu shalat di sore hari');
+      case 'maghrib': return context.tr('Waktu shalat setelah matahari terbenam');
+      case 'isya':    return context.tr('Waktu shalat di malam hari setelah hilang mega merah');
+      default:        return context.tr('Waktu untuk menunaikan shalat');
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 import '../viewmodel/panduan_ibadahn_viewmodel.dart';
 import '../model/panduan_ibadah_model.dart';
@@ -100,12 +100,12 @@ class _CategoriesPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppLocalizations.of(context).panduanIbadahTitle,
+                TrText('Panduan Ibadah',
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text(AppLocalizations.of(context).panduanIbadahSubtitle,
+                TrText('Pedoman lengkap ibadah sehari-hari',
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -170,13 +170,13 @@ class _CategoryCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(category.title,
+                      Text(context.tr(category.title),
                           style: GoogleFonts.poppins(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
                       const SizedBox(height: 4),
-                      Text(category.description,
+                      Text(context.tr(category.description),
                           style: GoogleFonts.poppins(
                               fontSize: 12,
                               color: Colors.white.withOpacity(0.9))),
@@ -189,7 +189,7 @@ class _CategoryCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          '${category.items.length} Panduan',
+                          '${category.items.length} ${context.tr('Panduan')}',
                           style: GoogleFonts.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -271,12 +271,12 @@ class _CategoryItemsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(category.title,
+                Text(context.tr(category.title),
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text(category.description,
+                Text(context.tr(category.description),
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -341,14 +341,14 @@ class _ItemCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.title,
+                      Text(context.tr(item.title),
                           style: GoogleFonts.poppins(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               // FIX: hardcoded Color(0xFF1A1A2E) → c.onSurface
                               color: c.onSurface)),
                       const SizedBox(height: 4),
-                      Text(item.shortDesc,
+                      Text(context.tr(item.shortDesc),
                           style: GoogleFonts.poppins(
                               fontSize: 12,
                               // FIX: Colors.grey[600] → c.textSecondary
@@ -422,14 +422,14 @@ class _DetailPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.title,
+                Text(context.tr(item.title),
                     style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis),
-                Text(item.shortDesc,
+                Text(context.tr(item.shortDesc),
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -448,7 +448,7 @@ class _DetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(section.title,
+          Text(context.tr(section.title),
               style: GoogleFonts.poppins(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -487,7 +487,7 @@ class _DetailPage extends StatelessWidget {
               offset: const Offset(0, 2)),
         ],
       ),
-      child: Text(text,
+      child: Text(context.tr(text),
           style: GoogleFonts.poppins(
               fontSize: 14,
               height: 1.7,
@@ -532,7 +532,7 @@ class _DetailPage extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(e.value,
+                child: Text(context.tr(e.value),
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         height: 1.5,
@@ -597,7 +597,7 @@ class _DetailPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(step.title,
+                  child: Text(context.tr(step.title),
                       style: GoogleFonts.poppins(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -612,7 +612,7 @@ class _DetailPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(step.description,
+                Text(context.tr(step.description),
                     style: GoogleFonts.poppins(
                         fontSize: 14,
                         height: 1.6,
@@ -736,7 +736,7 @@ class _DetailPage extends StatelessWidget {
             children: [
               Icon(Icons.menu_book_rounded, size: 18, color: _kGold),
               const SizedBox(width: 8),
-              Text(AppLocalizations.of(context).referensi,
+              TrText('Referensi',
                   style: GoogleFonts.poppins(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,

@@ -1,16 +1,16 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
 import '../viewmodel/kiblat_viewmodel.dart';
 
-const _kTeal      = Color(0xFF00A086);
-const _kTealDark  = Color(0xFF007A68);
+const _kTeal = Color(0xFF00A086);
+const _kTealDark = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
 
 class KiblatPage extends StatefulWidget {
@@ -76,7 +76,7 @@ class _KiblatPageState extends State<KiblatPage> {
                       color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text(AppLocalizations.of(context).arahKiblatTitle,
+                title: TrText('Arah Kiblat',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -92,7 +92,6 @@ class _KiblatPageState extends State<KiblatPage> {
                   ),
                 ],
               ),
-
               if (vm.isLoading)
                 SliverFillRemaining(
                   child: Center(
@@ -101,7 +100,7 @@ class _KiblatPageState extends State<KiblatPage> {
                       children: [
                         const CircularProgressIndicator(color: _kTeal),
                         const SizedBox(height: 16),
-                        Text(AppLocalizations.of(context).mendapatkanLokasi,
+                        TrText('Mendapatkan lokasi Anda...',
                             style: GoogleFonts.poppins(
                                 // FIX: Colors.grey → c.textSecondary
                                 color: c.textSecondary)),
@@ -109,7 +108,6 @@ class _KiblatPageState extends State<KiblatPage> {
                     ),
                   ),
                 )
-
               else if (vm.error.isNotEmpty)
                 SliverFillRemaining(
                   child: Center(
@@ -121,7 +119,7 @@ class _KiblatPageState extends State<KiblatPage> {
                           Icon(Icons.wifi_off_rounded,
                               size: 64, color: c.textHint),
                           const SizedBox(height: 16),
-                          Text(AppLocalizations.of(context).gagalLokasi,
+                          TrText('Gagal mendapatkan lokasi',
                               style: GoogleFonts.poppins(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -138,30 +136,27 @@ class _KiblatPageState extends State<KiblatPage> {
                                 backgroundColor: _kTeal),
                             icon: const Icon(Icons.refresh_rounded,
                                 color: Colors.white),
-                            label: Text(AppLocalizations.of(context).cobaLagi,
-                                style: GoogleFonts.poppins(
-                                    color: Colors.white)),
+                            label: TrText('Coba Lagi',
+                                style:
+                                    GoogleFonts.poppins(color: Colors.white)),
                           ),
                         ],
                       ),
                     ),
                   ),
                 )
-
               else if (vm.kiblat == null)
                 SliverFillRemaining(
                   child: Center(
-                    child: Text(AppLocalizations.of(context).dataKiblatTidakAda,
-                        style: GoogleFonts.poppins(
-                            color: c.textSecondary)),
+                    child: TrText('Data kiblat tidak tersedia',
+                        style: GoogleFonts.poppins(color: c.textSecondary)),
                   ),
                 )
-
               else
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        16, 20, 16, 24 + bottomPadding),
+                    padding:
+                        EdgeInsets.fromLTRB(16, 20, 16, 24 + bottomPadding),
                     child: Column(
                       children: [
                         _buildInfoCard(vm),
@@ -207,7 +202,8 @@ class _KiblatPageState extends State<KiblatPage> {
       child: Column(
         children: [
           Container(
-            width: 56, height: 56,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(16),
@@ -216,9 +212,8 @@ class _KiblatPageState extends State<KiblatPage> {
                 color: Colors.white, size: 32),
           ),
           const SizedBox(height: 12),
-          Text(AppLocalizations.of(context).arahKiblatTitle,
-              style: GoogleFonts.poppins(
-                  color: Colors.white70, fontSize: 14)),
+          TrText('Arah Kiblat',
+              style: GoogleFonts.poppins(color: Colors.white70, fontSize: 14)),
           const SizedBox(height: 4),
           Text('${direction.toStringAsFixed(1)}°',
               style: GoogleFonts.poppins(
@@ -226,9 +221,8 @@ class _KiblatPageState extends State<KiblatPage> {
                   fontSize: 52,
                   fontWeight: FontWeight.bold,
                   height: 1.1)),
-          Text(AppLocalizations.of(context).dariUtara,
-              style: GoogleFonts.poppins(
-                  color: Colors.white70, fontSize: 13)),
+          TrText('dari Utara',
+              style: GoogleFonts.poppins(color: Colors.white70, fontSize: 13)),
           if (vm.currentPosition != null) ...[
             const SizedBox(height: 16),
             Container(height: 1, color: Colors.white.withOpacity(0.2)),
@@ -242,8 +236,8 @@ class _KiblatPageState extends State<KiblatPage> {
                 Text(
                   'Lat: ${vm.currentPosition!.latitude.toStringAsFixed(4)}, '
                   'Long: ${vm.currentPosition!.longitude.toStringAsFixed(4)}',
-                  style: GoogleFonts.poppins(
-                      color: Colors.white70, fontSize: 12),
+                  style:
+                      GoogleFonts.poppins(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
@@ -259,7 +253,8 @@ class _KiblatPageState extends State<KiblatPage> {
     // FIX: lingkaran kompas adaptive
     final c = context.colors;
     return Container(
-      width: 300, height: 300,
+      width: 300,
+      height: 300,
       decoration: BoxDecoration(
         // FIX: Colors.white → c.surface
         color: c.surface,
@@ -278,7 +273,8 @@ class _KiblatPageState extends State<KiblatPage> {
           Transform.rotate(
             angle: -(heading * (pi / 180)),
             child: SizedBox(
-              width: 300, height: 300,
+              width: 300,
+              height: 300,
               child: Stack(
                 children: [
                   Align(
@@ -343,12 +339,11 @@ class _KiblatPageState extends State<KiblatPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.navigation_rounded,
-                    size: 72, color: _kTeal),
+                const Icon(Icons.navigation_rounded, size: 72, color: _kTeal),
                 const SizedBox(height: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
                     color: _kTeal,
                     borderRadius: BorderRadius.circular(20),
@@ -359,11 +354,14 @@ class _KiblatPageState extends State<KiblatPage> {
                           offset: const Offset(0, 3)),
                     ],
                   ),
-                  child: Text(AppLocalizations.of(context).kaabah,
-                      style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600)),
+                  child: Text(
+                    context.tr('Ka\'bah'),
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -383,8 +381,7 @@ class _KiblatPageState extends State<KiblatPage> {
         color: c.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(
-              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Center(
@@ -393,13 +390,12 @@ class _KiblatPageState extends State<KiblatPage> {
           children: [
             Icon(Icons.explore_off_rounded, size: 64, color: c.textHint),
             const SizedBox(height: 12),
-            Text(AppLocalizations.of(context).kompasKompass,
-                style: GoogleFonts.poppins(
-                    color: c.textSecondary, fontSize: 15)),
+            TrText(context.tr('Kompas tidak tersedia'),
+                style:
+                    GoogleFonts.poppins(color: c.textSecondary, fontSize: 15)),
             const SizedBox(height: 6),
-            Text(AppLocalizations.of(context).aktifkanKompas,
-                style: GoogleFonts.poppins(
-                    color: c.textHint, fontSize: 12)),
+            TrText(context.tr('Aktifkan sensor kompas perangkat'),
+                style: GoogleFonts.poppins(color: c.textHint, fontSize: 12)),
           ],
         ),
       ),
@@ -417,8 +413,7 @@ class _KiblatPageState extends State<KiblatPage> {
         color: c.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-              color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: c.shadow, blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -427,7 +422,8 @@ class _KiblatPageState extends State<KiblatPage> {
           Row(
             children: [
               Container(
-                width: 36, height: 36,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: _kTeal.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
@@ -436,7 +432,7 @@ class _KiblatPageState extends State<KiblatPage> {
                     color: _kTeal, size: 20),
               ),
               const SizedBox(width: 12),
-              Text(AppLocalizations.of(context).caraMenggunakan,
+              TrText(context.tr('Cara Menggunakan'),
                   style: GoogleFonts.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -445,10 +441,12 @@ class _KiblatPageState extends State<KiblatPage> {
             ],
           ),
           const SizedBox(height: 16),
-          _buildStep(context, '1', 'Letakkan ponsel pada permukaan datar'),
+          _buildStep(
+              context, '1', context.tr('Letakkan ponsel pada permukaan datar')),
           _buildStep(context, '2',
-              "Putar ponsel hingga panah mengarah ke Ka'bah"),
-          _buildStep(context, '3', 'Jauhkan dari benda logam atau magnet'),
+              context.tr("Putar ponsel hingga panah mengarah ke Ka'bah")),
+          _buildStep(
+              context, '3', context.tr('Jauhkan dari benda logam atau magnet')),
         ],
       ),
     );
@@ -462,7 +460,8 @@ class _KiblatPageState extends State<KiblatPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 28, height: 28,
+            width: 28,
+            height: 28,
             decoration: BoxDecoration(
               color: _kTeal.withOpacity(0.1),
               shape: BoxShape.circle,
@@ -512,9 +511,9 @@ class CompassPainter extends CustomPainter {
     final radius = size.width / 2 - 30;
 
     for (int i = 0; i < 360; i += 5) {
-      final angle   = i * pi / 180;
+      final angle = i * pi / 180;
       final isMajor = i % 30 == 0;
-      final isMid   = i % 10 == 0;
+      final isMid = i % 10 == 0;
 
       // FIX: opacity disesuaikan untuk dark mode
       final paint = Paint()
@@ -523,9 +522,17 @@ class CompassPainter extends CustomPainter {
             : isMid
                 ? Colors.grey.withOpacity(isDark ? 0.5 : 0.4)
                 : Colors.grey.withOpacity(isDark ? 0.3 : 0.2)
-        ..strokeWidth = isMajor ? 2.5 : isMid ? 1.5 : 0.8;
+        ..strokeWidth = isMajor
+            ? 2.5
+            : isMid
+                ? 1.5
+                : 0.8;
 
-      final tickLen = isMajor ? 14.0 : isMid ? 9.0 : 6.0;
+      final tickLen = isMajor
+          ? 14.0
+          : isMid
+              ? 9.0
+              : 6.0;
 
       final startPt = Offset(
         center.dx + (radius - tickLen) * cos(angle - pi / 2),

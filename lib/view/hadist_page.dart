@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/hadist_viewmodel.dart';
 import '../model/hadist_model.dart';
-import '../l10n/app_localizations.dart';
 import '../utils/theme_helper.dart';
 
 class HadistPage extends StatefulWidget {
@@ -106,12 +106,12 @@ class _HadistPageState extends State<HadistPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppLocalizations.of(context).hadistArbain,
+                TrText('Hadist Arbain Nawawi',
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                Text(AppLocalizations.of(context).hadistSubtitle,
+                TrText('40 Hadist pilihan untuk kehidupan sehari-hari',
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.white.withOpacity(0.9))),
@@ -162,7 +162,7 @@ class _HadistPageState extends State<HadistPage>
                     const Icon(Icons.wb_sunny_rounded,
                         color: Colors.white, size: 20),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).hadistHariIni,
+                    TrText('Hadist Hari Ini',
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class _HadistPageState extends State<HadistPage>
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text('Hadist ${hadist.number}',
+                      child: Text('${context.tr('Hadist')} ${hadist.number}',
                           style: GoogleFonts.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -236,7 +236,7 @@ class _HadistPageState extends State<HadistPage>
                   color: isSelected ? kTeal : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
+                child: TrText(
                   tabs[i],
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
@@ -261,7 +261,7 @@ class _HadistPageState extends State<HadistPage>
         TextField(
           style: TextStyle(color: c.onSurface),
           decoration: InputDecoration(
-            hintText: AppLocalizations.of(context).cariHadist,
+            hintText: context.tr('Cari hadist...'),
             hintStyle: GoogleFonts.poppins(fontSize: 13, color: c.textHint),
             prefixIcon: const Icon(Icons.search_rounded, color: kTeal),
             filled: true,
@@ -362,7 +362,7 @@ class _HadistPageState extends State<HadistPage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Hadist ${hadist.number}',
+                          Text('${context.tr('Hadist')} ${hadist.number}',
                               style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -398,7 +398,7 @@ class _HadistPageState extends State<HadistPage>
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 6),
-                Text('Rawi: ${hadist.rawi}',
+                Text('${context.tr('Rawi')}: ${hadist.rawi}',
                     style: GoogleFonts.poppins(
                         fontSize: 11,
                         color: c.textHint,
@@ -421,8 +421,8 @@ class _HadistPageState extends State<HadistPage>
           const SizedBox(height: 12),
           Text(
             _selectedTab == 0
-                ? AppLocalizations.of(context).tidakAdaHadist
-                : AppLocalizations.of(context).belumAdaFavorit,
+                ? context.tr('Tidak ada hadist ditemukan')
+                : context.tr('Belum ada hadist favorit'),
             style: GoogleFonts.poppins(
                 fontSize: 15, color: c.textSecondary),
           ),
@@ -482,12 +482,12 @@ class _HadistPageState extends State<HadistPage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Hadist Arbain',
+                                TrText('Hadist Arbain',
                                     style: GoogleFonts.poppins(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white)),
-                                Text('Rawi: ${hadist.rawi}',
+                                Text('${context.tr('Rawi')}: ${hadist.rawi}',
                                     style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         color: Colors.white
@@ -499,7 +499,7 @@ class _HadistPageState extends State<HadistPage>
                       ),
                     ),
                     const SizedBox(height: 20),
-                    _hadistSection(c, 'Teks Arab',
+                    _hadistSection(c, context.tr('Teks Arab'),
                         kTeal.withOpacity(0.06),
                         Text(hadist.arab,
                             textAlign: TextAlign.right,
@@ -509,7 +509,7 @@ class _HadistPageState extends State<HadistPage>
                                 fontFamily: 'serif',
                                 height: 2.2,
                                 color: c.onSurface))),
-                    _hadistSection(c, 'Transliterasi Latin',
+                    _hadistSection(c, context.tr('Transliterasi Latin'),
                         const Color(0xFF7B1FA2).withOpacity(0.06),
                         Text(hadist.latin,
                             style: GoogleFonts.poppins(
@@ -517,14 +517,14 @@ class _HadistPageState extends State<HadistPage>
                                 height: 1.8,
                                 fontStyle: FontStyle.italic,
                                 color: c.textSecondary))),
-                    _hadistSection(c, 'Terjemahan',
+                    _hadistSection(c, context.tr('Terjemahan'),
                         kGold.withOpacity(0.08),
                         Text(hadist.arti,
                             style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 height: 1.8,
                                 color: c.onSurface))),
-                    _hadistSection(c, 'Penjelasan',
+                    _hadistSection(c, context.tr('Penjelasan'),
                         kTeal.withOpacity(0.05),
                         Text(hadist.penjelasan,
                             style: GoogleFonts.poppins(
@@ -543,7 +543,7 @@ class _HadistPageState extends State<HadistPage>
                               ));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context).hadistDisalin,
+                                content: TrText('Hadist disalin!',
                                     style: GoogleFonts.poppins()),
                                 backgroundColor: kTeal,
                                 behavior: SnackBarBehavior.floating,
@@ -554,7 +554,7 @@ class _HadistPageState extends State<HadistPage>
                               ));
                             },
                             icon: const Icon(Icons.copy_rounded, size: 16),
-                            label: Text(AppLocalizations.of(context).salin,
+                            label: TrText('Salin',
                                 style: GoogleFonts.poppins(fontSize: 13)),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: kTeal,
@@ -571,7 +571,7 @@ class _HadistPageState extends State<HadistPage>
                             onPressed: () => Navigator.pop(context),
                             icon: const Icon(Icons.close_rounded,
                                 size: 16, color: Colors.white),
-                            label: Text(AppLocalizations.of(context).tutup,
+                            label: TrText('Tutup',
                                 style: GoogleFonts.poppins(
                                     fontSize: 13, color: Colors.white)),
                             style: ElevatedButton.styleFrom(
@@ -605,7 +605,7 @@ class _HadistPageState extends State<HadistPage>
             color: kTeal.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(title,
+          child: TrText(title,
               style: GoogleFonts.poppins(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,

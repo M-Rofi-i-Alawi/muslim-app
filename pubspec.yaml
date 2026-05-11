@@ -63,5 +63,5 @@ flutter:
     - assets/panduan/zakat.json
     - assets/panduan/haji.json
     - assets/.env
-    - assets/kompas.jpg
     - assets/logo_muslim_app.png
+    - assets/lang/en.json

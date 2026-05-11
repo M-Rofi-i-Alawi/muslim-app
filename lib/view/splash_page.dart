@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'menu_page.dart';
 
@@ -23,7 +24,7 @@ class _SplashPageState extends State<SplashPage>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 2800),
+      duration: const Duration(milliseconds: 1800),
       vsync: this,
     );
 
@@ -50,7 +51,7 @@ class _SplashPageState extends State<SplashPage>
 
     _controller.forward();
 
-    Timer(const Duration(milliseconds: 6400), () {
+    Timer(const Duration(milliseconds: 2400), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -194,14 +195,14 @@ class _SplashPageState extends State<SplashPage>
                           borderRadius: BorderRadius.circular(34),
                           child: Image.asset(
                             'assets/logo_muslim_app.png',
-                            width: 150,
-                            height: 150,
+                            width: 130,
+                            height: 130,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Image.asset(
                               'logo_muslim_app.png',
-                              width: 150,
-                              height: 150,
+                              width: 130,
+                              height: 130,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(Icons.mosque_rounded,
@@ -285,33 +286,46 @@ class _SplashPageState extends State<SplashPage>
 
             // ── Branding bawah ────────────────────────────────────
             Positioned(
-              bottom: 36,
+              bottom: 0,
               left: 0,
               right: 0,
               child: FadeTransition(
                 opacity: _fadeAnimation,
-                child: Column(
-                  children: [
-                    Text(
-                      'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white.withOpacity(0.85),
-                        fontFamily: 'serif',
-                        height: 1.6,
-                      ),
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+                    child: Column(
+                      children: [
+                        // Divider tipis
+                        Container(
+                          width: 48, height: 1,
+                          color: Colors.white.withOpacity(0.25),
+                          margin: const EdgeInsets.only(bottom: 14),
+                        ),
+                        Text(
+                          'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.90),
+                            fontFamily: 'serif',
+                            height: 1.8,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '© 2026 Muslim App',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.white.withOpacity(0.65),
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '© 2026 Muslim App',
-                      style: GoogleFonts.poppins(
-                        fontSize: 10,
-                        color: Colors.white.withOpacity(0.55),
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

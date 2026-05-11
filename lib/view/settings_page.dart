@@ -1,75 +1,70 @@
 // lib/view/settings_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import '../services/settings_service.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final c        = context.colors;
+    final c = context.colors;
     final settings = context.watch<SettingsService>();
-    final l        = AppLocalizations.of(context);
-
     return Scaffold(
       backgroundColor: c.background,
       appBar: AppBar(
-        title: Text(l.pengaturan),
+        title: TrText('Pengaturan'),
         backgroundColor: kTealDark,
         foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
-
           // ── NOTIFIKASI SHALAT ─────────────────────────
-          _SectionHeader(l.notifikasiShalat, c),
+          _SectionHeader(context.tr('Notifikasi Shalat'), c),
           const SizedBox(height: 8),
 
           _SettingsCard(
             c: c,
             children: [
-              _waktuTile(context, settings, 'imsak',
-                  Icons.alarm, const Color(0xFF00695C),
-                  l.imsak, l.imsakSubtitle),
+              _waktuTile(context, settings, 'imsak', Icons.alarm,
+                  const Color(0xFF00695C), context.tr('Imsak'), context.tr('Pengingat sebelum sahur berakhir')),
               _divider(c),
-              _waktuTile(context, settings, 'subuh',
-                  Icons.wb_twilight_rounded, const Color(0xFF1565C0),
-                  l.subuh, l.subuhSubtitle),
+              _waktuTile(context, settings, 'subuh', Icons.wb_twilight_rounded,
+                  const Color(0xFF1565C0), context.tr('Subuh'), context.tr('Awal waktu shalat Subuh')),
               _divider(c),
-              _waktuTile(context, settings, 'terbit',
-                  Icons.wb_sunny, const Color(0xFFF57F17),
-                  l.terbit, l.terbitSubtitle),
+              _waktuTile(context, settings, 'terbit', Icons.wb_sunny,
+                  const Color(0xFFF57F17), context.tr('Terbit'), context.tr('Matahari terbit — batas akhir Subuh')),
               _divider(c),
-              _waktuTile(context, settings, 'dhuha',
-                  Icons.wb_sunny_outlined, const Color(0xFFFFB300),
-                  l.dhuha, l.dhuhaSubtitle),
+              _waktuTile(context, settings, 'dhuha', Icons.wb_sunny_outlined,
+                  const Color(0xFFFFB300), context.tr('Dhuha'), context.tr('± 20 menit setelah matahari terbit')),
               _divider(c),
-              _waktuTile(context, settings, 'dzuhur',
-                  Icons.wb_sunny_rounded, const Color(0xFFE8650A),
-                  l.dzuhur, l.dzuhurSubtitle),
+              _waktuTile(context, settings, 'dzuhur', Icons.wb_sunny_rounded,
+                  const Color(0xFFE8650A), context.tr('Dzuhur'), context.tr('Tengah hari')),
               _divider(c),
-              _waktuTile(context, settings, 'ashar',
-                  Icons.cloud_rounded, const Color(0xFF6D4C41),
-                  l.ashar, l.asharSubtitle),
+              _waktuTile(context, settings, 'ashar', Icons.cloud_rounded,
+                  const Color(0xFF6D4C41), context.tr('Ashar'), context.tr('Sore hari')),
               _divider(c),
-              _waktuTile(context, settings, 'maghrib',
-                  Icons.nights_stay_rounded, const Color(0xFF7B1FA2),
-                  l.maghrib, l.maghribSubtitle),
+              _waktuTile(
+                  context,
+                  settings,
+                  'maghrib',
+                  Icons.nights_stay_rounded,
+                  const Color(0xFF7B1FA2),
+                  context.tr('Maghrib'),
+                  context.tr('Saat matahari terbenam')),
               _divider(c),
-              _waktuTile(context, settings, 'isya',
-                  Icons.nightlight_round, const Color(0xFF0D47A1),
-                  l.isya, l.isyaSubtitle),
+              _waktuTile(context, settings, 'isya', Icons.nightlight_round,
+                  const Color(0xFF0D47A1), context.tr('Isya'), context.tr('Malam hari')),
             ],
           ),
 
           const SizedBox(height: 20),
 
           // ── TAMPILAN ─────────────────────────
-          _SectionHeader(l.tampilan, c),
+          _SectionHeader(context.tr('Tampilan'), c),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -78,8 +73,8 @@ class SettingsPage extends StatelessWidget {
               _SwitchTile(
                 icon: Icons.dark_mode_rounded,
                 iconColor: const Color(0xFF5C6BC0),
-                title: l.modeGelap,
-                subtitle: l.modeGelapSubtitle,
+                title: context.tr('Mode Gelap'),
+                subtitle: context.tr('Tampilan gelap untuk kenyamanan mata'),
                 value: settings.darkMode,
                 onChanged: (v) => settings.setDarkMode(v),
                 c: c,
@@ -111,12 +106,12 @@ class SettingsPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l.ukuranFontQuran,
+                          TrText('Ukuran Font Al-Qur\'an',
                               style: TextStyle(
                                   color: c.onSurface,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14)),
-                          Text(l.ukuranTeksArab,
+                          TrText('Ukuran teks Arab',
                               style: TextStyle(
                                   color: c.textSecondary, fontSize: 12)),
                         ],
@@ -155,9 +150,7 @@ class SettingsPage extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: c.isDark
-                        ? c.surfaceVariant
-                        : Colors.grey.shade100,
+                    color: c.isDark ? c.surfaceVariant : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -177,7 +170,7 @@ class SettingsPage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // ── BAHASA ─────────────────────────
-          _SectionHeader(l.bahasa, c),
+          _SectionHeader(context.tr('Bahasa'), c),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -190,17 +183,14 @@ class SettingsPage extends StatelessWidget {
                   c: c),
               _divider(c),
               _LangTile(
-                  lang: 'en',
-                  label: '🇬🇧 English',
-                  settings: settings,
-                  c: c),
+                  lang: 'en', label: '🇬🇧 English', settings: settings, c: c),
             ],
           ),
 
           const SizedBox(height: 20),
 
           // ── RESET ─────────────────────────
-          _SectionHeader(l.lainnya, c),
+          _SectionHeader(context.tr('Lainnya'), c),
           const SizedBox(height: 8),
 
           _SettingsCard(
@@ -218,16 +208,14 @@ class SettingsPage extends StatelessWidget {
                   child: const Icon(Icons.refresh_rounded,
                       color: Colors.red, size: 20),
                 ),
-                title: Text(l.resetSemuaPengaturan,
+                title: TrText('Reset Semua Pengaturan',
                     style: TextStyle(
                         color: c.onSurface,
                         fontWeight: FontWeight.w600,
                         fontSize: 14)),
-                subtitle: Text(l.resetSubtitle,
-                    style:
-                        TextStyle(color: c.textSecondary, fontSize: 12)),
-                trailing:
-                    Icon(Icons.chevron_right_rounded, color: c.textHint),
+                subtitle: TrText('Kembalikan ke pengaturan awal',
+                    style: TextStyle(color: c.textSecondary, fontSize: 12)),
+                trailing: Icon(Icons.chevron_right_rounded, color: c.textHint),
                 onTap: () => _confirmReset(context, settings),
               ),
             ],
@@ -242,24 +230,19 @@ class SettingsPage extends StatelessWidget {
   // ─── DIALOG KONFIRMASI RESET ──────────────────────────────────────────────
   void _confirmReset(BuildContext context, SettingsService settings) {
     final c = context.colors;
-    final l = AppLocalizations.of(context);
-
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: c.surface,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(l.resetPengaturan,
-            style: TextStyle(
-                color: c.onSurface, fontWeight: FontWeight.bold)),
-        content: Text(l.resetKonfirmasi,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: TrText('Reset Pengaturan?',
+            style: TextStyle(color: c.onSurface, fontWeight: FontWeight.bold)),
+        content: TrText('Semua pengaturan akan dikembalikan ke awal, termasuk notifikasi shalat.',
             style: TextStyle(color: c.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l.batal,
-                style: TextStyle(color: c.textSecondary)),
+            child: TrText('Batal', style: TextStyle(color: c.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -270,11 +253,11 @@ class SettingsPage extends StatelessWidget {
               settings.resetAll();
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(l.resetBerhasil),
+                content: TrText('Pengaturan berhasil direset'),
                 backgroundColor: kTeal,
               ));
             },
-            child: Text(l.reset),
+            child: TrText('Reset'),
           ),
         ],
       ),
@@ -298,15 +281,15 @@ class SettingsPage extends StatelessWidget {
   ) {
     final c = context.colors;
     final bool value = switch (waktu) {
-      'imsak'   => settings.notifImsak,
-      'subuh'   => settings.notifSubuh,
-      'terbit'  => settings.notifTerbit,
-      'dhuha'   => settings.notifDhuha,
-      'dzuhur'  => settings.notifDzuhur,
-      'ashar'   => settings.notifAshar,
+      'imsak' => settings.notifImsak,
+      'subuh' => settings.notifSubuh,
+      'terbit' => settings.notifTerbit,
+      'dhuha' => settings.notifDhuha,
+      'dzuhur' => settings.notifDzuhur,
+      'ashar' => settings.notifAshar,
       'maghrib' => settings.notifMaghrib,
-      'isya'    => settings.notifIsya,
-      _         => false,
+      'isya' => settings.notifIsya,
+      _ => false,
     };
     return _SwitchTile(
       icon: icon,
@@ -373,8 +356,7 @@ class _SwitchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       secondary: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -385,9 +367,7 @@ class _SwitchTile extends StatelessWidget {
       ),
       title: Text(title,
           style: TextStyle(
-              color: c.onSurface,
-              fontWeight: FontWeight.w600,
-              fontSize: 14)),
+              color: c.onSurface, fontWeight: FontWeight.w600, fontSize: 14)),
       subtitle: subtitle.isEmpty
           ? null
           : Text(subtitle,

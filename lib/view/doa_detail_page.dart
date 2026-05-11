@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import '../services/tr_service.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../model/doa_model.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
-
 const _kTeal      = Color(0xFF00A086);
 const _kTealDark  = Color(0xFF007A68);
 const _kTealLight = Color(0xFF00C4A7);
@@ -20,7 +19,7 @@ class DoaDetailPage extends StatelessWidget {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Doa berhasil disalin', style: GoogleFonts.poppins()),
+        content: TrText('Doa berhasil disalin', style: GoogleFonts.poppins()),
         backgroundColor: _kTeal,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -198,7 +197,7 @@ class DoaDetailPage extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () => _copyDoa(context),
                       icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 18),
-                      label: Text('Salin Doa',
+                      label: TrText('Salin Doa',
                           style: GoogleFonts.poppins(
                               color: Colors.white, fontWeight: FontWeight.w600)),
                       style: ElevatedButton.styleFrom(

@@ -1,16 +1,14 @@
 // lib/view/about_page.dart
 import 'package:flutter/material.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/theme_helper.dart';
-import '../l10n/app_localizations.dart';
-
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final l = AppLocalizations.of(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -24,7 +22,7 @@ class AboutPage extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
-            title: Text(l.tentangAplikasi,
+            title: Text(context.tr('Tentang Aplikasi'),
                 style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -40,9 +38,9 @@ class AboutPage extends StatelessWidget {
                 // ── Deskripsi ──────────────────────────────
                 _SectionCard(
                   icon: Icons.info_outline_rounded,
-                  title: l.tentangAplikasi,
+                  title: context.tr('Tentang Aplikasi'),
                   child: Text(
-                    l.isEn
+                    context.isEn
                         ? 'Muslim App is a worship companion app that helps Muslims carry out '
                           'daily religious activities. Equipped with accurate GPS-based prayer schedules, '
                           'a complete digital Quran, a collection of prayers and dhikr, selected hadiths, '
@@ -64,72 +62,72 @@ class AboutPage extends StatelessWidget {
                 // ── Fitur Utama ────────────────────────────
                 _SectionCard(
                   icon: Icons.auto_awesome_rounded,
-                  title: l.fiturUtama,
+                  title: context.tr('Fitur Utama'),
                   child: Column(
                     children: [
                       _featureItem(c, Icons.access_time_rounded,
-                          l.jadwalShalat,
-                          l.isEn ? 'Accurate prayer times with GPS auto-detect, supports 30+ cities'
+                          context.tr('Jadwal Shalat'),
+                          context.isEn ? 'Accurate prayer times with GPS auto-detect, supports 30+ cities'
                                   : 'Waktu shalat akurat dengan GPS auto-detect, support 30+ kota',
                           kTeal),
                       _featureItem(c, Icons.auto_stories_rounded,
-                          l.alQuran,
-                          l.isEn ? '114 complete surahs with Indonesian translation & audio'
+                          context.tr('Al-Qur\'an'),
+                          context.isEn ? '114 complete surahs with Indonesian translation & audio'
                                   : '114 Surat lengkap dengan terjemahan Indonesia & audio',
                           const Color(0xFF1565C0)),
                       _featureItem(c, Icons.favorite_rounded,
-                          l.doaHarian,
-                          l.isEn ? 'Collection of prayers with Arabic, Latin, and translation'
+                          context.tr('Doa Harian'),
+                          context.isEn ? 'Collection of prayers with Arabic, Latin, and translation'
                                   : 'Kumpulan doa dengan teks Arab, Latin, dan terjemahan',
                           const Color(0xFFE8650A)),
                       _featureItem(c, Icons.book_rounded,
-                          l.hadist,
-                          l.isEn ? 'Hadith Arbain Nawawi and other selected hadiths'
+                          context.tr('Hadist'),
+                          context.isEn ? 'Hadith Arbain Nawawi and other selected hadiths'
                                   : 'Hadist Arbain Nawawi dan hadist pilihan lainnya',
                           const Color(0xFF795548)),
                       _featureItem(c, Icons.explore_rounded,
-                          l.arahKiblat,
-                          l.isEn ? 'Digital GPS compass to determine accurate qibla direction'
+                          context.tr('Arah Kiblat'),
+                          context.isEn ? 'Digital GPS compass to determine accurate qibla direction'
                                   : 'Kompas digital GPS untuk menentukan arah kiblat akurat',
                           const Color(0xFF7B1FA2)),
                       _featureItem(c, Icons.track_changes_rounded,
-                          l.tasbihDigital,
-                          l.isEn ? 'Digital dhikr counter with target & history'
+                          context.tr('Tasbih Digital'),
+                          context.isEn ? 'Digital dhikr counter with target & history'
                                   : 'Counter dzikir digital dengan target & histori',
                           const Color(0xFF388E3C)),
                       _featureItem(c, Icons.volunteer_activism_rounded,
-                          l.dzikirHarian,
-                          l.isEn ? 'Morning & evening dhikr guide with count'
+                          context.tr('Dzikir Harian'),
+                          context.isEn ? 'Morning & evening dhikr guide with count'
                                   : 'Panduan dzikir pagi & petang dengan hitungan',
                           const Color(0xFF00897B)),
                       _featureItem(c, Icons.star_rounded,
-                          l.asmaulHusna,
-                          l.isEn ? '99 Names of Allah with Latin, Arabic, and meaning'
+                          context.tr('Asmaul Husna'),
+                          context.isEn ? '99 Names of Allah with Latin, Arabic, and meaning'
                                   : '99 Nama Allah dengan Latin, Arab, dan artinya',
                           kGold),
                       _featureItem(c, Icons.account_balance_wallet_rounded,
-                          l.kalkulatorZakat,
-                          l.isEn ? 'Calculate maal, income, fitrah & professional zakat'
+                          context.tr('Kalkulator Zakat'),
+                          context.isEn ? 'Calculate maal, income, fitrah & professional zakat'
                                   : 'Hitung zakat maal, penghasilan, fitrah & profesi',
                           const Color(0xFF00838F)),
                       _featureItem(c, Icons.calendar_today_rounded,
-                          l.kalenderHijri,
-                          l.isEn ? 'Islamic calendar with Gregorian date conversion'
+                          context.tr('Kalender Hijri'),
+                          context.isEn ? 'Islamic calendar with Gregorian date conversion'
                                   : 'Kalender Islam dengan konversi tanggal Masehi',
                           const Color(0xFF5E35B1)),
                       _featureItem(c, Icons.checklist_rounded,
-                          l.panduanIbadah,
-                          l.isEn ? 'Tutorial for prayer, wudhu, tayammum & other worship'
+                          context.tr('Panduan Ibadah'),
+                          context.isEn ? 'Tutorial for prayer, wudhu, tayammum & other worship'
                                   : 'Tutorial shalat, wudhu, tayamum & ibadah lainnya',
                           const Color(0xFF6A1B9A)),
                       _featureItem(c, Icons.nightlight_round,
-                          l.catatanRamadhan,
-                          l.isEn ? 'Daily worship journal: fasting, recitation, charity, tarawih'
+                          context.tr('Catatan Ramadhan'),
+                          context.isEn ? 'Daily worship journal: fasting, recitation, charity, tarawih'
                                   : 'Jurnal ibadah harian: puasa, tadarus, sedekah, tarawih',
                           const Color(0xFFC62828)),
                       _featureItem(c, Icons.chat_bubble_outline_rounded,
-                          l.tanyaIslam,
-                          l.isEn ? 'AI chatbot to answer Islamic questions'
+                          context.tr('Tanya Islam'),
+                          context.isEn ? 'AI chatbot to answer Islamic questions'
                                   : 'AI chatbot untuk menjawab pertanyaan keislaman',
                           kTeal),
                     ],
@@ -141,7 +139,7 @@ class AboutPage extends StatelessWidget {
                 // ── Teknologi ──────────────────────────────
                 _SectionCard(
                   icon: Icons.code_rounded,
-                  title: l.teknologi,
+                  title: context.tr('Teknologi'),
                   child: Column(
                     children: [
                       _techItem(c, 'Flutter 3.x', 'Cross-platform framework'),
@@ -161,21 +159,21 @@ class AboutPage extends StatelessWidget {
                 // ── API & Data ─────────────────────────────
                 _SectionCard(
                   icon: Icons.api_rounded,
-                  title: l.apiSumberData,
+                  title: context.tr('API & Data'),
                   child: Column(
                     children: [
                       _creditItem(c, 'Aladhan API',
-                          l.isEn ? 'Prayer schedule GPS & qibla direction' : 'Jadwal shalat GPS & arah kiblat'),
+                          context.isEn ? 'Prayer schedule GPS & qibla direction' : 'Jadwal shalat GPS & arah kiblat'),
                       _creditItem(c, 'Equran.id API',
-                          l.isEn ? "Al-Qur'an & translation" : "Al-Qur'an & terjemahan"),
+                          context.isEn ? "Al-Qur'an & translation" : "Al-Qur'an & terjemahan"),
                       _creditItem(c, 'Doa-Doa API',
-                          l.isEn ? 'Daily prayer database' : 'Database doa harian'),
+                          context.isEn ? 'Daily prayer database' : 'Database doa harian'),
                       _creditItem(c, 'Hadist API',
-                          l.isEn ? 'Hadith Arbain Nawawi' : 'Hadist Arbain Nawawi'),
+                          context.isEn ? 'Hadith Arbain Nawawi' : 'Hadist Arbain Nawawi'),
                       _creditItem(c, 'Google Gemini',
-                          l.isEn ? 'AI for Ask ISLAM' : 'AI untuk Tanya ISLAM'),
+                          context.isEn ? 'AI for Ask ISLAM' : 'AI untuk Tanya ISLAM'),
                       _creditItem(c, 'Kemenag RI',
-                          l.isEn ? 'Prayer time calculation method' : 'Metode perhitungan shalat'),
+                          context.isEn ? 'Prayer time calculation method' : 'Metode perhitungan shalat'),
                     ],
                   ),
                 ),
@@ -185,16 +183,18 @@ class AboutPage extends StatelessWidget {
                 // ── Update ─────────────────────────────────
                 _SectionCard(
                   icon: Icons.celebration_rounded,
-                  title: l.updateTerbaru,
+                  title: context.tr('Update Terbaru'),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _updateItem(c, l.isEn ? '✨ UI/UX redesign with modern Teal theme'      : '✨ Redesign UI/UX dengan tema Teal modern'),
-                      _updateItem(c, l.isEn ? '📍 GPS auto-detect for prayer schedule'        : '📍 GPS auto-detect untuk jadwal shalat'),
-                      _updateItem(c, l.isEn ? '🌍 Support 30+ cities in Indonesia'            : '🌍 Support 30+ kota di Indonesia'),
-                      _updateItem(c, l.isEn ? '🤖 Google Gemini AI integration'               : '🤖 Integrasi Google Gemini AI'),
-                      _updateItem(c, l.isEn ? '📓 Ramadan Notes feature (Timeline)'           : '📓 Fitur Catatan Ramadhan (Timeline)'),
-                      _updateItem(c, l.isEn ? '🎯 Bug fixes & performance improvements'       : '🎯 Perbaikan bug & peningkatan performa'),
+                      _updateItem(c, context.tr('✨ UI/UX redesign with modern Teal theme')),
+                      _updateItem(c, context.tr('📍 GPS auto-detect for prayer schedule')),
+                      _updateItem(c, context.tr('🌍 Support 30+ cities in Indonesia')),
+                      _updateItem(c, context.tr('🤖 Google Gemini AI integration')),
+                      _updateItem(c, context.tr('📓 Ramadan Notes feature (Timeline)')),
+                      _updateItem(c, context.tr('🌐 Now available in English & Indonesian')),
+                      _updateItem(c, context.tr('🔤 Change language: Settings → Language')),
+                      _updateItem(c, context.tr('🎯 Bug fixes & performance improvements')),
                     ],
                   ),
                 ),
@@ -213,11 +213,11 @@ class AboutPage extends StatelessWidget {
                       child: const Icon(Icons.mosque_rounded, color: kTeal, size: 28),
                     ),
                     const SizedBox(height: 12),
-                    Text(l.dikembangkanDengan,
+                    Text(context.tr('Dikembangkan dengan'),
                         style: GoogleFonts.poppins(
                             fontSize: 13, color: c.textSecondary)),
                     const SizedBox(height: 4),
-                    Text(l.copyright,
+                    Text(context.tr('Hak Cipta © 2023 Ask ISLAM. All rights reserved.'),
                         style: GoogleFonts.poppins(
                             fontSize: 12, color: c.textHint)),
                     const SizedBox(height: 12),
@@ -235,7 +235,7 @@ class AboutPage extends StatelessWidget {
                         children: [
                           const Icon(Icons.flutter_dash, color: kTeal, size: 16),
                           const SizedBox(width: 6),
-                          Text(l.builtWithFlutter,
+                          Text(context.tr('Dibangun dengan Flutter'),
                               style: GoogleFonts.poppins(
                                   fontSize: 12,
                                   color: kTeal,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/tr_service.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../l10n/app_localizations.dart';
 import '../viewmodel/kalender_viewmodel.dart';
 import '../model/kalender_model.dart';
 import '../utils/theme_helper.dart';
@@ -71,7 +71,7 @@ class HijriCalendarPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                TrText(
                   'Kalender Hijriah',
                   style: GoogleFonts.poppins(
                     fontSize: 20,
@@ -79,7 +79,7 @@ class HijriCalendarPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                Text(
+                TrText(
                   'Kalender Islam & Konversi Tanggal',
                   style: GoogleFonts.poppins(
                     fontSize: 12,
@@ -131,7 +131,7 @@ class HijriCalendarPage extends StatelessWidget {
                 color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
+              child: TrText(
                 'HARI INI',
                 style: GoogleFonts.poppins(
                   fontSize: 11,
@@ -288,7 +288,7 @@ class HijriCalendarPage extends StatelessWidget {
           child: Column(
             children: [
               Row(
-                children: ['Ahd', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']
+                children: [context.tr('Ahd'), context.tr('Sen'), context.tr('Sel'), context.tr('Rab'), context.tr('Kam'), context.tr('Jum'), context.tr('Sab')]
                     .map((d) => Expanded(
                           child: Center(
                             child: Text(
@@ -296,7 +296,7 @@ class HijriCalendarPage extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                color: d == 'Jum'
+                                color: d == context.tr('Jum')
                                     ? _kTeal
                                     : context.colors.textHint,
                               ),
@@ -399,7 +399,7 @@ class HijriCalendarPage extends StatelessWidget {
                           color: _kGold, size: 18),
                     ),
                     const SizedBox(width: 10),
-                    Text(
+                    TrText(
                       'Hari Penting Bulan Ini',
                       style: GoogleFonts.poppins(
                         fontSize: 14,
@@ -521,7 +521,7 @@ class HijriCalendarPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          TrText(
             'Konversi Tanggal',
             style: GoogleFonts.poppins(
                 fontSize: 14,
@@ -545,7 +545,7 @@ class HijriCalendarPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            TrText(
                               'Masehi',
                               style: GoogleFonts.poppins(
                                 fontSize: 11,
@@ -568,7 +568,7 @@ class HijriCalendarPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(
+                            TrText(
                               'Hijriah',
                               style: GoogleFonts.poppins(
                                 fontSize: 11,
@@ -612,7 +612,7 @@ class HijriCalendarPage extends StatelessWidget {
                     },
                     icon: const Icon(Icons.calendar_month_rounded,
                         color: Colors.white, size: 18),
-                    label: Text(
+                    label: TrText(
                       'Pilih Tanggal Masehi',
                       style: GoogleFonts.poppins(
                           fontSize: 14, color: Colors.white),

@@ -223,9 +223,9 @@ class SuratDetailPageState extends State<SuratDetailPage> {
           Wrap(
             spacing: 8,
             children: [
-              _infoChip(widget.surat.arti),
-              _infoChip('${widget.surat.jumlahAyat} Ayat'),
-              _infoChip(_cap(widget.surat.tempatTurun)),
+              _infoChip(context.tr(widget.surat.arti)),
+              _infoChip('${widget.surat.jumlahAyat} ${context.tr('Ayat')}'),
+              _infoChip(_cap(context.tr(widget.surat.tempatTurun))),
             ],
           ),
           if (widget.surat.nomor != 9) ...[
@@ -386,7 +386,9 @@ class SuratDetailPageState extends State<SuratDetailPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            result ? 'Ayat ${ayat.nomorAyat} disimpan' : 'Bookmark dihapus',
+                            result
+                                ? '${context.tr('Ayat')} ${ayat.nomorAyat} ${context.tr('disalin')}'
+                                : context.tr('Bookmark dihapus'),
                             style: GoogleFonts.poppins(),
                           ),
                           backgroundColor: result ? _kGold : Colors.grey,

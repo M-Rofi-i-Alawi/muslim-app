@@ -81,7 +81,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
       setState(() => _bookmarked = result);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          result ? 'Ayat disimpan ke bookmark' : 'Bookmark dihapus',
+          result ? context.tr('Ayat disimpan ke bookmark') : context.tr('Bookmark dihapus'),
           style: GoogleFonts.poppins(),
         ),
         backgroundColor: _kTeal,
@@ -173,12 +173,12 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
                             // FIX: tambah tombol copy/share
                             IconButton(
                               icon: const Icon(Icons.copy_rounded, color: Colors.white70),
-                              tooltip: 'Salin ayat',
+                              tooltip: context.tr('Salin ayat'),
                               onPressed: _shareAyat,
                             ),
                             IconButton(
                               icon: const Icon(Icons.text_fields_rounded, color: Colors.white70),
-                              tooltip: 'Ukuran font',
+                              tooltip: context.tr('Ukuran font'),
                               onPressed: _showFontDialog,
                             ),
                             IconButton(
@@ -259,7 +259,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
                                 Column(
                                   children: [
                                     Text(
-                                      'Ayat ${widget.ayatList[_currentIndex].nomorAyat}',
+                                      '${context.tr('Ayat')} ${widget.ayatList[_currentIndex].nomorAyat}',
                                       style: GoogleFonts.poppins(
                                           color: Colors.white,
                                           fontSize: 14,
@@ -320,7 +320,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
                 border: Border.all(color: _kTeal.withOpacity(0.4), width: 1),
               ),
               child: Text(
-                '${widget.namaSurat} · Ayat ${ayat.nomorAyat}',
+                '${widget.namaSurat} · ${context.tr('Ayat')} ${ayat.nomorAyat}',
                 style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12),
               ),
             ),

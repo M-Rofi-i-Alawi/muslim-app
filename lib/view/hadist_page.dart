@@ -205,7 +205,7 @@ class _HadistPageState extends State<HadistPage>
 
   // ─── CUSTOM TAB BAR ───────────────────────────────────────────────────────
   Widget _buildTabBar(AppColors c) {
-    final tabs = ['Semua Hadist', 'Favorit'];
+    final tabs = [context.tr('Semua Hadist'), context.tr('Favorit')];
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),

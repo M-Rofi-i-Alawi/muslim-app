@@ -22,6 +22,8 @@ class TrService extends ChangeNotifier {
 
   // Map terjemahan: 'teks_indonesia' → 'english text'
   Map<String, String> _translations = {};
+  // Map lookup case-insensitive: 'lowercase_key' → 'english text'
+  Map<String, String> _translationsLower = {};
   bool _loaded = false;
 
   // ── Load JSON dari assets ──────────────────────────────────────────────────
@@ -31,6 +33,10 @@ class TrService extends ChangeNotifier {
       final raw = await rootBundle.loadString('assets/lang/en.json');
       final Map<String, dynamic> map = json.decode(raw);
       _translations = map.map((k, v) => MapEntry(k, v.toString()));
+      // Build case-insensitive lookup map
+      _translationsLower = _translations.map(
+        (k, v) => MapEntry(k.toLowerCase(), v),
+      );
     } catch (e) {
       debugPrint('TrService: Gagal load en.json — $e');
     }
@@ -40,7 +46,10 @@ class TrService extends ChangeNotifier {
   // ── Translate satu string (sync, instan) ───────────────────────────────────
   String translate(String text, String targetLang) {
     if (targetLang == 'id' || text.trim().isEmpty) return text;
-    return _translations[text] ?? text;
+    // Try exact match first, then case-insensitive fallback
+    return _translations[text]
+        ?? _translationsLower[text.toLowerCase()]
+        ?? text;
   }
 
   // ── Ambil dari cache — alias untuk kompatibilitas ──────────────────────────

@@ -272,8 +272,10 @@ class ShalatRepository {
 
           final dayName          = days[(selectedDate.weekday - 1) % 7];
           final monthName        = months[selectedDate.month - 1];
+          // Store as structured format: "dayName|day|monthName|year"
+          // so the view can translate day/month names per language
           final tanggalFormatted =
-              '$dayName, ${selectedDate.day} $monthName ${selectedDate.year}';
+              '$dayName|${selectedDate.day}|$monthName|${selectedDate.year}';
 
           debugPrint('✅ Jadwal loaded: $cityName - $tanggalFormatted');
 

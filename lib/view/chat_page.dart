@@ -21,13 +21,15 @@ class _ChatPageState extends State<ChatPage> {
   final _ctrl       = TextEditingController();
   final _scrollCtrl = ScrollController();
 
-  static const _quickQuestions = [
-    'Apa syarat sah shalat?',
-    'Bacaan doa qunut subuh',
-    'Cara tayamum yang benar',
-    'Niat puasa Senin Kamis',
-    'Doa setelah adzan',
-  ];
+  List<String> _getQuickQuestions() {
+    return [
+      context.tr('Apa syarat sah shalat?'),
+      context.tr('Bacaan doa qunut subuh'),
+      context.tr('Cara tayamum yang benar'),
+      context.tr('Niat puasa Senin Kamis'),
+      context.tr('Doa setelah adzan'),
+    ];
+  }
 
   @override
   void dispose() {
@@ -92,7 +94,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'AI sedang menyiapkan jawaban...',
+                    context.tr('AI sedang menyiapkan jawaban...'),
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: c.textSecondary), // ← adaptive
@@ -170,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
                 IconButton(
                   icon: const Icon(Icons.delete_outline_rounded,
                       color: Colors.white70),
-                  tooltip: 'Hapus percakapan',
+                  tooltip: context.tr('Hapus percakapan'),
                   onPressed: () => _confirmClear(context, vm),
                 ),
             ],
@@ -206,9 +208,7 @@ class _ChatPageState extends State<ChatPage> {
                   color: c.onSurface)), // ← adaptive
           const SizedBox(height: 8),
           Text(
-            context.isEn
-                    ? 'Ask questions about worship, Al-Quran,\nhadiths, prayers, and other Islamic topics.'
-                    : 'Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\nhadist, doa, dan seputar Islam lainnya.',
+            context.tr('Ajukan pertanyaan tentang ibadah, Al-Qur\'an,\nhadist, doa, dan seputar Islam lainnya.'),
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
                 fontSize: 13, color: c.textSecondary, height: 1.6), // ← adaptive
@@ -226,7 +226,7 @@ class _ChatPageState extends State<ChatPage> {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _quickQuestions.map((q) {
+            children: _getQuickQuestions().map((q) {
               return GestureDetector(
                 onTap: () => _send(vm, text: q),
                 child: Container(

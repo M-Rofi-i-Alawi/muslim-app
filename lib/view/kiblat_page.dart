@@ -88,7 +88,7 @@ class _KiblatPageState extends State<KiblatPage> {
                     icon: const Icon(Icons.my_location_rounded,
                         color: Colors.white),
                     onPressed: () => vm.getCurrentLocation(),
-                    tooltip: 'Perbarui lokasi',
+                    tooltip: context.tr('Perbarui lokasi'),
                   ),
                 ],
               ),

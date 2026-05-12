@@ -107,7 +107,7 @@ class _ZakatPageState extends State<ZakatPage>
 
   // ─── TAB BAR ──────────────────────────────────────────────────────────────
   Widget _buildTabBar(AppColors c) {
-    final tabs = ['Maal', 'Penghasilan', 'Fitrah', 'Perdagangan', 'Pertanian'];
+    final tabs = [context.tr('Maal'), context.tr('Penghasilan'), context.tr('Fitrah'), context.tr('Perdagangan'), context.tr('Pertanian')];
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
@@ -756,8 +756,8 @@ class _ResultCard extends StatelessWidget {
           const SizedBox(height: 16),
           Container(height: 1, color: Colors.white.withOpacity(0.2)),
           const SizedBox(height: 14),
-          _resultRow('Total Harta', vm.formatRupiah(result.totalHarta)),
-          _resultRow('Nisab', vm.formatRupiah(result.nisab)),
+          _resultRow(context.tr('Total Harta'), vm.formatRupiah(result.totalHarta)),
+          _resultRow(context.tr('Nisab'), vm.formatRupiah(result.nisab)),
           if (isWajib) ...[
             const SizedBox(height: 12),
             Container(

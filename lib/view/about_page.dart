@@ -40,18 +40,12 @@ class AboutPage extends StatelessWidget {
                   icon: Icons.info_outline_rounded,
                   title: context.tr('Tentang Aplikasi'),
                   child: Text(
-                    context.isEn
-                        ? 'Muslim App is a worship companion app that helps Muslims carry out '
-                          'daily religious activities. Equipped with accurate GPS-based prayer schedules, '
-                          'a complete digital Quran, a collection of prayers and dhikr, selected hadiths, '
-                          'and an AI chatbot to answer Islamic questions. Designed with a modern Teal-themed UI/UX '
-                          'that is comfortable and easy to use.'
-                        : 'Muslim App adalah aplikasi pendamping ibadah yang membantu umat Muslim '
+                    context.tr('Muslim App adalah aplikasi pendamping ibadah yang membantu umat Muslim '
                           'dalam menjalankan aktivitas keagamaan sehari-hari. Dilengkapi dengan '
                           'jadwal shalat berbasis GPS yang akurat, Al-Qur\'an digital lengkap, '
                           'kumpulan doa dan wirid, hadist pilihan, hingga fitur chatbot AI untuk '
                           'menjawab pertanyaan seputar Islam. Aplikasi ini dirancang dengan UI/UX '
-                          'modern bertema Teal yang nyaman dan mudah digunakan.',
+                          'modern bertema Teal yang nyaman dan mudah digunakan.'),
                     style: GoogleFonts.poppins(
                         fontSize: 13, color: c.textSecondary, height: 1.7),
                   ),
@@ -67,68 +61,55 @@ class AboutPage extends StatelessWidget {
                     children: [
                       _featureItem(c, Icons.access_time_rounded,
                           context.tr('Jadwal Shalat'),
-                          context.isEn ? 'Accurate prayer times with GPS auto-detect, supports 30+ cities'
-                                  : 'Waktu shalat akurat dengan GPS auto-detect, support 30+ kota',
+                          context.tr('Jadwal shalat akurat dengan deteksi GPS otomatis, support 30+ kota'),
                           kTeal),
                       _featureItem(c, Icons.auto_stories_rounded,
                           context.tr('Al-Qur\'an'),
-                          context.isEn ? '114 complete surahs with Indonesian translation & audio'
-                                  : '114 Surat lengkap dengan terjemahan Indonesia & audio',
+                          context.tr('114 surat lengkap dengan terjemahan Indonesia & audio'),
                           const Color(0xFF1565C0)),
                       _featureItem(c, Icons.favorite_rounded,
                           context.tr('Doa Harian'),
-                          context.isEn ? 'Collection of prayers with Arabic, Latin, and translation'
-                                  : 'Kumpulan doa dengan teks Arab, Latin, dan terjemahan',
+                          context.tr('Koleksi doa harian lengkap dengan Arab, Latin, dan terjemahan'),
                           const Color(0xFFE8650A)),
                       _featureItem(c, Icons.book_rounded,
                           context.tr('Hadist'),
-                          context.isEn ? 'Hadith Arbain Nawawi and other selected hadiths'
-                                  : 'Hadist Arbain Nawawi dan hadist pilihan lainnya',
+                          context.tr('Hadist Arbain Nawawi dan hadist pilihan lainnya'),
                           const Color(0xFF795548)),
                       _featureItem(c, Icons.explore_rounded,
                           context.tr('Arah Kiblat'),
-                          context.isEn ? 'Digital GPS compass to determine accurate qibla direction'
-                                  : 'Kompas digital GPS untuk menentukan arah kiblat akurat',
+                          context.tr('Kompas GPS digital untuk menentukan arah kiblat yang akurat'),
                           const Color(0xFF7B1FA2)),
                       _featureItem(c, Icons.track_changes_rounded,
                           context.tr('Tasbih Digital'),
-                          context.isEn ? 'Digital dhikr counter with target & history'
-                                  : 'Counter dzikir digital dengan target & histori',
+                          context.tr('Penghitung dzikir digital dengan target & riwayat'),
                           const Color(0xFF388E3C)),
                       _featureItem(c, Icons.volunteer_activism_rounded,
                           context.tr('Dzikir Harian'),
-                          context.isEn ? 'Morning & evening dhikr guide with count'
-                                  : 'Panduan dzikir pagi & petang dengan hitungan',
+                          context.tr('Panduan dzikir pagi & petang dengan hitungan'),
                           const Color(0xFF00897B)),
                       _featureItem(c, Icons.star_rounded,
                           context.tr('Asmaul Husna'),
-                          context.isEn ? '99 Names of Allah with Latin, Arabic, and meaning'
-                                  : '99 Nama Allah dengan Latin, Arab, dan artinya',
+                          context.tr('99 Nama Allah lengkap dengan Latin, Arab, dan makna'),
                           kGold),
                       _featureItem(c, Icons.account_balance_wallet_rounded,
                           context.tr('Kalkulator Zakat'),
-                          context.isEn ? 'Calculate maal, income, fitrah & professional zakat'
-                                  : 'Hitung zakat maal, penghasilan, fitrah & profesi',
+                          context.tr('Hitung zakat maal, penghasilan, fitrah & profesi'),
                           const Color(0xFF00838F)),
                       _featureItem(c, Icons.calendar_today_rounded,
                           context.tr('Kalender Hijri'),
-                          context.isEn ? 'Islamic calendar with Gregorian date conversion'
-                                  : 'Kalender Islam dengan konversi tanggal Masehi',
+                          context.tr('Kalender Islam dengan konversi tanggal Masehi'),
                           const Color(0xFF5E35B1)),
                       _featureItem(c, Icons.checklist_rounded,
                           context.tr('Panduan Ibadah'),
-                          context.isEn ? 'Tutorial for prayer, wudhu, tayammum & other worship'
-                                  : 'Tutorial shalat, wudhu, tayamum & ibadah lainnya',
+                          context.tr('Tutorial shalat, wudhu, tayamum & ibadah lainnya'),
                           const Color(0xFF6A1B9A)),
                       _featureItem(c, Icons.nightlight_round,
                           context.tr('Catatan Ramadhan'),
-                          context.isEn ? 'Daily worship journal: fasting, recitation, charity, tarawih'
-                                  : 'Jurnal ibadah harian: puasa, tadarus, sedekah, tarawih',
+                          context.tr('Jurnal ibadah harian: puasa, tadarus, infak, tarawih'),
                           const Color(0xFFC62828)),
                       _featureItem(c, Icons.chat_bubble_outline_rounded,
                           context.tr('Tanya Islam'),
-                          context.isEn ? 'AI chatbot to answer Islamic questions'
-                                  : 'AI chatbot untuk menjawab pertanyaan keislaman',
+                          context.tr('Chatbot AI untuk menjawab pertanyaan seputar Islam'),
                           kTeal),
                     ],
                   ),
@@ -163,17 +144,17 @@ class AboutPage extends StatelessWidget {
                   child: Column(
                     children: [
                       _creditItem(c, 'Aladhan API',
-                          context.isEn ? 'Prayer schedule GPS & qibla direction' : 'Jadwal shalat GPS & arah kiblat'),
+                          context.tr('Jadwal shalat GPS & arah kiblat')),
                       _creditItem(c, 'Equran.id API',
-                          context.isEn ? "Al-Qur'an & translation" : "Al-Qur'an & terjemahan"),
+                          context.tr("Al-Qur'an & terjemahan")),
                       _creditItem(c, 'Doa-Doa API',
-                          context.isEn ? 'Daily prayer database' : 'Database doa harian'),
+                          context.tr('Database doa harian')),
                       _creditItem(c, 'Hadist API',
-                          context.isEn ? 'Hadith Arbain Nawawi' : 'Hadist Arbain Nawawi'),
+                          context.tr('Hadist Arbain Nawawi')),
                       _creditItem(c, 'Google Gemini',
-                          context.isEn ? 'AI for Ask ISLAM' : 'AI untuk Tanya ISLAM'),
+                          context.tr('AI untuk Tanya ISLAM')),
                       _creditItem(c, 'Kemenag RI',
-                          context.isEn ? 'Prayer time calculation method' : 'Metode perhitungan shalat'),
+                          context.tr('Metode perhitungan shalat')),
                     ],
                   ),
                 ),

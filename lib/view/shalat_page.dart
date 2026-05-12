@@ -82,6 +82,22 @@ class _ShalatPageState extends State<ShalatPage> {
     return h > 0 ? '$h $jam $m $menit' : '$m $menit';
   }
 
+  /// Translate structured tanggal "DayName|day|MonthName|year"
+  String _formatTanggal(String tanggal) {
+    final parts = tanggal.split('|');
+    if (parts.length == 4) {
+      final day   = context.tr(parts[0]); // Senin → Monday
+      final date  = parts[1];
+      final month = context.tr(parts[2]); // Mei → May
+      final year  = parts[3];
+      if (context.isEn) {
+        return '$day, $month $date, $year';
+      }
+      return '$day, $date $month $year';
+    }
+    return tanggal; // fallback for old format
+  }
+
   void _showCityPicker() {
     final cities = ShalatRepository.cityCoordinates.keys.toList()..sort();
     showModalBottomSheet(
@@ -257,7 +273,7 @@ class _ShalatPageState extends State<ShalatPage> {
                           const Icon(Icons.calendar_today_rounded,
                               color: Colors.white60, size: 12),
                           const SizedBox(width: 4),
-                          Text(tanggal,
+                          Text(_formatTanggal(tanggal),
                               style: GoogleFonts.poppins(
                                   color: Colors.white70, fontSize: 11)),
                         ]),

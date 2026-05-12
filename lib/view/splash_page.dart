@@ -250,13 +250,15 @@ class _SplashPageState extends State<SplashPage>
                               border: Border.all(
                                   color: Colors.white.withOpacity(0.2)),
                             ),
-                            child: Text(
-                              'Sahabat Ibadah Anda',
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.5,
+                            child: Builder(
+                              builder: (context) => Text(
+                                context.tr('Sahabat Ibadah Anda'),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 0.5,
+                                ),
                               ),
                             ),
                           ),

@@ -165,7 +165,7 @@ class _MenuPageState extends State<MenuPage> {
       _MenuItemData(Icons.nightlight_round, 'Ramadhan',
           const Color(0xFFC62828),
           () => _push(context, const RamadhanPage())),
-      _MenuItemData(Icons.info_outline_rounded, 'Tentang',
+      _MenuItemData(Icons.info_outline_rounded, 'Tentang Aplikasi',
           const Color(0xFF546E7A), () => _push(context, const AboutPage())),
       _MenuItemData(Icons.settings_rounded, 'Pengaturan',
           const Color(0xFF37474F), () => _push(context, const SettingsPage())),
@@ -228,12 +228,28 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
+  /// Translate structured tanggal "DayName|day|MonthName|year"
+  String _formatTanggal(String tanggal) {
+    final parts = tanggal.split('|');
+    if (parts.length == 4) {
+      final day   = context.tr(parts[0]); // Senin → Monday
+      final date  = parts[1];
+      final month = context.tr(parts[2]); // Mei → May
+      final year  = parts[3];
+      if (context.isEn) {
+        return '$day, $month $date, $year';
+      }
+      return '$day, $date $month $year';
+    }
+    return tanggal; // fallback for old format
+  }
+
   Widget _buildHeroHeader() {
     return Consumer<ShalatViewModel>(
       builder: (context, vm, _) {
         final c = context.colors;
         final cityName = vm.jadwal?.namaKota ??
-            (context.isEn ? 'Detecting...' : 'Mendeteksi...');
+            context.tr('Mendeteksi...');
         final tanggal = vm.jadwal?.tanggal ?? '';
         final zona = _getZona(cityName);
         final nextName = _translatePrayer(_nextPrayerName);
@@ -276,7 +292,7 @@ class _MenuPageState extends State<MenuPage> {
                           border: Border.all(
                               color: Colors.white.withOpacity(0.3)),
                         ),
-                        child: Text(context.isEn ? 'Change' : 'Ganti',
+                        child: Text(context.tr('Ganti'),
                             style: GoogleFonts.poppins(
                                 color: _kGold,
                                 fontSize: 12,
@@ -306,7 +322,7 @@ class _MenuPageState extends State<MenuPage> {
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
-                                    '${context.isEn ? "Next" : "Menuju"} $nextName · $_nextPrayerTime $zona',
+                                    '${context.tr('Menuju')} $nextName · $_nextPrayerTime $zona',
                                     style: GoogleFonts.poppins(
                                         color: Colors.white70,
                                         fontSize: 12,
@@ -326,9 +342,7 @@ class _MenuPageState extends State<MenuPage> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 12),
                               child: Text(
-                                  context.isEn
-                                      ? 'Loading schedule...'
-                                      : 'Memuat jadwal...',
+                                  context.tr('Memuat jadwal...'),
                                   style: GoogleFonts.poppins(
                                       color: Colors.white70, fontSize: 14)),
                             ),
@@ -343,7 +357,7 @@ class _MenuPageState extends State<MenuPage> {
                         const Icon(Icons.calendar_today_rounded,
                             color: Colors.white38, size: 11),
                         const SizedBox(width: 4),
-                        Text(tanggal,
+                        Text(_formatTanggal(tanggal),
                             style: GoogleFonts.poppins(
                                 color: Colors.white60, fontSize: 11)),
                       ],

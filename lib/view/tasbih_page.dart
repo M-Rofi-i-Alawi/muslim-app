@@ -817,7 +817,7 @@ class _TasbihPageState extends State<TasbihPage>
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                content: Text('Dzikir "$nama" ditambahkan!',
+                                content: Text('${context.tr('Dzikir')} "$nama" ${context.tr('ditambahkan!')}',
                                     style: GoogleFonts.poppins()),
                                 backgroundColor: _kTeal,
                                 behavior: SnackBarBehavior.floating,

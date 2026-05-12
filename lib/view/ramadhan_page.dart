@@ -105,7 +105,7 @@ class _RamadhanPageState extends State<RamadhanPage>
                     final entry = vm.currentEntry;
                     if (entry == null) return const SizedBox.shrink();
                     return Text(
-                      'Hari ke-${entry.ramadhanDay} · ${_formatDate(context, entry.date)}',
+                      '${context.tr('Hari ke-')}${entry.ramadhanDay} · ${_formatDate(context, entry.date)}',
                       style: GoogleFonts.poppins(
                           fontSize: 12, color: Colors.white.withOpacity(0.9)),
                     );
@@ -136,9 +136,9 @@ class _RamadhanPageState extends State<RamadhanPage>
   // ─── TAB BAR ──────────────────────────────────────────────────────────────
   Widget _buildTabBar(AppColors c) {
     final tabs = [
-      context.isEn ? 'Deeds' : 'Amalan',
-      context.isEn ? 'Statistics' : 'Statistik',
-      context.isEn ? 'Karomah' : 'Karomah',
+      context.tr('Amalan'),
+      context.tr('Statistik'),
+      context.tr('Karomah'),
     ];
 
     return Container(
@@ -435,8 +435,8 @@ class _TimelineItemState extends State<_TimelineItem> {
                           const SizedBox(height: 6),
                           Text(
                             isPuasa
-                                ? 'Puasa Lancar · Shalat $shalatCount/5'
-                                : 'Tidak Puasa',
+                                ? '${context.tr('Puasa Lancar · Shalat')} $shalatCount/5'
+                                : context.tr('Tidak Puasa'),
                             style: GoogleFonts.poppins(
                                 fontSize: 12, color: puasaColor),
                           ),
@@ -450,13 +450,13 @@ class _TimelineItemState extends State<_TimelineItem> {
                               children: [
                                 if (entry.tadarusJuz > 0)
                                   _badge(
-                                      'Tadarus ${entry.tadarusJuz} Juz', kTeal),
+                                      '${context.tr('Tadarus')} ${entry.tadarusJuz} Juz', kTeal),
                                 if (entry.infakAmount > 0)
                                   _badge(
-                                      'Infak Rp ${_fmtMoney(entry.infakAmount)}',
+                                      '${context.tr('Infak')} Rp ${_fmtMoney(entry.infakAmount)}',
                                       kGold),
                                 if (entry.shalatTarawih)
-                                  _badge('Tarawih', const Color(0xFF7B1FA2)),
+                                  _badge(context.tr('Tarawih'), const Color(0xFF7B1FA2)),
                               ],
                             ),
                           ],
@@ -498,25 +498,25 @@ class _TimelineItemState extends State<_TimelineItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _detailSection(
-              'Shalat',
+              context.tr('Shalat'),
               Icons.self_improvement_rounded,
               kTeal,
               c,
               Column(children: [
-                _checkRow('Subuh', entry.shalatSubuh, c),
-                _checkRow('Dzuhur', entry.shalatDzuhur, c),
-                _checkRow('Ashar', entry.shalatAshar, c),
-                _checkRow('Maghrib', entry.shalatMaghrib, c),
-                _checkRow('Isya', entry.shalatIsya, c),
+                _checkRow(context.tr('Subuh'), entry.shalatSubuh, c),
+                _checkRow(context.tr('Dzuhur'), entry.shalatDzuhur, c),
+                _checkRow(context.tr('Ashar'), entry.shalatAshar, c),
+                _checkRow(context.tr('Maghrib'), entry.shalatMaghrib, c),
+                _checkRow(context.tr('Isya'), entry.shalatIsya, c),
                 if (entry.shalatTarawih || entry.shalatTahajud) ...[
                   Divider(color: c.divider),
-                  if (entry.shalatTarawih) _checkRow('Tarawih', true, c),
-                  if (entry.shalatTahajud) _checkRow('Tahajud', true, c),
+                  if (entry.shalatTarawih) _checkRow(context.tr('Tarawih'), true, c),
+                  if (entry.shalatTahajud) _checkRow(context.tr('Tahajud'), true, c),
                 ],
               ])),
           if (entry.tadarusJuz > 0)
             _detailSection(
-                'Tadarus',
+                context.tr('Tadarus'),
                 Icons.menu_book_rounded,
                 const Color(0xFF388E3C),
                 c,
@@ -525,7 +525,7 @@ class _TimelineItemState extends State<_TimelineItem> {
                         GoogleFonts.poppins(fontSize: 13, color: c.onSurface))),
           if (entry.infakAmount > 0)
             _detailSection(
-                'Infak',
+                context.tr('Infak'),
                 Icons.volunteer_activism_rounded,
                 kGold,
                 c,
@@ -713,28 +713,28 @@ class _StatistikTab extends StatelessWidget {
       children: [
         _StatCard(
             c,
-            context.isEn ? 'Fasting' : 'Puasa',
+            context.tr('Puasa'),
             '${stats.puasaCount}',
             '${stats.puasaPercentage.toStringAsFixed(0)}%',
             Icons.wb_sunny_rounded,
             const Color(0xFFE8650A)),
         _StatCard(
             c,
-            context.isEn ? 'Full Prayer' : 'Shalat Lengkap',
+            context.tr('Shalat Lengkap'),
             '${stats.allShalatCompleteCount}',
             '${stats.shalatPercentage.toStringAsFixed(0)}%',
             Icons.self_improvement_rounded,
             kTeal),
         _StatCard(
             c,
-            context.isEn ? 'Recitation' : 'Tadarus',
+            context.tr('Tadarus'),
             '${stats.totalTadarusJuz} Juz',
             'Total',
             Icons.menu_book_rounded,
             const Color(0xFF388E3C)),
         _StatCard(
             c,
-            context.isEn ? 'Charity' : 'Infak',
+            context.tr('Infak'),
             'Rp ${_fmtNum(stats.totalInfak)}',
             'Total',
             Icons.volunteer_activism_rounded,
@@ -747,27 +747,27 @@ class _StatistikTab extends StatelessWidget {
       BuildContext context, RamadhanStatistics stats, AppColors c) {
     return _SectionCard(
       c: c,
-      title: context.isEn ? 'Detailed Statistics' : 'Detail Statistik',
+      title: context.tr('Detail Statistik'),
       icon: Icons.bar_chart_rounded,
       color: kTeal,
       child: Column(
         children: [
-          _row(c, context.isEn ? 'Days recorded' : 'Hari dicatat',
-              '${stats.totalDays} hari'),
-          _row(c, context.isEn ? 'Fasting' : 'Puasa',
-              '${stats.puasaCount} hari'),
-          _row(c, context.isEn ? '5 daily prayers' : 'Shalat 5 waktu',
-              '${stats.allShalatCompleteCount} hari'),
-          _row(c, context.isEn ? 'Tarawih' : 'Tarawih',
-              '${stats.tarawihCount} hari'),
-          _row(c, context.isEn ? 'Tahajud' : 'Tahajud',
-              '${stats.tahajudCount} hari'),
-          _row(c, context.isEn ? 'Total recitation' : 'Total tadarus',
-              '${stats.totalTadarusJuz} juz'),
-          _row(c, context.isEn ? 'Total charity' : 'Total infak',
+          _row(c, context.tr('Hari dicatat'),
+              '${stats.totalDays} ${context.tr('hari')}'),
+          _row(c, context.tr('Puasa'),
+              '${stats.puasaCount} ${context.tr('hari')}'),
+          _row(c, context.tr('Shalat 5 waktu'),
+              '${stats.allShalatCompleteCount} ${context.tr('hari')}'),
+          _row(c, context.tr('Tarawih'),
+              '${stats.tarawihCount} ${context.tr('hari')}'),
+          _row(c, context.tr('Tahajud'),
+              '${stats.tahajudCount} ${context.tr('hari')}'),
+          _row(c, context.tr('Total tadarus'),
+              '${stats.totalTadarusJuz} ${context.tr('juz')}'),
+          _row(c, context.tr('Total infak'),
               'Rp ${_fmtNum(stats.totalInfak)}'),
-          _row(c, context.isEn ? 'Lectures summarized' : 'Ceramah dirangkum',
-              '${stats.ceramahCount} ceramah'),
+          _row(c, context.tr('Ceramah dirangkum'),
+              '${stats.ceramahCount} ${context.tr('ceramah')}'),
         ],
       ),
     );
@@ -911,7 +911,7 @@ class _KaromahTab extends StatelessWidget {
           ),
           Column(
             children: [
-              Text('Hari ke-${vm.currentEntry?.ramadhanDay ?? 1}',
+              Text('${context.tr('Hari ke-')}${vm.currentEntry?.ramadhanDay ?? 1}',
                   style: GoogleFonts.poppins(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -1130,7 +1130,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
-                      context.isEn ? '✅ Notes saved' : '✅ Catatan disimpan',
+                      context.tr('✅ Catatan disimpan'),
                       style: GoogleFonts.poppins()),
                   backgroundColor: kTeal,
                   behavior: SnackBarBehavior.floating,
@@ -1164,7 +1164,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Hari ke-${_entry.ramadhanDay}',
+                      Text('${context.tr('Hari ke-')}${_entry.ramadhanDay}',
                           style: GoogleFonts.poppins(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -1182,11 +1182,11 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Puasa
             _SectionCard(
               c: c,
-              title: context.isEn ? 'Fasting' : 'Puasa',
+              title: context.tr('Puasa'),
               icon: Icons.wb_sunny_rounded,
               color: const Color(0xFFE8650A),
               child: CheckboxListTile(
-                title: Text(context.isEn ? 'Fasting today' : 'Puasa hari ini',
+                title: Text(context.tr('Puasa hari ini'),
                     style:
                         GoogleFonts.poppins(fontSize: 14, color: c.onSurface)),
                 value: _entry.puasa,
@@ -1202,7 +1202,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Shalat
             _SectionCard(
               c: c,
-              title: context.isEn ? 'Prayer' : 'Shalat',
+              title: context.tr('Shalat'),
               icon: Icons.self_improvement_rounded,
               color: kTeal,
               child: Column(
@@ -1254,7 +1254,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                     ],
                   ])
                     CheckboxListTile(
-                      title: Text(pair[0] as String,
+                      title: Text(context.tr(pair[0] as String),
                           style: GoogleFonts.poppins(
                               fontSize: 14, color: c.onSurface)),
                       value: pair[1] as bool,
@@ -1301,14 +1301,14 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Tadarus
             _SectionCard(
               c: c,
-              title: context.isEn ? 'Quran Recitation' : 'Tadarus Al-Quran',
+              title: context.tr('Tadarus Al-Quran'),
               icon: Icons.menu_book_rounded,
               color: const Color(0xFF388E3C),
               child: Column(
                 children: [
                   ListTile(
                     title: Text(
-                        context.isEn ? 'Juz recited' : 'Juz yang dibaca',
+                        context.tr('Juz yang dibaca'),
                         style: GoogleFonts.poppins(
                             fontSize: 14, color: c.onSurface)),
                     trailing: Row(
@@ -1349,9 +1349,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                     child: TextField(
                       style: TextStyle(color: c.onSurface),
                       decoration: InputDecoration(
-                        labelText: context.isEn
-                            ? 'Surah recited'
-                            : 'Surat yang dibaca',
+                        labelText: context.tr('Surat yang dibaca'),
                         labelStyle: TextStyle(color: c.textSecondary),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
@@ -1369,7 +1367,7 @@ class _EditEntryPageState extends State<_EditEntryPage> {
             // Catatan harian
             _SectionCard(
               c: c,
-              title: context.isEn ? 'Additional Notes' : 'Catatan Tambahan',
+              title: context.tr('Catatan Tambahan'),
               icon: Icons.note_rounded,
               color: const Color(0xFF546E7A),
               child: Padding(
@@ -1377,11 +1375,9 @@ class _EditEntryPageState extends State<_EditEntryPage> {
                 child: TextField(
                   style: TextStyle(color: c.onSurface),
                   decoration: InputDecoration(
-                    labelText: context.isEn ? 'Notes' : 'Catatan',
+                    labelText: context.tr('Catatan'),
                     labelStyle: TextStyle(color: c.textSecondary),
-                    hintText: context.isEn
-                        ? 'Write notes or reflections...'
-                        : 'Tulis catatan atau refleksi...',
+                    hintText: context.tr('Tulis catatan atau refleksi...'),
                     hintStyle: TextStyle(color: c.textHint),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),

@@ -58,7 +58,7 @@ class DoaDetailPage extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.copy_rounded, color: Colors.white),
-                tooltip: 'Salin Doa',
+                tooltip: context.tr('Salin Doa'),
                 onPressed: () => _copyDoa(context),
               ),
             ],
@@ -134,7 +134,7 @@ class DoaDetailPage extends StatelessWidget {
                   // Card Arab
                   _buildSection(
                     c: c,
-                    label: 'Arab',
+                    label: context.tr('Arab'),
                     labelColor: _kTeal,
                     labelBg: _kTeal.withOpacity(0.12),
                     child: Text(
@@ -155,7 +155,7 @@ class DoaDetailPage extends StatelessWidget {
                   // Card Latin
                   _buildSection(
                     c: c,
-                    label: 'Latin',
+                    label: context.tr('Latin'),
                     labelColor: const Color(0xFF7B1FA2),
                     labelBg: const Color(0xFF7B1FA2).withOpacity(0.12),
                     child: Text(
@@ -175,7 +175,7 @@ class DoaDetailPage extends StatelessWidget {
                   // Card Artinya
                   _buildSection(
                     c: c,
-                    label: 'Artinya',
+                    label: context.tr('Artinya'),
                     labelColor: const Color(0xFF388E3C),
                     labelBg: const Color(0xFF388E3C).withOpacity(0.12),
                     child: Text(
